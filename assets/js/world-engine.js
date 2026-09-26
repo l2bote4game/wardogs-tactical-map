@@ -103,6 +103,24 @@ export class WorldEngine {
 
         const geometry = PackLoader.buildTerrainGeometry(pack, geoDef);
 
+        // Store authentic DEM grid on terrainEngine for sub-millimeter bilinear elevation queries
+        const posDef = geoDef.attributes.position;
+        if (posDef && posDef.grid) {
+            const x = pack.view(posDef.grid.x);
+            const y = pack.view(posDef.grid.y);
+            const z = pack.view(posDef.grid.z);
+            this.terrain.demGrid = {
+                x, y, z,
+                cols: x.length,
+                rows: z.length,
+                minX: x[0],
+                maxX: x[x.length - 1],
+                minZ: z[0],
+                maxZ: z[z.length - 1]
+            };
+            console.log(`[WorldEngine] Stored authentic DEM grid: ${x.length}x${z.length} (${y.length} heights). Bounds: [${x[0]}, ${x[x.length - 1]}] x [${z[0]}, ${z[z.length - 1]}]`);
+        }
+
         // Load satellite texture for true visual fidelity
         const satTexPath = `assets/textures/${mapId}_sat.jpg`;
         const satTexture = this.terrain.textureLoader.load(satTexPath);

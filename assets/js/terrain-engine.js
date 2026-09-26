@@ -232,6 +232,31 @@ export class TerrainEngine {
        Sub-Meter Bilinear Interpolation for Exact In-Game Elevation
        ------------------------------------------------------------ */
     getElevation(gameX, gameY) {
+        // 1. Authentic Game DEM Grid (Sub-millimeter exact from official game files)
+        if (this.demGrid) {
+            const dg = this.demGrid;
+            const half = this.config.gridSize / 2;
+            const wx = gameX - half;
+            const wz = gameY - half;
+
+            if (wx >= dg.minX && wx <= dg.maxX && wz >= dg.minZ && wz <= dg.maxZ) {
+                const u = (wx - dg.minX) / (dg.maxX - dg.minX) * (dg.cols - 1);
+                const v = (wz - dg.minZ) / (dg.maxZ - dg.minZ) * (dg.rows - 1);
+                const c0 = Math.floor(u);
+                const c1 = Math.min(c0 + 1, dg.cols - 1);
+                const r0 = Math.floor(v);
+                const r1 = Math.min(r0 + 1, dg.rows - 1);
+                const du = u - c0;
+                const dv = v - r0;
+                const h00 = dg.y[r0 * dg.cols + c0];
+                const h10 = dg.y[r0 * dg.cols + c1];
+                const h01 = dg.y[r1 * dg.cols + c0];
+                const h11 = dg.y[r1 * dg.cols + c1];
+                return (h00 * (1 - du) + h10 * du) * (1 - dv) + (h01 * (1 - du) + h11 * du) * dv;
+            }
+        }
+
+        // 2. Fallback to procedural heightMatrix while DEM grid is loading
         const size = this.config.gridSize; // 2000m
         const res = this.GRID_RES;
 
