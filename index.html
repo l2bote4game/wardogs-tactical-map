@@ -78,9 +78,19 @@
             <button id="btn-style-sat" class="map-btn" title="Pure Satellite Aerial Photo">SATELLITE</button>
             <button id="btn-style-topo" class="map-btn" title="Tactical Topographic Contours">TOPO</button>
             <div class="w-px h-5 bg-gray-700 mx-1"></div>
+            <!-- Authentic 3D Game World Toggles -->
+            <button id="btn-toggle-buildings" class="map-btn active" title="Toggle 3D Houses, Hangars, Bridges & Bunkers">🏠 3D ДОМА</button>
+            <button id="btn-toggle-trees" class="map-btn active" title="Toggle 3D Trees & Forests">🌲 ДЕРЕВЬЯ</button>
+            <div class="w-px h-5 bg-gray-700 mx-1"></div>
             <button id="btn-toggle-grid" class="map-btn active" title="Toggle 100m Military Grid">GRID</button>
         </div>
     </header>
+
+    <!-- World Loading Banner -->
+    <div id="world-loading-banner" class="hud-panel" style="position: absolute; top: 72px; left: 50%; transform: translateX(-50%); z-index: 999; padding: 8px 20px; border-radius: 8px; border: 1px solid var(--cyan); background: rgba(10, 12, 16, 0.95); display: none; align-items: center; gap: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.6);">
+        <span class="spinner" style="width: 14px; height: 14px; border: 2px solid var(--cyan); border-top-color: transparent; border-radius: 50%; display: inline-block; animation: spin 0.8s linear infinite;"></span>
+        <span id="world-loading-text" class="font-mono text-xs text-[color:var(--cyan)] font-bold">LOADING 3D GAME WORLD...</span>
+    </div>
 
     <!-- Left Tool Rail -->
     <nav class="tool-rail hud-panel" aria-label="Tactical Tool Palette">

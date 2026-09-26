@@ -154,8 +154,23 @@ export class ViewshedEngine {
             }
         }
 
+        let blockedBy = visible ? 'NONE' : 'TERRAIN';
+
+        // Test 3D building obstacle collision
+        if (visible && this.terrain.worldEngine) {
+            const obsWorld = this.terrain.gameToWorld(obsX, obsY, obsElev);
+            const tgtWorld = this.terrain.gameToWorld(tgtX, tgtY, tgtElev);
+            const bHit = this.terrain.worldEngine.checkBuildingObstruction(obsWorld, tgtWorld);
+            if (bHit.hit) {
+                visible = false;
+                blockedBy = 'BUILDING';
+                obstacleDist = Math.round(bHit.distance / (this.terrain.scaleRatio || 0.1));
+            }
+        }
+
         return {
             visible,
+            blockedBy,
             distance: Math.round(totalDist),
             horizontalDistance: Math.round(horizDist),
             elevationDelta: Math.round(dz),

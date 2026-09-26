@@ -419,3 +419,8 @@ input[type="range"]::-webkit-slider-thumb:hover {
     letter-spacing: 0.1em;
     color: var(--cyan);
 }
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

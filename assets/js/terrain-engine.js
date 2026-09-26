@@ -12,6 +12,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { MAP_CONFIGS } from './config.js';
+import { WorldEngine } from './world-engine.js';
 
 export class TerrainEngine {
     constructor(canvasContainer) {
@@ -82,6 +83,9 @@ export class TerrainEngine {
         // Lighting Rig
         this.setupLighting();
 
+        // Authentic 3D World Engine (Dem terrain, buildings, trees)
+        this.worldEngine = new WorldEngine(this);
+
         // Build Terrain
         this.loadMap(this.currentMapId);
 
@@ -126,6 +130,11 @@ export class TerrainEngine {
         this.rebuildTerrainMesh();
         this.rebuildMilitaryGrid();
         this.loadSatelliteTexture(this.config.texturePath);
+
+        // Load authentic 3D World (DEM terrain, buildings, trees)
+        if (this.worldEngine) {
+            this.worldEngine.loadWorld(mapId);
+        }
 
         // Reset camera focus
         if (this.controls) {

@@ -299,6 +299,41 @@ class TacticalApp {
             btnGrid.classList.toggle('active', flag);
             tacticalAudio.playClick();
         });
+
+        // 3D Buildings & Vegetation Toggles
+        const btnBuildings = document.getElementById('btn-toggle-buildings');
+        if (btnBuildings && this.terrain.worldEngine) {
+            btnBuildings.addEventListener('click', () => {
+                const active = this.terrain.worldEngine.toggleBuildings();
+                btnBuildings.classList.toggle('active', active);
+                tacticalAudio.playClick();
+                this.updateAll();
+            });
+        }
+
+        const btnTrees = document.getElementById('btn-toggle-trees');
+        if (btnTrees && this.terrain.worldEngine) {
+            btnTrees.addEventListener('click', () => {
+                const active = this.terrain.worldEngine.toggleVegetation();
+                btnTrees.classList.toggle('active', active);
+                tacticalAudio.playClick();
+            });
+        }
+
+        // Connect World Loading Progress Banner
+        const loadingBanner = document.getElementById('world-loading-banner');
+        const loadingText = document.getElementById('world-loading-text');
+        if (this.terrain.worldEngine) {
+            this.terrain.worldEngine.onProgress = (status, pct) => {
+                if (!loadingBanner || !loadingText) return;
+                if (pct < 1.0) {
+                    loadingBanner.style.display = 'flex';
+                    loadingText.textContent = `${status.toUpperCase()} (${Math.round(pct * 100)}%)`;
+                } else {
+                    loadingBanner.style.display = 'none';
+                }
+            };
+        }
     }
 
     /* ------------------------------------------------------------

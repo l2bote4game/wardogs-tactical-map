@@ -1,0 +1,4475 @@
+{
+  "version": 1,
+  "maps": {
+    "bakurani": {
+      "bounds": [
+        [
+          -643.5971330688509,
+          -62.7814679145813,
+          -643.0719920258929
+        ],
+        [
+          643.460709830038,
+          115.93286529244425,
+          649.9023640540688
+        ]
+      ],
+      "sourceInstances": 114296,
+      "terrain": {
+        "url": "/bakurani-terrain.760409d8093b57c0.pack",
+        "bytes": 7112496,
+        "sha256": "760409d8093b57c07bb5fd8d79535a46d9bd5f9ae42b4543224df26580226cd5",
+        "compressedBytes": {
+          "br": 3358790,
+          "gzip": 4698843
+        }
+      },
+      "structures": {
+        "lq": {
+          "url": "/bakurani-structures-lq.96462c5799f25f1c.pack",
+          "bytes": 11016232,
+          "sha256": "96462c5799f25f1c6a176d415a681de2a1e39b441217fc1824be8c9c73144bc1",
+          "compressedBytes": {
+            "br": 2390808,
+            "gzip": 2722587
+          }
+        },
+        "mq": {
+          "url": "/bakurani-structures-mq.3dcdb44f00011c85.pack",
+          "bytes": 17871432,
+          "sha256": "3dcdb44f00011c8569c461261ef640ee7308e413f5a27d76440d57554956701a",
+          "compressedBytes": {
+            "br": 3444097,
+            "gzip": 3972933
+          }
+        },
+        "hq": {
+          "url": "/bakurani-structures-hq.dd53196556179894.pack",
+          "bytes": 20431824,
+          "sha256": "dd531965561798940d8af48ebb6c593a597f36498d13c4f5f4f28c7ccba7fc13",
+          "compressedBytes": {
+            "br": 4658171,
+            "gzip": 5429573
+          }
+        }
+      },
+      "vegetation": {
+        "lq": {
+          "url": "/bakurani-vegetation-lq.17e38492c575b5e9.pack",
+          "bytes": 7934296,
+          "sha256": "17e38492c575b5e9074429a2c26f9d2d5e6b6b91acd5ae3b07a25f09b2795405",
+          "compressedBytes": {
+            "br": 4064929,
+            "gzip": 4323922
+          }
+        },
+        "mq": {
+          "url": "/bakurani-vegetation-mq.8b9eee2809654120.pack",
+          "bytes": 3443248,
+          "sha256": "8b9eee2809654120dd137df72333d53d7dce581d957ef9936ddb19c9378991a5",
+          "compressedBytes": {
+            "br": 899615,
+            "gzip": 1727799
+          }
+        },
+        "hq": {
+          "url": "/bakurani-vegetation-hq.17b81208487282d0.pack",
+          "bytes": 4346280,
+          "sha256": "17b81208487282d0a10d7997a5534be09bc1a53bb511f4409cd83091dbc6716b",
+          "compressedBytes": {
+            "br": 1510517,
+            "gzip": 2418617
+          }
+        },
+        "bands": {
+          "url": "/bakurani-vegetation-bands.212dabf7b6513ad4.pack",
+          "bytes": 7934944,
+          "sha256": "212dabf7b6513ad4ce216fe10f59f80fd364b132084ede1a019d362e9ec42d5a",
+          "compressedBytes": {
+            "br": 4019764,
+            "gzip": 4297996
+          }
+        },
+        "cones": {
+          "url": "/bakurani-vegetation-cones.bcaccdd683db319d.pack",
+          "bytes": 953680,
+          "sha256": "bcaccdd683db319d1ea82315dacf63bcb91bdd55b40739eae2d615107fba43c4",
+          "compressedBytes": {
+            "br": 571600,
+            "gzip": 598810
+          }
+        }
+      },
+      "surround": {
+        "url": "/bakurani-surround.6ec2ba7ac7857885.pack",
+        "bytes": 2210552,
+        "sha256": "6ec2ba7ac7857885998088942c46104252b2e044c186c07cd84e5a4ffb3a8372",
+        "compressedBytes": {
+          "br": 2194591,
+          "gzip": 2197827
+        }
+      },
+      "roads": {
+        "url": "/bakurani-roads.a5678f98a26f1bdf.pack",
+        "bytes": 146912,
+        "sha256": "a5678f98a26f1bdf4422f32615f82e5b42f77061a812b6f2a17d50896776eafe",
+        "compressedBytes": {
+          "br": 39664,
+          "gzip": 43784
+        }
+      },
+      "world": {
+        "map": "kavkazi",
+        "site": "bakurani",
+        "worldM": 16320,
+        "cellSizeM": 1020,
+        "cellCount": 16,
+        "offset": [
+          -173.97120000000004,
+          1097.3567999999996
+        ],
+        "refElevM": -948.78,
+        "docs": "World pack contract v1; see viewer/docs/object-scaling-proposal.md, \"Appendix: world pack format\". Placements are Float32 x10 TRS (px,py,pz,qx,qy,qz,qw,sx,sy,sz) in site-local metres: site-local = map-centred world metres - (mean(map.towers[].pos) - 0.5) * worldM, and Y = (cell.centreElevM - site.centreElevM) + py. Library geometry carries position/normal plus normalized 8-bit vertex colours baked from the cell scene materials[name].color; one shared MeshStandardMaterial (roughness 0.92, metalness 0.04, vertexColors) reproduces the site packs' per-material baseColorFactor exactly. Mirrored (negative determinant) placements reference the reflected geometry \"<model>:m\". Vegetation exists at LQ only, and models whose largest bounding-box dimension is under 2 m are absent from the MQ library; the runtime skips a placement whose active tier lacks its model.",
+        "base": {
+          "url": "/bakurani-world-base.3a8391da3362a127.pack",
+          "bytes": 40147704,
+          "sha256": "3a8391da3362a127cee0bcaec677924a4b50e9d98cda24606aded2399cbdd59f",
+          "compressedBytes": {
+            "br": 9600950,
+            "gzip": 11472701
+          }
+        },
+        "heights": {
+          "url": "/bakurani-world-heights.f671546e05f82955.pack",
+          "bytes": 14691200,
+          "sha256": "f671546e05f829551729928acfeaca33b429c798f1935412365f01e2f9bdcf36",
+          "compressedBytes": {
+            "br": 14560120,
+            "gzip": 14505660
+          }
+        },
+        "cells": {
+          "9_3": {
+            "structures": {
+              "url": "/bakurani-world-cell-9_3.5e4e41b7be9c69c0.pack",
+              "bytes": 6520,
+              "sha256": "5e4e41b7be9c69c034ce43625d784237337bc3fe440aa15c4a3b724d00cb454f",
+              "compressedBytes": {
+                "br": 4670,
+                "gzip": 4896
+              }
+            },
+            "placements": 122,
+            "tris": {
+              "mq": 20376,
+              "hq": 42578
+            },
+            "centre": [
+              1703.9712,
+              -5687.3568
+            ],
+            "centreElevM": -701.57
+          },
+          "9_4": {
+            "structures": {
+              "url": "/bakurani-world-cell-9_4.996368c79784eaea.pack",
+              "bytes": 132000,
+              "sha256": "996368c79784eaea54e440a70cf51e7f2ab0d9d1cb4a241fc6806c9511128c46",
+              "compressedBytes": {
+                "br": 47421,
+                "gzip": 51384
+              }
+            },
+            "placements": 3078,
+            "tris": {
+              "mq": 344634,
+              "hq": 1109680
+            },
+            "centre": [
+              1703.9712,
+              -4667.3568
+            ],
+            "centreElevM": -730.68
+          },
+          "8_5": {
+            "structures": {
+              "url": "/bakurani-world-cell-8_5.7f62bf0f1d3f5c23.pack",
+              "bytes": 72056,
+              "sha256": "7f62bf0f1d3f5c23aa95f7413a90d22517e84129f045a2f52ca6f79bbedbbe57",
+              "compressedBytes": {
+                "br": 44018,
+                "gzip": 45681
+              }
+            },
+            "placements": 1660,
+            "tris": {
+              "mq": 239675,
+              "hq": 564016
+            },
+            "centre": [
+              683.9712000000001,
+              -3647.3567999999996
+            ],
+            "centreElevM": -746.43
+          },
+          "9_5": {
+            "structures": {
+              "url": "/bakurani-world-cell-9_5.5a98dd26134f0820.pack",
+              "bytes": 786912,
+              "sha256": "5a98dd26134f08200bb75efb4f10a132ced4d0c7aeb328587b2066eb7de19d14",
+              "compressedBytes": {
+                "br": 199458,
+                "gzip": 227925
+              }
+            },
+            "placements": 17210,
+            "tris": {
+              "mq": 1880595,
+              "hq": 7761533
+            },
+            "centre": [
+              1703.9712,
+              -3647.3567999999996
+            ],
+            "centreElevM": -807.17
+          },
+          "8_6": {
+            "structures": {
+              "url": "/bakurani-world-cell-8_6.15208e64c2bdac5b.pack",
+              "bytes": 175056,
+              "sha256": "15208e64c2bdac5b61362e3663677832fbcd471b6fbed1481514af62adbfd52a",
+              "compressedBytes": {
+                "br": 79409,
+                "gzip": 84152
+              }
+            },
+            "placements": 3903,
+            "tris": {
+              "mq": 476406,
+              "hq": 1573697
+            },
+            "centre": [
+              683.9712000000001,
+              -2627.3567999999996
+            ],
+            "centreElevM": -900.9
+          },
+          "5_7": {
+            "structures": {
+              "url": "/bakurani-world-cell-5_7.59b39d3c776b01b5.pack",
+              "bytes": 1720,
+              "sha256": "59b39d3c776b01b54b4a221b181e4409a95ed91cdd04cde79ed67583c367bc2f",
+              "compressedBytes": {
+                "br": 994,
+                "gzip": 1044
+              }
+            },
+            "placements": 3,
+            "tris": {
+              "mq": 480,
+              "hq": 1076
+            },
+            "centre": [
+              -2376.0288,
+              -1607.3567999999996
+            ],
+            "centreElevM": -516.22
+          },
+          "6_7": {
+            "structures": {
+              "url": "/bakurani-world-cell-6_7.4800a9f4d6b5eb07.pack",
+              "bytes": 7968,
+              "sha256": "4800a9f4d6b5eb07bf3949853237b123c69b159cc11e434deb57fd6be81c5a54",
+              "compressedBytes": {
+                "br": 5667,
+                "gzip": 5890
+              }
+            },
+            "placements": 156,
+            "tris": {
+              "mq": 24520,
+              "hq": 53374
+            },
+            "centre": [
+              -1356.0288,
+              -1607.3567999999996
+            ],
+            "centreElevM": -767.44
+          },
+          "7_7": {
+            "structures": {
+              "url": "/bakurani-world-cell-7_7.d7b889fb7d80a1f6.pack",
+              "bytes": 129408,
+              "sha256": "d7b889fb7d80a1f6aee706509e6773894f51965eee1f98767548141f7392d233",
+              "compressedBytes": {
+                "br": 52371,
+                "gzip": 55753
+              }
+            },
+            "placements": 2642,
+            "tris": {
+              "mq": 455259,
+              "hq": 1768176
+            },
+            "centre": [
+              -336.02879999999993,
+              -1607.3567999999996
+            ],
+            "centreElevM": -796.28
+          },
+          "8_7": {
+            "structures": {
+              "url": "/bakurani-world-cell-8_7.2c0fa685fd22686a.pack",
+              "bytes": 202408,
+              "sha256": "2c0fa685fd22686a31055c685135fe8dc3c3afbb402022f183639b77215e2f62",
+              "compressedBytes": {
+                "br": 61404,
+                "gzip": 67803
+              }
+            },
+            "placements": 4085,
+            "tris": {
+              "mq": 568963,
+              "hq": 2100083
+            },
+            "centre": [
+              683.9712000000001,
+              -1607.3567999999996
+            ],
+            "centreElevM": -790.86
+          },
+          "3_8": {
+            "structures": {
+              "url": "/bakurani-world-cell-3_8.a1694940b70fd3e3.pack",
+              "bytes": 252752,
+              "sha256": "a1694940b70fd3e3638c44caf49d292d71cbba8be5ab885e2f32bafa81a3ac26",
+              "compressedBytes": {
+                "br": 64014,
+                "gzip": 72282
+              }
+            },
+            "placements": 4869,
+            "tris": {
+              "mq": 638227,
+              "hq": 2418608
+            },
+            "centre": [
+              -4416.0288,
+              -587.3567999999996
+            ],
+            "centreElevM": -739.33
+          },
+          "4_8": {
+            "structures": {
+              "url": "/bakurani-world-cell-4_8.d1aef529a12a1763.pack",
+              "bytes": 397840,
+              "sha256": "d1aef529a12a1763bec759866d9c8718eaa067861163d63b60ebca7b35d7aaff",
+              "compressedBytes": {
+                "br": 106598,
+                "gzip": 122646
+              }
+            },
+            "placements": 8478,
+            "tris": {
+              "mq": 956868,
+              "hq": 3984404
+            },
+            "centre": [
+              -3396.0288,
+              -587.3567999999996
+            ],
+            "centreElevM": -705.79
+          },
+          "5_8": {
+            "structures": {
+              "url": "/bakurani-world-cell-5_8.79e9c9547dab3a13.pack",
+              "bytes": 448440,
+              "sha256": "79e9c9547dab3a13b70747145e5b93a33b2881b5caeee0993f89e05fff10f802",
+              "compressedBytes": {
+                "br": 116752,
+                "gzip": 133074
+              }
+            },
+            "placements": 9396,
+            "tris": {
+              "mq": 1150924,
+              "hq": 4641564
+            },
+            "centre": [
+              -2376.0288,
+              -587.3567999999996
+            ],
+            "centreElevM": -769.21
+          },
+          "6_8": {
+            "structures": {
+              "url": "/bakurani-world-cell-6_8.ce0fc3e635261c17.pack",
+              "bytes": 145456,
+              "sha256": "ce0fc3e635261c17ea1dc2867925679b1dfdcdffe8c2a236817cd01454adff8b",
+              "compressedBytes": {
+                "br": 46950,
+                "gzip": 50832
+              }
+            },
+            "placements": 2603,
+            "tris": {
+              "mq": 279111,
+              "hq": 1113985
+            },
+            "centre": [
+              -1356.0288,
+              -587.3567999999996
+            ],
+            "centreElevM": -807.32
+          },
+          "7_8": {
+            "structures": {
+              "url": "/bakurani-world-cell-7_8.986ccfa90a98722c.pack",
+              "bytes": 53992,
+              "sha256": "986ccfa90a98722c049ba79979ac2bfc5bcf16a69e5983b8eb9ed08a6369bc41",
+              "compressedBytes": {
+                "br": 27557,
+                "gzip": 28692
+              }
+            },
+            "placements": 1118,
+            "tris": {
+              "mq": 126427,
+              "hq": 403105
+            },
+            "centre": [
+              -336.02879999999993,
+              -587.3567999999996
+            ],
+            "centreElevM": -927.69
+          },
+          "8_8": {
+            "structures": {
+              "url": "/bakurani-world-cell-8_8.9d25137386bbd8b4.pack",
+              "bytes": 172240,
+              "sha256": "9d25137386bbd8b46cd8bafa965429d6dcdefdc99e796b7b8dcd1c724b212cc5",
+              "compressedBytes": {
+                "br": 55805,
+                "gzip": 59887
+              }
+            },
+            "placements": 3103,
+            "tris": {
+              "mq": 408472,
+              "hq": 1467098
+            },
+            "centre": [
+              683.9712000000001,
+              -587.3567999999996
+            ],
+            "centreElevM": -893.88
+          },
+          "9_8": {
+            "structures": {
+              "url": "/bakurani-world-cell-9_8.29a1adcbf65de9b7.pack",
+              "bytes": 117032,
+              "sha256": "29a1adcbf65de9b7489497089c40ca053ea4fdd5e65851b182f215ee95444537",
+              "compressedBytes": {
+                "br": 35526,
+                "gzip": 38860
+              }
+            },
+            "placements": 2167,
+            "tris": {
+              "mq": 153933,
+              "hq": 733782
+            },
+            "centre": [
+              1703.9712,
+              -587.3567999999996
+            ],
+            "centreElevM": -797.27
+          },
+          "10_8": {
+            "structures": {
+              "url": "/bakurani-world-cell-10_8.f25969f5934c39f5.pack",
+              "bytes": 17536,
+              "sha256": "f25969f5934c39f5a55051abc3b32d3f1e464ea82371afd84d95c8131602ea90",
+              "compressedBytes": {
+                "br": 12852,
+                "gzip": 13101
+              }
+            },
+            "placements": 398,
+            "tris": {
+              "mq": 62230,
+              "hq": 131246
+            },
+            "centre": [
+              2723.9712,
+              -587.3567999999996
+            ],
+            "centreElevM": -830.31
+          },
+          "11_8": {
+            "structures": {
+              "url": "/bakurani-world-cell-11_8.8c95bef4be99d16d.pack",
+              "bytes": 10400,
+              "sha256": "8c95bef4be99d16dccdb6968e62430bf0fa8f26ffb8e617b827491abda65eba2",
+              "compressedBytes": {
+                "br": 6967,
+                "gzip": 7237
+              }
+            },
+            "placements": 202,
+            "tris": {
+              "mq": 31588,
+              "hq": 75754
+            },
+            "centre": [
+              3743.9712,
+              -587.3567999999996
+            ],
+            "centreElevM": -636.19
+          },
+          "2_9": {
+            "structures": {
+              "url": "/bakurani-world-cell-2_9.94a2c4f8b0ad269c.pack",
+              "bytes": 1504,
+              "sha256": "94a2c4f8b0ad269c73f0c70af9537027cfc317ef94e0c6f6d4e6e927930752f6",
+              "compressedBytes": {
+                "br": 872,
+                "gzip": 913
+              }
+            },
+            "placements": 1,
+            "tris": {
+              "mq": 0,
+              "hq": 2
+            },
+            "centre": [
+              -5436.0288,
+              432.64320000000043
+            ],
+            "centreElevM": -813.36
+          },
+          "4_9": {
+            "structures": {
+              "url": "/bakurani-world-cell-4_9.e8229e3a60709407.pack",
+              "bytes": 3864,
+              "sha256": "e8229e3a6070940714f9ac7c2345d42b65e952b9c5b2c63bb65ddcf46e40df9a",
+              "compressedBytes": {
+                "br": 2182,
+                "gzip": 2404
+              }
+            },
+            "placements": 53,
+            "tris": {
+              "mq": 850,
+              "hq": 13412
+            },
+            "centre": [
+              -3396.0288,
+              432.64320000000043
+            ],
+            "centreElevM": -829.48
+          },
+          "5_9": {
+            "structures": {
+              "url": "/bakurani-world-cell-5_9.7e2781b750d01b5b.pack",
+              "bytes": 222544,
+              "sha256": "7e2781b750d01b5b57fe4016373f62e134f92633827e8ceced1fa12f85829be4",
+              "compressedBytes": {
+                "br": 65775,
+                "gzip": 72297
+              }
+            },
+            "placements": 4005,
+            "tris": {
+              "mq": 308654,
+              "hq": 1561241
+            },
+            "centre": [
+              -2376.0288,
+              432.64320000000043
+            ],
+            "centreElevM": -868.49
+          },
+          "6_9": {
+            "structures": {
+              "url": "/bakurani-world-cell-6_9.be4f760e58da90ec.pack",
+              "bytes": 356064,
+              "sha256": "be4f760e58da90ec6ac1b1b2f04e284eedd38f27567217a0c03fcb93e5022613",
+              "compressedBytes": {
+                "br": 99362,
+                "gzip": 111446
+              }
+            },
+            "placements": 7639,
+            "tris": {
+              "mq": 950512,
+              "hq": 3761323
+            },
+            "centre": [
+              -1356.0288,
+              432.64320000000043
+            ],
+            "centreElevM": -935.5
+          },
+          "7_9": {
+            "structures": {
+              "url": "/bakurani-world-cell-7_9.5189dcba9c09cd7c.pack",
+              "bytes": 170592,
+              "sha256": "5189dcba9c09cd7cf71df7a98f9e46d6cb60865d5b6f83a205c52142634ac257",
+              "compressedBytes": {
+                "br": 47971,
+                "gzip": 52064
+              }
+            },
+            "placements": 3317,
+            "tris": {
+              "mq": 481190,
+              "hq": 1742209
+            },
+            "centre": [
+              -336.02879999999993,
+              432.64320000000043
+            ],
+            "centreElevM": -941.2
+          },
+          "8_9": {
+            "structures": {
+              "url": "/bakurani-world-cell-8_9.ba26cf69e2082587.pack",
+              "bytes": 393448,
+              "sha256": "ba26cf69e208258788209e3a846483b002ad2c7ef3678bcf2ad9a156da99965d",
+              "compressedBytes": {
+                "br": 107508,
+                "gzip": 121837
+              }
+            },
+            "placements": 8383,
+            "tris": {
+              "mq": 1243893,
+              "hq": 4432359
+            },
+            "centre": [
+              683.9712000000001,
+              432.64320000000043
+            ],
+            "centreElevM": -935.01
+          },
+          "9_9": {
+            "structures": {
+              "url": "/bakurani-world-cell-9_9.2298c53d675d5d52.pack",
+              "bytes": 204680,
+              "sha256": "2298c53d675d5d525c7c0627a30ca110f236d723b9296953d74658cbf36f54b4",
+              "compressedBytes": {
+                "br": 63355,
+                "gzip": 68855
+              }
+            },
+            "placements": 3989,
+            "tris": {
+              "mq": 383593,
+              "hq": 1570757
+            },
+            "centre": [
+              1703.9712,
+              432.64320000000043
+            ],
+            "centreElevM": -926.21
+          },
+          "10_9": {
+            "structures": {
+              "url": "/bakurani-world-cell-10_9.7575987cc661e325.pack",
+              "bytes": 187192,
+              "sha256": "7575987cc661e325618d892c6b45b5b041eaf30bbc1c709eaedcb8ea8aad999b",
+              "compressedBytes": {
+                "br": 54811,
+                "gzip": 60992
+              }
+            },
+            "placements": 3816,
+            "tris": {
+              "mq": 437434,
+              "hq": 1752606
+            },
+            "centre": [
+              2723.9712,
+              432.64320000000043
+            ],
+            "centreElevM": -905.97
+          },
+          "11_9": {
+            "structures": {
+              "url": "/bakurani-world-cell-11_9.b8310e4f39f22025.pack",
+              "bytes": 422568,
+              "sha256": "b8310e4f39f220253b8755ce8fd9bcd5634d8ee6c04453facea7bf98753c1dd8",
+              "compressedBytes": {
+                "br": 110022,
+                "gzip": 124149
+              }
+            },
+            "placements": 8259,
+            "tris": {
+              "mq": 924629,
+              "hq": 3792355
+            },
+            "centre": [
+              3743.9712,
+              432.64320000000043
+            ],
+            "centreElevM": -877.07
+          },
+          "3_10": {
+            "structures": {
+              "url": "/bakurani-world-cell-3_10.55738aab59a7da02.pack",
+              "bytes": 16224,
+              "sha256": "55738aab59a7da02aa4886c6e76bae82f774fa28397a2458b8b0a0b4c175b16f",
+              "compressedBytes": {
+                "br": 11261,
+                "gzip": 11579
+              }
+            },
+            "placements": 364,
+            "tris": {
+              "mq": 62466,
+              "hq": 127036
+            },
+            "centre": [
+              -4416.0288,
+              1452.6432000000004
+            ],
+            "centreElevM": -854.71
+          },
+          "4_10": {
+            "structures": {
+              "url": "/bakurani-world-cell-4_10.64ffb5aaba7850c1.pack",
+              "bytes": 64216,
+              "sha256": "64ffb5aaba7850c1ff66767b802de5115995927fecfac17e808718e4503d3aa0",
+              "compressedBytes": {
+                "br": 26441,
+                "gzip": 29194
+              }
+            },
+            "placements": 1549,
+            "tris": {
+              "mq": 240871,
+              "hq": 502554
+            },
+            "centre": [
+              -3396.0288,
+              1452.6432000000004
+            ],
+            "centreElevM": -935.64
+          },
+          "5_10": {
+            "structures": {
+              "url": "/bakurani-world-cell-5_10.bd741f8b347ad733.pack",
+              "bytes": 38248,
+              "sha256": "bd741f8b347ad7335be295c83a7ecfa85d4af2a47eb1194f1fd9d79d0f7bc87a",
+              "compressedBytes": {
+                "br": 24906,
+                "gzip": 25497
+              }
+            },
+            "placements": 903,
+            "tris": {
+              "mq": 147842,
+              "hq": 312479
+            },
+            "centre": [
+              -2376.0288,
+              1452.6432000000004
+            ],
+            "centreElevM": -975.57
+          },
+          "6_10": {
+            "structures": {
+              "url": "/bakurani-world-cell-6_10.2436be5d8cef5cc6.pack",
+              "bytes": 114256,
+              "sha256": "2436be5d8cef5cc6a6b6213993948254f50f19942db91cc054ee785205a09f20",
+              "compressedBytes": {
+                "br": 44217,
+                "gzip": 46499
+              }
+            },
+            "placements": 2229,
+            "tris": {
+              "mq": 238961,
+              "hq": 858477
+            },
+            "centre": [
+              -1356.0288,
+              1452.6432000000004
+            ],
+            "centreElevM": -922.06
+          },
+          "7_10": {
+            "structures": {
+              "url": "/bakurani-world-cell-7_10.2dd0c7d31ace917f.pack",
+              "bytes": 509568,
+              "sha256": "2dd0c7d31ace917f4892735d3df96a5d2cef7e5fd7a3f0df196870c7763c7f3a",
+              "compressedBytes": {
+                "br": 153846,
+                "gzip": 174752
+              }
+            },
+            "placements": 11430,
+            "tris": {
+              "mq": 1575247,
+              "hq": 6226613
+            },
+            "centre": [
+              -336.02879999999993,
+              1452.6432000000004
+            ],
+            "centreElevM": -943.58
+          },
+          "8_10": {
+            "structures": {
+              "url": "/bakurani-world-cell-8_10.95e6cc93485cf789.pack",
+              "bytes": 129680,
+              "sha256": "95e6cc93485cf789cf638aeb24f38adfcb1fce5001186fb2e48d45dc5a7d9eba",
+              "compressedBytes": {
+                "br": 63188,
+                "gzip": 66097
+              }
+            },
+            "placements": 2708,
+            "tris": {
+              "mq": 264706,
+              "hq": 868149
+            },
+            "centre": [
+              683.9712000000001,
+              1452.6432000000004
+            ],
+            "centreElevM": -929.03
+          },
+          "9_10": {
+            "structures": {
+              "url": "/bakurani-world-cell-9_10.6c7afa5773ffac5c.pack",
+              "bytes": 93824,
+              "sha256": "6c7afa5773ffac5c30a2bf365c5bba03e073385b95675225e7d154ef9a1dbeca",
+              "compressedBytes": {
+                "br": 37808,
+                "gzip": 39557
+              }
+            },
+            "placements": 1708,
+            "tris": {
+              "mq": 290300,
+              "hq": 870734
+            },
+            "centre": [
+              1703.9712,
+              1452.6432000000004
+            ],
+            "centreElevM": -915.52
+          },
+          "10_10": {
+            "structures": {
+              "url": "/bakurani-world-cell-10_10.5741440b71a532ad.pack",
+              "bytes": 34168,
+              "sha256": "5741440b71a532ad516d4069d8bf9a43ead87bb497c1cf256e2f9319536f3967",
+              "compressedBytes": {
+                "br": 21557,
+                "gzip": 22128
+              }
+            },
+            "placements": 785,
+            "tris": {
+              "mq": 145560,
+              "hq": 404360
+            },
+            "centre": [
+              2723.9712,
+              1452.6432000000004
+            ],
+            "centreElevM": -925.23
+          },
+          "11_10": {
+            "structures": {
+              "url": "/bakurani-world-cell-11_10.ae7472472587fff1.pack",
+              "bytes": 36224,
+              "sha256": "ae7472472587fff16efcb13b50c755d3524e3371fbe1c8dedf7fbfb2256e0226",
+              "compressedBytes": {
+                "br": 25103,
+                "gzip": 25455
+              }
+            },
+            "placements": 861,
+            "tris": {
+              "mq": 146984,
+              "hq": 300142
+            },
+            "centre": [
+              3743.9712,
+              1452.6432000000004
+            ],
+            "centreElevM": -928.32
+          },
+          "12_10": {
+            "structures": {
+              "url": "/bakurani-world-cell-12_10.bbb1570b29043435.pack",
+              "bytes": 27504,
+              "sha256": "bbb1570b2904343544a94e73afc983603965675a6e5c323361e0159bc3b5e060",
+              "compressedBytes": {
+                "br": 19473,
+                "gzip": 19843
+              }
+            },
+            "placements": 643,
+            "tris": {
+              "mq": 111889,
+              "hq": 224060
+            },
+            "centre": [
+              4763.9712,
+              1452.6432000000004
+            ],
+            "centreElevM": -914.69
+          },
+          "13_10": {
+            "structures": {
+              "url": "/bakurani-world-cell-13_10.2028d4fadfb40caf.pack",
+              "bytes": 3176,
+              "sha256": "2028d4fadfb40cafdd7935cee1d3f5099c799d85bbe171a42241a5c561689cae",
+              "compressedBytes": {
+                "br": 2137,
+                "gzip": 2298
+              }
+            },
+            "placements": 38,
+            "tris": {
+              "mq": 6440,
+              "hq": 13262
+            },
+            "centre": [
+              5783.9712,
+              1452.6432000000004
+            ],
+            "centreElevM": -873.9
+          },
+          "1_11": {
+            "structures": {
+              "url": "/bakurani-world-cell-1_11.05ea6677e6eff2da.pack",
+              "bytes": 4016,
+              "sha256": "05ea6677e6eff2da0c1858d1f15159ba20f4bb7ce5c7db8584492af80dad1422",
+              "compressedBytes": {
+                "br": 2700,
+                "gzip": 2884
+              }
+            },
+            "placements": 59,
+            "tris": {
+              "mq": 9835,
+              "hq": 20591
+            },
+            "centre": [
+              -6456.0288,
+              2472.6432000000004
+            ],
+            "centreElevM": -986.68
+          },
+          "2_11": {
+            "structures": {
+              "url": "/bakurani-world-cell-2_11.5817e202fac8c0f7.pack",
+              "bytes": 43064,
+              "sha256": "5817e202fac8c0f7c5c9731b80192b72124c2dc5a00c62288211f78acc7649d1",
+              "compressedBytes": {
+                "br": 28629,
+                "gzip": 29179
+              }
+            },
+            "placements": 1031,
+            "tris": {
+              "mq": 177865,
+              "hq": 359819
+            },
+            "centre": [
+              -5436.0288,
+              2472.6432000000004
+            ],
+            "centreElevM": -954.69
+          },
+          "3_11": {
+            "structures": {
+              "url": "/bakurani-world-cell-3_11.f4cb3976ff97c191.pack",
+              "bytes": 24424,
+              "sha256": "f4cb3976ff97c191434253921ef4258e7fa165e0daf6ff9214ab399ddfd6d089",
+              "compressedBytes": {
+                "br": 16431,
+                "gzip": 16931
+              }
+            },
+            "placements": 569,
+            "tris": {
+              "mq": 98159,
+              "hq": 198581
+            },
+            "centre": [
+              -4416.0288,
+              2472.6432000000004
+            ],
+            "centreElevM": -919.26
+          },
+          "5_11": {
+            "structures": {
+              "url": "/bakurani-world-cell-5_11.04d6364448b07fdf.pack",
+              "bytes": 67392,
+              "sha256": "04d6364448b07fdfc156a9658490d948401d105f32a6c13181092cad73574289",
+              "compressedBytes": {
+                "br": 17257,
+                "gzip": 19016
+              }
+            },
+            "placements": 1192,
+            "tris": {
+              "mq": 65509,
+              "hq": 356448
+            },
+            "centre": [
+              -2376.0288,
+              2472.6432000000004
+            ],
+            "centreElevM": -860.05
+          },
+          "6_11": {
+            "structures": {
+              "url": "/bakurani-world-cell-6_11.f21d1535ab03a050.pack",
+              "bytes": 21064,
+              "sha256": "f21d1535ab03a050df53b982a8f198e59c200e94173b8b0082626b91c814e96f",
+              "compressedBytes": {
+                "br": 11137,
+                "gzip": 12035
+              }
+            },
+            "placements": 482,
+            "tris": {
+              "mq": 34012,
+              "hq": 151712
+            },
+            "centre": [
+              -1356.0288,
+              2472.6432000000004
+            ],
+            "centreElevM": -910.39
+          },
+          "7_11": {
+            "structures": {
+              "url": "/bakurani-world-cell-7_11.4d18a9cead5e73e0.pack",
+              "bytes": 260888,
+              "sha256": "4d18a9cead5e73e00c7df651619c864324f6db2412df4dd13bca4c6431e0e9a9",
+              "compressedBytes": {
+                "br": 72654,
+                "gzip": 82233
+              }
+            },
+            "placements": 5357,
+            "tris": {
+              "mq": 695633,
+              "hq": 2737637
+            },
+            "centre": [
+              -336.02879999999993,
+              2472.6432000000004
+            ],
+            "centreElevM": -909.06
+          },
+          "8_11": {
+            "structures": {
+              "url": "/bakurani-world-cell-8_11.3fa7867745ff850c.pack",
+              "bytes": 235032,
+              "sha256": "3fa7867745ff850c6a7b64a6bd5b59d4af9c27ff7cfe5dbfff105ae6127ff11a",
+              "compressedBytes": {
+                "br": 64016,
+                "gzip": 70144
+              }
+            },
+            "placements": 4295,
+            "tris": {
+              "mq": 366096,
+              "hq": 1616822
+            },
+            "centre": [
+              683.9712000000001,
+              2472.6432000000004
+            ],
+            "centreElevM": -771.18
+          },
+          "9_11": {
+            "structures": {
+              "url": "/bakurani-world-cell-9_11.ec5385370a56c32a.pack",
+              "bytes": 3496,
+              "sha256": "ec5385370a56c32acd5e6264f852e8e040cc789b52ba612fbc6ea05dc68cbf86",
+              "compressedBytes": {
+                "br": 1470,
+                "gzip": 1592
+              }
+            },
+            "placements": 36,
+            "tris": {
+              "mq": 4996,
+              "hq": 25072
+            },
+            "centre": [
+              1703.9712,
+              2472.6432000000004
+            ],
+            "centreElevM": -839.95
+          },
+          "13_11": {
+            "structures": {
+              "url": "/bakurani-world-cell-13_11.52804ad8a082aede.pack",
+              "bytes": 3496,
+              "sha256": "52804ad8a082aede483a5f80bb9677233f2d1c54fdada742094e9dc36b846034",
+              "compressedBytes": {
+                "br": 2360,
+                "gzip": 2525
+              }
+            },
+            "placements": 46,
+            "tris": {
+              "mq": 7941,
+              "hq": 16054
+            },
+            "centre": [
+              5783.9712,
+              2472.6432000000004
+            ],
+            "centreElevM": -825.18
+          },
+          "6_12": {
+            "structures": {
+              "url": "/bakurani-world-cell-6_12.ee5fa25d942ed04c.pack",
+              "bytes": 30784,
+              "sha256": "ee5fa25d942ed04c005aa47e500b2181af84da9a911bd8bad553b88e8603a093",
+              "compressedBytes": {
+                "br": 15413,
+                "gzip": 17129
+              }
+            },
+            "placements": 725,
+            "tris": {
+              "mq": 51329,
+              "hq": 228713
+            },
+            "centre": [
+              -1356.0288,
+              3492.6432000000004
+            ],
+            "centreElevM": -864.13
+          },
+          "7_12": {
+            "structures": {
+              "url": "/bakurani-world-cell-7_12.4ac23ce6065123aa.pack",
+              "bytes": 112768,
+              "sha256": "4ac23ce6065123aa712ae7875de9690bcfd50fa7fbcabebcde25ce68ad33d8c4",
+              "compressedBytes": {
+                "br": 38511,
+                "gzip": 42094
+              }
+            },
+            "placements": 2190,
+            "tris": {
+              "mq": 116389,
+              "hq": 683755
+            },
+            "centre": [
+              -336.02879999999993,
+              3492.6432000000004
+            ],
+            "centreElevM": -881.08
+          },
+          "8_12": {
+            "structures": {
+              "url": "/bakurani-world-cell-8_12.ac1ff2884ae9285d.pack",
+              "bytes": 581608,
+              "sha256": "ac1ff2884ae9285d7b4dbcd3e3a4666105c63b9e3b7b68ce04ef83e9086da63e",
+              "compressedBytes": {
+                "br": 154082,
+                "gzip": 179092
+              }
+            },
+            "placements": 12518,
+            "tris": {
+              "mq": 1581342,
+              "hq": 6472962
+            },
+            "centre": [
+              683.9712000000001,
+              3492.6432000000004
+            ],
+            "centreElevM": -841.64
+          },
+          "9_12": {
+            "structures": {
+              "url": "/bakurani-world-cell-9_12.7e7658292654c835.pack",
+              "bytes": 5792,
+              "sha256": "7e7658292654c83535f47530231870c7a81513cd53d55ed1e33404811a07c769",
+              "compressedBytes": {
+                "br": 3489,
+                "gzip": 3688
+              }
+            },
+            "placements": 87,
+            "tris": {
+              "mq": 13598,
+              "hq": 37760
+            },
+            "centre": [
+              1703.9712,
+              3492.6432000000004
+            ],
+            "centreElevM": -759.72
+          },
+          "5_13": {
+            "structures": {
+              "url": "/bakurani-world-cell-5_13.49c3310e671c5d7f.pack",
+              "bytes": 14440,
+              "sha256": "49c3310e671c5d7fefbeb5e04cd6a6a86ca99c1e0ce27d0d3e4c51bc6253483c",
+              "compressedBytes": {
+                "br": 7242,
+                "gzip": 8296
+              }
+            },
+            "placements": 317,
+            "tris": {
+              "mq": 22962,
+              "hq": 101472
+            },
+            "centre": [
+              -2376.0288,
+              4512.6432
+            ],
+            "centreElevM": -720.34
+          },
+          "6_13": {
+            "structures": {
+              "url": "/bakurani-world-cell-6_13.da2ebc5f3580e9ce.pack",
+              "bytes": 24928,
+              "sha256": "da2ebc5f3580e9cee5cd6cc26f266fc25d36fe1cfec39d4f66f2369988fe8497",
+              "compressedBytes": {
+                "br": 12643,
+                "gzip": 14236
+              }
+            },
+            "placements": 579,
+            "tris": {
+              "mq": 41703,
+              "hq": 184631
+            },
+            "centre": [
+              -1356.0288,
+              4512.6432
+            ],
+            "centreElevM": -831.52
+          },
+          "9_13": {
+            "structures": {
+              "url": "/bakurani-world-cell-9_13.e92d9337626a8e5d.pack",
+              "bytes": 8872,
+              "sha256": "e92d9337626a8e5d32b65754e8fcd659df3b87dcf6a01c4bd0cad6294f5e03de",
+              "compressedBytes": {
+                "br": 6422,
+                "gzip": 6666
+              }
+            },
+            "placements": 182,
+            "tris": {
+              "mq": 28240,
+              "hq": 58296
+            },
+            "centre": [
+              1703.9712,
+              4512.6432
+            ],
+            "centreElevM": -845.64
+          },
+          "10_13": {
+            "structures": {
+              "url": "/bakurani-world-cell-10_13.15dfcd69a8c211f0.pack",
+              "bytes": 6352,
+              "sha256": "15dfcd69a8c211f0103e624b3adb763f8d3800e4ff8e85e5901bff56228f7108",
+              "compressedBytes": {
+                "br": 4547,
+                "gzip": 4776
+              }
+            },
+            "placements": 119,
+            "tris": {
+              "mq": 18400,
+              "hq": 37604
+            },
+            "centre": [
+              2723.9712,
+              4512.6432
+            ],
+            "centreElevM": -664.59
+          },
+          "4_14": {
+            "structures": {
+              "url": "/bakurani-world-cell-4_14.d10e2bd6835f48bd.pack",
+              "bytes": 30888,
+              "sha256": "d10e2bd6835f48bdb50ea425bde9bff1403f01e621aaa6c4243513cfc52cb625",
+              "compressedBytes": {
+                "br": 16486,
+                "gzip": 18393
+              }
+            },
+            "placements": 728,
+            "tris": {
+              "mq": 50680,
+              "hq": 227168
+            },
+            "centre": [
+              -3396.0288,
+              5532.6432
+            ],
+            "centreElevM": -771.52
+          },
+          "5_14": {
+            "structures": {
+              "url": "/bakurani-world-cell-5_14.f3548755d641ac80.pack",
+              "bytes": 19168,
+              "sha256": "f3548755d641ac805397d9c02ed0c189949486c99082b36cc93eaa379695297c",
+              "compressedBytes": {
+                "br": 9361,
+                "gzip": 10915
+              }
+            },
+            "placements": 435,
+            "tris": {
+              "mq": 30934,
+              "hq": 137600
+            },
+            "centre": [
+              -2376.0288,
+              5532.6432
+            ],
+            "centreElevM": -707.96
+          }
+        }
+      }
+    },
+    "ozeti": {
+      "bounds": [
+        [
+          -740.0111676185537,
+          -87.05195908681502,
+          -742.8619565502279
+        ],
+        [
+          742.166883011698,
+          72.96344771616283,
+          739.8137042565509
+        ]
+      ],
+      "sourceInstances": 100362,
+      "terrain": {
+        "url": "/ozeti-terrain.a1a266ca50404bf2.pack",
+        "bytes": 8663864,
+        "sha256": "a1a266ca50404bf28cb103895f556d7ab077b2e699a649cbf2c4c0a4213d4a96",
+        "compressedBytes": {
+          "br": 3840919,
+          "gzip": 5518306
+        }
+      },
+      "structures": {
+        "lq": {
+          "url": "/ozeti-structures-lq.8decbc1347c13acd.pack",
+          "bytes": 8369760,
+          "sha256": "8decbc1347c13acd7cb3b05898ba4a2e9891de78400af6eead0a743de4936d17",
+          "compressedBytes": {
+            "br": 1995130,
+            "gzip": 2256536
+          }
+        },
+        "mq": {
+          "url": "/ozeti-structures-mq.682940411f4fdaca.pack",
+          "bytes": 16967624,
+          "sha256": "682940411f4fdaca916a93668ff7b5cc6b011ad68393ca8eded2f91819270c6c",
+          "compressedBytes": {
+            "br": 3403944,
+            "gzip": 3934841
+          }
+        },
+        "hq": {
+          "url": "/ozeti-structures-hq.413852f5db3b7959.pack",
+          "bytes": 22466672,
+          "sha256": "413852f5db3b795958adb8a4b42b484f3f3368a0d5439db2232667650539199b",
+          "compressedBytes": {
+            "br": 5729212,
+            "gzip": 6793230
+          }
+        }
+      },
+      "vegetation": {
+        "lq": {
+          "url": "/ozeti-vegetation-lq.a6e5850b5815b512.pack",
+          "bytes": 11144352,
+          "sha256": "a6e5850b5815b512a948d51fbb2c72b0ca8851277b807ba67e6eec35bf2ca254",
+          "compressedBytes": {
+            "br": 5670553,
+            "gzip": 6034011
+          }
+        },
+        "mq": {
+          "url": "/ozeti-vegetation-mq.005595785a5e549e.pack",
+          "bytes": 4470456,
+          "sha256": "005595785a5e549e6e6cb4c1e9870e13e3a56331fe2121a0f2f40983bce47ad0",
+          "compressedBytes": {
+            "br": 1163176,
+            "gzip": 2301044
+          }
+        },
+        "hq": {
+          "url": "/ozeti-vegetation-hq.4292db128e901879.pack",
+          "bytes": 4534928,
+          "sha256": "4292db128e901879f57e45d91a718a76cc17a7cbd3935501d00ce178effab9d6",
+          "compressedBytes": {
+            "br": 1210693,
+            "gzip": 2352031
+          }
+        },
+        "bands": {
+          "url": "/ozeti-vegetation-bands.b666d77754cbc145.pack",
+          "bytes": 11145000,
+          "sha256": "b666d77754cbc145d28c9638f3fc87dc3c18cf2c4edb1f2cd8c05952725a46eb",
+          "compressedBytes": {
+            "br": 5603662,
+            "gzip": 6001894
+          }
+        },
+        "cones": {
+          "url": "/ozeti-vegetation-cones.c217592b622cc7ee.pack",
+          "bytes": 1560280,
+          "sha256": "c217592b622cc7ee173a82460db7843de381e52ce4118ebc54f11bdc657183af",
+          "compressedBytes": {
+            "br": 937668,
+            "gzip": 980170
+          }
+        }
+      },
+      "surround": {
+        "url": "/ozeti-surround.63a29640ec3b38e9.pack",
+        "bytes": 1625392,
+        "sha256": "63a29640ec3b38e9478bad7f12b703d77a75c45a65a97810a78643d2b26295ba",
+        "compressedBytes": {
+          "br": 1604492,
+          "gzip": 1607929
+        }
+      },
+      "roads": {
+        "url": "/ozeti-roads.a46620df4b3ec3cc.pack",
+        "bytes": 74376,
+        "sha256": "a46620df4b3ec3ccff86aa2895bc198f393cab6aa458596e2b5785a608d916fe",
+        "compressedBytes": {
+          "br": 21985,
+          "gzip": 24218
+        }
+      },
+      "world": {
+        "map": "europe",
+        "site": "ozeti",
+        "worldM": 16320,
+        "cellSizeM": 1020,
+        "cellCount": 16,
+        "offset": [
+          1835.5920000000017,
+          1849.0559999999994
+        ],
+        "refElevM": -915.59,
+        "docs": "World pack contract v1; see viewer/docs/object-scaling-proposal.md, \"Appendix: world pack format\". Placements are Float32 x10 TRS (px,py,pz,qx,qy,qz,qw,sx,sy,sz) in site-local metres: site-local = map-centred world metres - (mean(map.towers[].pos) - 0.5) * worldM, and Y = (cell.centreElevM - site.centreElevM) + py. Library geometry carries position/normal plus normalized 8-bit vertex colours baked from the cell scene materials[name].color; one shared MeshStandardMaterial (roughness 0.92, metalness 0.04, vertexColors) reproduces the site packs' per-material baseColorFactor exactly. Mirrored (negative determinant) placements reference the reflected geometry \"<model>:m\". Vegetation exists at LQ only, and models whose largest bounding-box dimension is under 2 m are absent from the MQ library; the runtime skips a placement whose active tier lacks its model.",
+        "base": {
+          "url": "/ozeti-world-base.46846c7c7515f9d6.pack",
+          "bytes": 38252784,
+          "sha256": "46846c7c7515f9d671461fb0efaaa3000b10880dfd6d03f1a27e7e50b7fd8950",
+          "compressedBytes": {
+            "br": 10125395,
+            "gzip": 11405497
+          }
+        },
+        "heights": {
+          "url": "/ozeti-world-heights.3b84c1f8c80f047c.pack",
+          "bytes": 11466104,
+          "sha256": "3b84c1f8c80f047c9bd6c8d24a18b6cc9e32ae358d6db251509a9a11f29beb34",
+          "compressedBytes": {
+            "br": 11431666,
+            "gzip": 11414697
+          }
+        },
+        "cells": {
+          "9_3": {
+            "structures": {
+              "url": "/ozeti-world-cell-9_3.3a0a4f9e507af649.pack",
+              "bytes": 36176,
+              "sha256": "3a0a4f9e507af6497914d2f9a2840a3a1cad396b2bead735b7608434c8bbfe3b",
+              "compressedBytes": {
+                "br": 25439,
+                "gzip": 25728
+              }
+            },
+            "placements": 863,
+            "tris": {
+              "mq": 139192,
+              "hq": 301187
+            },
+            "centre": [
+              -305.5920000000017,
+              -6439.056
+            ],
+            "centreElevM": -852.15
+          },
+          "9_4": {
+            "structures": {
+              "url": "/ozeti-world-cell-9_4.8aca3e3c0c99e750.pack",
+              "bytes": 32256,
+              "sha256": "8aca3e3c0c99e750d0975095bd93f9b483aa6c5e79a177c62b74392febb9afa8",
+              "compressedBytes": {
+                "br": 22460,
+                "gzip": 22824
+              }
+            },
+            "placements": 761,
+            "tris": {
+              "mq": 121760,
+              "hq": 265589
+            },
+            "centre": [
+              -305.5920000000017,
+              -5419.056
+            ],
+            "centreElevM": -915.28
+          },
+          "9_5": {
+            "structures": {
+              "url": "/ozeti-world-cell-9_5.0b96f0e43f5ae50a.pack",
+              "bytes": 7136,
+              "sha256": "0b96f0e43f5ae50a61fd7e031716c28a41eb6faf5f4499666cc5b33816398b2c",
+              "compressedBytes": {
+                "br": 5241,
+                "gzip": 5444
+              }
+            },
+            "placements": 141,
+            "tris": {
+              "mq": 23124,
+              "hq": 49209
+            },
+            "centre": [
+              -305.5920000000017,
+              -4399.056
+            ],
+            "centreElevM": -892.37
+          },
+          "8_6": {
+            "structures": {
+              "url": "/ozeti-world-cell-8_6.968c95dcea231783.pack",
+              "bytes": 23712,
+              "sha256": "968c95dcea23178330e7a59704f6ce2e819cf1800267089e8595473816569e0b",
+              "compressedBytes": {
+                "br": 16853,
+                "gzip": 17140
+              }
+            },
+            "placements": 547,
+            "tris": {
+              "mq": 93869,
+              "hq": 190903
+            },
+            "centre": [
+              -1325.5920000000017,
+              -3379.0559999999996
+            ],
+            "centreElevM": -924.57
+          },
+          "9_6": {
+            "structures": {
+              "url": "/ozeti-world-cell-9_6.ab4d30a9430ff07b.pack",
+              "bytes": 1752,
+              "sha256": "ab4d30a9430ff07bde4c9bb24510b0cf74794e541680ab750b1957a355bdb7ca",
+              "compressedBytes": {
+                "br": 1090,
+                "gzip": 1163
+              }
+            },
+            "placements": 6,
+            "tris": {
+              "mq": 984,
+              "hq": 2094
+            },
+            "centre": [
+              -305.5920000000017,
+              -3379.0559999999996
+            ],
+            "centreElevM": -801.59
+          },
+          "6_7": {
+            "structures": {
+              "url": "/ozeti-world-cell-6_7.20c8eb62ef6801cd.pack",
+              "bytes": 193168,
+              "sha256": "20c8eb62ef6801cd66236ae8655b00261b81cfb2156f852f2642062cd9921308",
+              "compressedBytes": {
+                "br": 57664,
+                "gzip": 63623
+              }
+            },
+            "placements": 3483,
+            "tris": {
+              "mq": 372793,
+              "hq": 1538480
+            },
+            "centre": [
+              -3365.5920000000015,
+              -2359.0559999999996
+            ],
+            "centreElevM": -762.85
+          },
+          "7_7": {
+            "structures": {
+              "url": "/ozeti-world-cell-7_7.c98f651c160ea467.pack",
+              "bytes": 170720,
+              "sha256": "c98f651c160ea4676c83810702bae781c8c8b0f78ac6f11d138673c116217f7c",
+              "compressedBytes": {
+                "br": 66374,
+                "gzip": 70406
+              }
+            },
+            "placements": 3366,
+            "tris": {
+              "mq": 459573,
+              "hq": 1443617
+            },
+            "centre": [
+              -2345.5920000000015,
+              -2359.0559999999996
+            ],
+            "centreElevM": -918.67
+          },
+          "8_7": {
+            "structures": {
+              "url": "/ozeti-world-cell-8_7.8585a13d6c9f292d.pack",
+              "bytes": 22272,
+              "sha256": "8585a13d6c9f292dee65ea0aa7a76736ab147c5a323eb6558df75f6384230bd4",
+              "compressedBytes": {
+                "br": 15936,
+                "gzip": 16215
+              }
+            },
+            "placements": 512,
+            "tris": {
+              "mq": 88545,
+              "hq": 178341
+            },
+            "centre": [
+              -1325.5920000000017,
+              -2359.0559999999996
+            ],
+            "centreElevM": -857.07
+          },
+          "6_8": {
+            "structures": {
+              "url": "/ozeti-world-cell-6_8.464c14bfadf4181a.pack",
+              "bytes": 3704,
+              "sha256": "464c14bfadf4181a0fbb865eec0da11bf657906ffb40800a21adb9f6a40f814c",
+              "compressedBytes": {
+                "br": 2141,
+                "gzip": 2335
+              }
+            },
+            "placements": 42,
+            "tris": {
+              "mq": 2442,
+              "hq": 6772
+            },
+            "centre": [
+              -3365.5920000000015,
+              -1339.0559999999994
+            ],
+            "centreElevM": -842.51
+          },
+          "7_8": {
+            "structures": {
+              "url": "/ozeti-world-cell-7_8.45fbd99c2c2e5436.pack",
+              "bytes": 611712,
+              "sha256": "45fbd99c2c2e543658fe36bed1ea65599dd052d30e1bb9b9da08886982261a20",
+              "compressedBytes": {
+                "br": 179952,
+                "gzip": 206224
+              }
+            },
+            "placements": 13717,
+            "tris": {
+              "mq": 1813481,
+              "hq": 6507749
+            },
+            "centre": [
+              -2345.5920000000015,
+              -1339.0559999999994
+            ],
+            "centreElevM": -943.98
+          },
+          "8_8": {
+            "structures": {
+              "url": "/ozeti-world-cell-8_8.04a3324f7189b904.pack",
+              "bytes": 46720,
+              "sha256": "04a3324f7189b904b9f37281ef503914464fadcdb3d4b8dee6ca4f8e5563faf6",
+              "compressedBytes": {
+                "br": 17515,
+                "gzip": 19669
+              }
+            },
+            "placements": 1110,
+            "tris": {
+              "mq": 27678,
+              "hq": 230702
+            },
+            "centre": [
+              -1325.5920000000017,
+              -1339.0559999999994
+            ],
+            "centreElevM": -922.75
+          },
+          "9_8": {
+            "structures": {
+              "url": "/ozeti-world-cell-9_8.5d9b2c67ef7c5dc7.pack",
+              "bytes": 22032,
+              "sha256": "5d9b2c67ef7c5dc784dce4e1dd8c71b587f4f78307673f5287f0d326cdc7d701",
+              "compressedBytes": {
+                "br": 11767,
+                "gzip": 12591
+              }
+            },
+            "placements": 506,
+            "tris": {
+              "mq": 35604,
+              "hq": 158976
+            },
+            "centre": [
+              -305.5920000000017,
+              -1339.0559999999994
+            ],
+            "centreElevM": -864.03
+          },
+          "10_8": {
+            "structures": {
+              "url": "/ozeti-world-cell-10_8.dc8b2b9b030ac1e4.pack",
+              "bytes": 1504,
+              "sha256": "dc8b2b9b030ac1e4602aa9e2aad5de85f65cb8993efe15264e6841a73c4e197c",
+              "compressedBytes": {
+                "br": 865,
+                "gzip": 907
+              }
+            },
+            "placements": 1,
+            "tris": {
+              "mq": 0,
+              "hq": 2
+            },
+            "centre": [
+              714.4079999999983,
+              -1339.0559999999994
+            ],
+            "centreElevM": -817
+          },
+          "11_8": {
+            "structures": {
+              "url": "/ozeti-world-cell-11_8.51cb4533112ba332.pack",
+              "bytes": 6856,
+              "sha256": "51cb4533112ba332e364012979e08fc2816ee7514368945eedb8f0fe25930f6a",
+              "compressedBytes": {
+                "br": 2182,
+                "gzip": 2544
+              }
+            },
+            "placements": 130,
+            "tris": {
+              "mq": 4030,
+              "hq": 20800
+            },
+            "centre": [
+              1734.4079999999983,
+              -1339.0559999999994
+            ],
+            "centreElevM": -806.94
+          },
+          "5_9": {
+            "structures": {
+              "url": "/ozeti-world-cell-5_9.0e1aa9de7424ee24.pack",
+              "bytes": 1544,
+              "sha256": "0e1aa9de7424ee248039f68b5cf1c7b57e2dfc5714ff1d2b987173ca4aeee1c7",
+              "compressedBytes": {
+                "br": 888,
+                "gzip": 937
+              }
+            },
+            "placements": 1,
+            "tris": {
+              "mq": 221,
+              "hq": 349
+            },
+            "centre": [
+              -4385.5920000000015,
+              -319.05599999999936
+            ],
+            "centreElevM": -903.69
+          },
+          "6_9": {
+            "structures": {
+              "url": "/ozeti-world-cell-6_9.54dadf58d28dd49f.pack",
+              "bytes": 105760,
+              "sha256": "54dadf58d28dd49f22103356b54c762c6f4c9a6a97094080e3c85c7ee2a00c19",
+              "compressedBytes": {
+                "br": 58665,
+                "gzip": 61193
+              }
+            },
+            "placements": 2553,
+            "tris": {
+              "mq": 362772,
+              "hq": 1064677
+            },
+            "centre": [
+              -3365.5920000000015,
+              -319.05599999999936
+            ],
+            "centreElevM": -946.15
+          },
+          "7_9": {
+            "structures": {
+              "url": "/ozeti-world-cell-7_9.bb8a88148982f963.pack",
+              "bytes": 167712,
+              "sha256": "bb8a88148982f9635399347a72ebb18a0c86faa9568f2986c3deebc1640c8269",
+              "compressedBytes": {
+                "br": 72186,
+                "gzip": 75741
+              }
+            },
+            "placements": 3384,
+            "tris": {
+              "mq": 370382,
+              "hq": 1182419
+            },
+            "centre": [
+              -2345.5920000000015,
+              -319.05599999999936
+            ],
+            "centreElevM": -891.03
+          },
+          "8_9": {
+            "structures": {
+              "url": "/ozeti-world-cell-8_9.81c2d76463350755.pack",
+              "bytes": 414560,
+              "sha256": "81c2d7646335075516f5e29eac18fc35fd3dbd193e30ea6557c60575a9589d80",
+              "compressedBytes": {
+                "br": 122737,
+                "gzip": 139477
+              }
+            },
+            "placements": 9133,
+            "tris": {
+              "mq": 914412,
+              "hq": 3974488
+            },
+            "centre": [
+              -1325.5920000000017,
+              -319.05599999999936
+            ],
+            "centreElevM": -924.78
+          },
+          "9_9": {
+            "structures": {
+              "url": "/ozeti-world-cell-9_9.a9b09f3a829c7b05.pack",
+              "bytes": 118200,
+              "sha256": "a9b09f3a829c7b05c95487d2120e145d9aab16670ea3b81b125e0e757ecb8a81",
+              "compressedBytes": {
+                "br": 31377,
+                "gzip": 34334
+              }
+            },
+            "placements": 2122,
+            "tris": {
+              "mq": 231639,
+              "hq": 939712
+            },
+            "centre": [
+              -305.5920000000017,
+              -319.05599999999936
+            ],
+            "centreElevM": -917.26
+          },
+          "10_9": {
+            "structures": {
+              "url": "/ozeti-world-cell-10_9.95e057d980570e52.pack",
+              "bytes": 84024,
+              "sha256": "95e057d980570e521caa84a5272f6be2666656178c293e3f235b3ee13bd859d8",
+              "compressedBytes": {
+                "br": 26831,
+                "gzip": 29274
+              }
+            },
+            "placements": 1482,
+            "tris": {
+              "mq": 143118,
+              "hq": 553215
+            },
+            "centre": [
+              714.4079999999983,
+              -319.05599999999936
+            ],
+            "centreElevM": -911.28
+          },
+          "11_9": {
+            "structures": {
+              "url": "/ozeti-world-cell-11_9.15ec16fbfec5b7b8.pack",
+              "bytes": 604384,
+              "sha256": "15ec16fbfec5b7b8771b3e31e0bf2c903fa3ca6649e0b078c1463c7c9daf687f",
+              "compressedBytes": {
+                "br": 168542,
+                "gzip": 193811
+              }
+            },
+            "placements": 13567,
+            "tris": {
+              "mq": 1340650,
+              "hq": 5569212
+            },
+            "centre": [
+              1734.4079999999983,
+              -319.05599999999936
+            ],
+            "centreElevM": -890.68
+          },
+          "12_9": {
+            "structures": {
+              "url": "/ozeti-world-cell-12_9.dd447a38857a966f.pack",
+              "bytes": 437312,
+              "sha256": "dd447a38857a966ff0e228d1c30fb79da12bd5fc5cc160d6020e23eb3383388f",
+              "compressedBytes": {
+                "br": 122517,
+                "gzip": 140346
+              }
+            },
+            "placements": 9800,
+            "tris": {
+              "mq": 1087523,
+              "hq": 4368116
+            },
+            "centre": [
+              2754.4079999999985,
+              -319.05599999999936
+            ],
+            "centreElevM": -876.68
+          },
+          "13_9": {
+            "structures": {
+              "url": "/ozeti-world-cell-13_9.135190453bad989a.pack",
+              "bytes": 325008,
+              "sha256": "135190453bad989a97d319ff9f7152c25e32109595a531fd7560ee1b491c0f50",
+              "compressedBytes": {
+                "br": 90155,
+                "gzip": 99850
+              }
+            },
+            "placements": 6703,
+            "tris": {
+              "mq": 926147,
+              "hq": 3312786
+            },
+            "centre": [
+              3774.4079999999985,
+              -319.05599999999936
+            ],
+            "centreElevM": -862.91
+          },
+          "14_9": {
+            "structures": {
+              "url": "/ozeti-world-cell-14_9.eb71b68007e316f7.pack",
+              "bytes": 48752,
+              "sha256": "eb71b68007e316f77f294ef8cf8673961e4a77beffc2bb0cb55653609004a08b",
+              "compressedBytes": {
+                "br": 33773,
+                "gzip": 34069
+              }
+            },
+            "placements": 1173,
+            "tris": {
+              "mq": 187887,
+              "hq": 409377
+            },
+            "centre": [
+              4794.4079999999985,
+              -319.05599999999936
+            ],
+            "centreElevM": -885.05
+          },
+          "15_9": {
+            "structures": {
+              "url": "/ozeti-world-cell-15_9.239813f4616bd3aa.pack",
+              "bytes": 8512,
+              "sha256": "239813f4616bd3aa513cbd8e549e8c6af4908e802c702182d1d4a328a611aae9",
+              "compressedBytes": {
+                "br": 6067,
+                "gzip": 6279
+              }
+            },
+            "placements": 171,
+            "tris": {
+              "mq": 27912,
+              "hq": 59679
+            },
+            "centre": [
+              5814.4079999999985,
+              -319.05599999999936
+            ],
+            "centreElevM": -849.76
+          },
+          "5_10": {
+            "structures": {
+              "url": "/ozeti-world-cell-5_10.eb399636359a6cc4.pack",
+              "bytes": 53312,
+              "sha256": "eb399636359a6cc40019cc67584d18a1503792848de54cd2b25702de25035fb4",
+              "compressedBytes": {
+                "br": 36689,
+                "gzip": 36990
+              }
+            },
+            "placements": 1291,
+            "tris": {
+              "mq": 207169,
+              "hq": 450559
+            },
+            "centre": [
+              -4385.5920000000015,
+              700.9440000000006
+            ],
+            "centreElevM": -965
+          },
+          "6_10": {
+            "structures": {
+              "url": "/ozeti-world-cell-6_10.62f58e0a73f8300c.pack",
+              "bytes": 58984,
+              "sha256": "62f58e0a73f8300cab9150864be983680a5937f04571df86f19b80da378ea8c9",
+              "compressedBytes": {
+                "br": 29522,
+                "gzip": 31596
+              }
+            },
+            "placements": 1422,
+            "tris": {
+              "mq": 116792,
+              "hq": 453892
+            },
+            "centre": [
+              -3365.5920000000015,
+              700.9440000000006
+            ],
+            "centreElevM": -941.23
+          },
+          "7_10": {
+            "structures": {
+              "url": "/ozeti-world-cell-7_10.9b2e6e0f1cf2da7b.pack",
+              "bytes": 82984,
+              "sha256": "9b2e6e0f1cf2da7be60de960c673e94745b9197d1a7918edac84d47626773150",
+              "compressedBytes": {
+                "br": 36344,
+                "gzip": 39533
+              }
+            },
+            "placements": 1967,
+            "tris": {
+              "mq": 167274,
+              "hq": 632788
+            },
+            "centre": [
+              -2345.5920000000015,
+              700.9440000000006
+            ],
+            "centreElevM": -947.42
+          },
+          "8_10": {
+            "structures": {
+              "url": "/ozeti-world-cell-8_10.aae4c27071e501a2.pack",
+              "bytes": 121312,
+              "sha256": "aae4c27071e501a27bcebfc4924368bf09e1e832c303a08f19e8690cb29548a7",
+              "compressedBytes": {
+                "br": 61451,
+                "gzip": 64117
+              }
+            },
+            "placements": 2702,
+            "tris": {
+              "mq": 272848,
+              "hq": 889011
+            },
+            "centre": [
+              -1325.5920000000017,
+              700.9440000000006
+            ],
+            "centreElevM": -859.54
+          },
+          "9_10": {
+            "structures": {
+              "url": "/ozeti-world-cell-9_10.f9503802242267ab.pack",
+              "bytes": 46648,
+              "sha256": "f9503802242267ab39cfd93e4648c23423d6bd3980082245817e10f1acb656c4",
+              "compressedBytes": {
+                "br": 13547,
+                "gzip": 15450
+              }
+            },
+            "placements": 1081,
+            "tris": {
+              "mq": 66403,
+              "hq": 305454
+            },
+            "centre": [
+              -305.5920000000017,
+              700.9440000000006
+            ],
+            "centreElevM": -903.12
+          },
+          "10_10": {
+            "structures": {
+              "url": "/ozeti-world-cell-10_10.eff832d5cffb4c99.pack",
+              "bytes": 25568,
+              "sha256": "eff832d5cffb4c997dfa205e1631e058210d853887b24db1339d916fd0b70534",
+              "compressedBytes": {
+                "br": 18080,
+                "gzip": 18415
+              }
+            },
+            "placements": 588,
+            "tris": {
+              "mq": 102160,
+              "hq": 205041
+            },
+            "centre": [
+              714.4079999999983,
+              700.9440000000006
+            ],
+            "centreElevM": -901.16
+          },
+          "11_10": {
+            "structures": {
+              "url": "/ozeti-world-cell-11_10.0878631c1671ca8d.pack",
+              "bytes": 158544,
+              "sha256": "0878631c1671ca8d6b3d7ab7048975ffb0f08afad0d1973339acc5f7d9af3171",
+              "compressedBytes": {
+                "br": 62117,
+                "gzip": 65678
+              }
+            },
+            "placements": 3139,
+            "tris": {
+              "mq": 435489,
+              "hq": 1295604
+            },
+            "centre": [
+              1734.4079999999983,
+              700.9440000000006
+            ],
+            "centreElevM": -935.33
+          },
+          "12_10": {
+            "structures": {
+              "url": "/ozeti-world-cell-12_10.9c440c27c47d0929.pack",
+              "bytes": 233032,
+              "sha256": "9c440c27c47d09299dbbcb6c685c6618a1f830ea72c0991c0828e6733f5fab05",
+              "compressedBytes": {
+                "br": 88221,
+                "gzip": 93807
+              }
+            },
+            "placements": 4674,
+            "tris": {
+              "mq": 598003,
+              "hq": 2043480
+            },
+            "centre": [
+              2754.4079999999985,
+              700.9440000000006
+            ],
+            "centreElevM": -926.54
+          },
+          "13_10": {
+            "structures": {
+              "url": "/ozeti-world-cell-13_10.9f0954508c1605d8.pack",
+              "bytes": 57328,
+              "sha256": "9f0954508c1605d8fb8b58d9361238b2fe85a6c46f4220143b13ed3d878974fd",
+              "compressedBytes": {
+                "br": 28824,
+                "gzip": 30580
+              }
+            },
+            "placements": 1359,
+            "tris": {
+              "mq": 184496,
+              "hq": 554754
+            },
+            "centre": [
+              3774.4079999999985,
+              700.9440000000006
+            ],
+            "centreElevM": -877.88
+          },
+          "14_10": {
+            "structures": {
+              "url": "/ozeti-world-cell-14_10.5d6c2395cbf857dd.pack",
+              "bytes": 27672,
+              "sha256": "5d6c2395cbf857dd9b2de89dcaae0ab5920208ffb6b04a0e05eafd6a658358d3",
+              "compressedBytes": {
+                "br": 8244,
+                "gzip": 10269
+              }
+            },
+            "placements": 647,
+            "tris": {
+              "mq": 46854,
+              "hq": 207072
+            },
+            "centre": [
+              4794.4079999999985,
+              700.9440000000006
+            ],
+            "centreElevM": -810.8
+          },
+          "15_10": {
+            "structures": {
+              "url": "/ozeti-world-cell-15_10.6f8fe671ff73405d.pack",
+              "bytes": 10984,
+              "sha256": "6f8fe671ff73405df3d30b64d153938ff87478d51ec82ed8e3155601e8dea0da",
+              "compressedBytes": {
+                "br": 3142,
+                "gzip": 3896
+              }
+            },
+            "placements": 230,
+            "tris": {
+              "mq": 16652,
+              "hq": 73600
+            },
+            "centre": [
+              5814.4079999999985,
+              700.9440000000006
+            ],
+            "centreElevM": -765.46
+          },
+          "2_11": {
+            "structures": {
+              "url": "/ozeti-world-cell-2_11.008913d5cccd60df.pack",
+              "bytes": 20192,
+              "sha256": "008913d5cccd60df28d4155e33038e28bea288fce341161f100aeda9477bb9e7",
+              "compressedBytes": {
+                "br": 14556,
+                "gzip": 14809
+              }
+            },
+            "placements": 463,
+            "tris": {
+              "mq": 80162,
+              "hq": 161587
+            },
+            "centre": [
+              -7445.5920000000015,
+              1720.9440000000006
+            ],
+            "centreElevM": -952.21
+          },
+          "3_11": {
+            "structures": {
+              "url": "/ozeti-world-cell-3_11.ff68d52c1eefced8.pack",
+              "bytes": 109280,
+              "sha256": "ff68d52c1eefced84354861750e6a56f7daadacb1f309c84e87a3fb07d0622c6",
+              "compressedBytes": {
+                "br": 74035,
+                "gzip": 75697
+              }
+            },
+            "placements": 2686,
+            "tris": {
+              "mq": 458390,
+              "hq": 937414
+            },
+            "centre": [
+              -6425.5920000000015,
+              1720.9440000000006
+            ],
+            "centreElevM": -992.21
+          },
+          "4_11": {
+            "structures": {
+              "url": "/ozeti-world-cell-4_11.87c3e3e0fd11f934.pack",
+              "bytes": 223704,
+              "sha256": "87c3e3e0fd11f934e997ae15e2d80053e2aad564701345cf80e7fe2f83333b8a",
+              "compressedBytes": {
+                "br": 145962,
+                "gzip": 152372
+              }
+            },
+            "placements": 5536,
+            "tris": {
+              "mq": 931323,
+              "hq": 1930688
+            },
+            "centre": [
+              -5405.5920000000015,
+              1720.9440000000006
+            ],
+            "centreElevM": -1015.56
+          },
+          "5_11": {
+            "structures": {
+              "url": "/ozeti-world-cell-5_11.4b08d56aa93e72c9.pack",
+              "bytes": 82184,
+              "sha256": "4b08d56aa93e72c9a8009621962241ae1ea7a71d5a591615d8d1ee6ee5c2c4f6",
+              "compressedBytes": {
+                "br": 48056,
+                "gzip": 50007
+              }
+            },
+            "placements": 1998,
+            "tris": {
+              "mq": 245195,
+              "hq": 669954
+            },
+            "centre": [
+              -4385.5920000000015,
+              1720.9440000000006
+            ],
+            "centreElevM": -948.89
+          },
+          "6_11": {
+            "structures": {
+              "url": "/ozeti-world-cell-6_11.a5bfd27fdef92f1c.pack",
+              "bytes": 12680,
+              "sha256": "a5bfd27fdef92f1cf29b2610d3b3b57d5313368e696599d64aebd14ccb2b6a66",
+              "compressedBytes": {
+                "br": 6868,
+                "gzip": 7523
+              }
+            },
+            "placements": 262,
+            "tris": {
+              "mq": 17106,
+              "hq": 75982
+            },
+            "centre": [
+              -3365.5920000000015,
+              1720.9440000000006
+            ],
+            "centreElevM": -892.86
+          },
+          "7_11": {
+            "structures": {
+              "url": "/ozeti-world-cell-7_11.bbe2633f944c9897.pack",
+              "bytes": 212416,
+              "sha256": "bbe2633f944c9897dc24e15e84c2ac1211c5e7def2e065ed8d9b371540b6fadb",
+              "compressedBytes": {
+                "br": 53987,
+                "gzip": 61244
+              }
+            },
+            "placements": 4133,
+            "tris": {
+              "mq": 375695,
+              "hq": 1563475
+            },
+            "centre": [
+              -2345.5920000000015,
+              1720.9440000000006
+            ],
+            "centreElevM": -906.21
+          },
+          "8_11": {
+            "structures": {
+              "url": "/ozeti-world-cell-8_11.465c494a5f465525.pack",
+              "bytes": 200896,
+              "sha256": "465c494a5f465525e775a450a355d8df5a9dcba85750a806953e996626c372d9",
+              "compressedBytes": {
+                "br": 57464,
+                "gzip": 63823
+              }
+            },
+            "placements": 4079,
+            "tris": {
+              "mq": 388010,
+              "hq": 1691553
+            },
+            "centre": [
+              -1325.5920000000017,
+              1720.9440000000006
+            ],
+            "centreElevM": -800.11
+          },
+          "9_11": {
+            "structures": {
+              "url": "/ozeti-world-cell-9_11.0b395cecd4ead8ab.pack",
+              "bytes": 148640,
+              "sha256": "0b395cecd4ead8abd4bd5c58973f4240ef0a73f372c09c7868beca6f40908e32",
+              "compressedBytes": {
+                "br": 41648,
+                "gzip": 46159
+              }
+            },
+            "placements": 2887,
+            "tris": {
+              "mq": 253393,
+              "hq": 1121899
+            },
+            "centre": [
+              -305.5920000000017,
+              1720.9440000000006
+            ],
+            "centreElevM": -840.97
+          },
+          "11_11": {
+            "structures": {
+              "url": "/ozeti-world-cell-11_11.354c36acebd08d53.pack",
+              "bytes": 1512,
+              "sha256": "354c36acebd08d53b355694680b7d7706fb887ecadcfbb5d77306a77c504e3d9",
+              "compressedBytes": {
+                "br": 869,
+                "gzip": 910
+              }
+            },
+            "placements": 1,
+            "tris": {
+              "mq": 0,
+              "hq": 2
+            },
+            "centre": [
+              1734.4079999999983,
+              1720.9440000000006
+            ],
+            "centreElevM": -842.31
+          },
+          "1_12": {
+            "structures": {
+              "url": "/ozeti-world-cell-1_12.43e016bf2f52f81d.pack",
+              "bytes": 22992,
+              "sha256": "43e016bf2f52f81db2819f9f6b9cf90d587ba881294251ddaa529a460f42adba",
+              "compressedBytes": {
+                "br": 16231,
+                "gzip": 16515
+              }
+            },
+            "placements": 529,
+            "tris": {
+              "mq": 84812,
+              "hq": 184621
+            },
+            "centre": [
+              -8465.592000000002,
+              2740.9440000000004
+            ],
+            "centreElevM": -959.73
+          },
+          "2_12": {
+            "structures": {
+              "url": "/ozeti-world-cell-2_12.2344953afaedb058.pack",
+              "bytes": 178120,
+              "sha256": "2344953afaedb0582b7f562c3755af40edfe10e98ade44896c69aa3c1a003426",
+              "compressedBytes": {
+                "br": 117546,
+                "gzip": 121866
+              }
+            },
+            "placements": 4407,
+            "tris": {
+              "mq": 734875,
+              "hq": 1538043
+            },
+            "centre": [
+              -7445.5920000000015,
+              2740.9440000000004
+            ],
+            "centreElevM": -995.93
+          },
+          "3_12": {
+            "structures": {
+              "url": "/ozeti-world-cell-3_12.1eb1deff2c436141.pack",
+              "bytes": 114280,
+              "sha256": "1eb1deff2c4361410f8f588dd138a4b59b095ddc48fd8c64b6bd46b012d529fd",
+              "compressedBytes": {
+                "br": 77248,
+                "gzip": 79200
+              }
+            },
+            "placements": 2811,
+            "tris": {
+              "mq": 460116,
+              "hq": 981039
+            },
+            "centre": [
+              -6425.5920000000015,
+              2740.9440000000004
+            ],
+            "centreElevM": -1006.84
+          },
+          "4_12": {
+            "structures": {
+              "url": "/ozeti-world-cell-4_12.cb24ef2899d9d77e.pack",
+              "bytes": 66832,
+              "sha256": "cb24ef2899d9d77e6b7a8bf1acc04b56d79ced5a328da367a5d9e42c9b19f747",
+              "compressedBytes": {
+                "br": 39018,
+                "gzip": 40717
+              }
+            },
+            "placements": 1618,
+            "tris": {
+              "mq": 178826,
+              "hq": 529944
+            },
+            "centre": [
+              -5405.5920000000015,
+              2740.9440000000004
+            ],
+            "centreElevM": -936.11
+          },
+          "7_12": {
+            "structures": {
+              "url": "/ozeti-world-cell-7_12.eea735146c0fe6bc.pack",
+              "bytes": 6016,
+              "sha256": "eea735146c0fe6bceda8b897437fdf837a06416fd3ee27bb13d5093b04c1a19a",
+              "compressedBytes": {
+                "br": 2014,
+                "gzip": 2293
+              }
+            },
+            "placements": 109,
+            "tris": {
+              "mq": 3398,
+              "hq": 17536
+            },
+            "centre": [
+              -2345.5920000000015,
+              2740.9440000000004
+            ],
+            "centreElevM": -872.46
+          },
+          "8_12": {
+            "structures": {
+              "url": "/ozeti-world-cell-8_12.4940d890112c889b.pack",
+              "bytes": 287392,
+              "sha256": "4940d890112c889bb0966e5e1f23857eac265198e1669ab8fcbaadd238e16369",
+              "compressedBytes": {
+                "br": 108720,
+                "gzip": 118390
+              }
+            },
+            "placements": 5868,
+            "tris": {
+              "mq": 364031,
+              "hq": 2039056
+            },
+            "centre": [
+              -1325.5920000000017,
+              2740.9440000000004
+            ],
+            "centreElevM": -819.81
+          },
+          "9_12": {
+            "structures": {
+              "url": "/ozeti-world-cell-9_12.c762eff93392d49a.pack",
+              "bytes": 2048,
+              "sha256": "c762eff93392d49a6dd15aa3909386fac8a496c12bda974dce661ea767b9476e",
+              "compressedBytes": {
+                "br": 1244,
+                "gzip": 1352
+              }
+            },
+            "placements": 11,
+            "tris": {
+              "mq": 1810,
+              "hq": 4342
+            },
+            "centre": [
+              -305.5920000000017,
+              2740.9440000000004
+            ],
+            "centreElevM": -789.29
+          },
+          "0_13": {
+            "structures": {
+              "url": "/ozeti-world-cell-0_13.5544582d55267a57.pack",
+              "bytes": 109400,
+              "sha256": "5544582d55267a5796de8e1b7dc0b3f95088610b5d6917e1dad9b85d2ee3ad20",
+              "compressedBytes": {
+                "br": 71251,
+                "gzip": 72697
+              }
+            },
+            "placements": 2693,
+            "tris": {
+              "mq": 434864,
+              "hq": 939857
+            },
+            "centre": [
+              -9485.592000000002,
+              3760.9440000000004
+            ],
+            "centreElevM": -1004.09
+          },
+          "1_13": {
+            "structures": {
+              "url": "/ozeti-world-cell-1_13.d5cd1f21f8ff71f8.pack",
+              "bytes": 116640,
+              "sha256": "d5cd1f21f8ff71f86914c37c133c772f744d0e79a1a94f82f93dbf826ad72d0a",
+              "compressedBytes": {
+                "br": 76500,
+                "gzip": 78162
+              }
+            },
+            "placements": 2874,
+            "tris": {
+              "mq": 465520,
+              "hq": 1003026
+            },
+            "centre": [
+              -8465.592000000002,
+              3760.9440000000004
+            ],
+            "centreElevM": -983.49
+          },
+          "4_13": {
+            "structures": {
+              "url": "/ozeti-world-cell-4_13.69cda48979f23ece.pack",
+              "bytes": 30152,
+              "sha256": "69cda48979f23ece53b6ac7fe9f90897357a23790a8c0d90b32c1c1c868a6007",
+              "compressedBytes": {
+                "br": 13382,
+                "gzip": 14943
+              }
+            },
+            "placements": 709,
+            "tris": {
+              "mq": 50402,
+              "hq": 224224
+            },
+            "centre": [
+              -5405.5920000000015,
+              3760.9440000000004
+            ],
+            "centreElevM": -921.76
+          },
+          "8_13": {
+            "structures": {
+              "url": "/ozeti-world-cell-8_13.f544936eae33646f.pack",
+              "bytes": 19384,
+              "sha256": "f544936eae33646fb864b06ef726ca1c04e7f47fdbccd1b4a577845d8808dbd1",
+              "compressedBytes": {
+                "br": 3925,
+                "gzip": 4579
+              }
+            },
+            "placements": 328,
+            "tris": {
+              "mq": 24444,
+              "hq": 79324
+            },
+            "centre": [
+              -1325.5920000000017,
+              3760.9440000000004
+            ],
+            "centreElevM": -833.03
+          },
+          "4_14": {
+            "structures": {
+              "url": "/ozeti-world-cell-4_14.720bc1775ea4aff2.pack",
+              "bytes": 34896,
+              "sha256": "720bc1775ea4aff21c313ba23f5ca3ec7d586b27a91c11937e34ce178dc4d53e",
+              "compressedBytes": {
+                "br": 14997,
+                "gzip": 16861
+              }
+            },
+            "placements": 828,
+            "tris": {
+              "mq": 58200,
+              "hq": 259968
+            },
+            "centre": [
+              -5405.5920000000015,
+              4780.944
+            ],
+            "centreElevM": -915.71
+          },
+          "3_15": {
+            "structures": {
+              "url": "/ozeti-world-cell-3_15.b8f63111be86781d.pack",
+              "bytes": 2840,
+              "sha256": "b8f63111be86781dc6cf6ed393aa2be30d91cc1641779ae8203ec2fd752d9866",
+              "compressedBytes": {
+                "br": 1399,
+                "gzip": 1542
+              }
+            },
+            "placements": 27,
+            "tris": {
+              "mq": 1966,
+              "hq": 8672
+            },
+            "centre": [
+              -6425.5920000000015,
+              5800.944
+            ],
+            "centreElevM": -872.53
+          },
+          "4_15": {
+            "structures": {
+              "url": "/ozeti-world-cell-4_15.2e9b0dde5a4dc968.pack",
+              "bytes": 11768,
+              "sha256": "2e9b0dde5a4dc96817b6ed5c25897528070cc7134fc845e190983f8038e36915",
+              "compressedBytes": {
+                "br": 4232,
+                "gzip": 5000
+              }
+            },
+            "placements": 250,
+            "tris": {
+              "mq": 18100,
+              "hq": 80000
+            },
+            "centre": [
+              -5405.5920000000015,
+              5800.944
+            ],
+            "centreElevM": -830.42
+          }
+        }
+      }
+    },
+    "zestafona": {
+      "bounds": [
+        [
+          -539.9128523396594,
+          -174.52343943796654,
+          -542.8588247005891
+        ],
+        [
+          540.8666542195962,
+          158.90054512023926,
+          542.842454084411
+        ]
+      ],
+      "sourceInstances": 120012,
+      "terrain": {
+        "url": "/zestafona-terrain.139c175baf9b2ec1.pack",
+        "bytes": 4609992,
+        "sha256": "139c175baf9b2ec17824eb25b3de55997cde138279cf7ed0f24970cf9e634e9f",
+        "compressedBytes": {
+          "br": 1657100,
+          "gzip": 2285424
+        }
+      },
+      "structures": {
+        "lq": {
+          "url": "/zestafona-structures-lq.8678abe7e498b166.pack",
+          "bytes": 13789944,
+          "sha256": "8678abe7e498b16638ee45bfb064a2646ef12cf6f42ee2ea5cc8ec8f6f39eb5a",
+          "compressedBytes": {
+            "br": 2762005,
+            "gzip": 3278537
+          }
+        },
+        "mq": {
+          "url": "/zestafona-structures-mq.1c9d147cfa251cf1.pack",
+          "bytes": 19793960,
+          "sha256": "1c9d147cfa251cf18473a32ca548c4bb9b3dd97d8fc7770129a15813db2bf515",
+          "compressedBytes": {
+            "br": 4529386,
+            "gzip": 5299726
+          }
+        },
+        "hq": {
+          "url": "/zestafona-structures-hq.547a110050f9ba2e.pack",
+          "bytes": 28741816,
+          "sha256": "547a110050f9ba2eeed900ff77b86a2c3b5774ab91f35688eac57818fdbc91a4",
+          "compressedBytes": {
+            "br": 8025247,
+            "gzip": 9661879
+          }
+        }
+      },
+      "vegetation": {
+        "lq": {
+          "url": "/zestafona-vegetation-lq.b44467b1017a7049.pack",
+          "bytes": 5106720,
+          "sha256": "b44467b1017a70493f4611597890972e32d465938ebd43a366ada8abc1f42161",
+          "compressedBytes": {
+            "br": 2580912,
+            "gzip": 2762007
+          }
+        },
+        "mq": {
+          "url": "/zestafona-vegetation-mq.b062f760b281d0b6.pack",
+          "bytes": 2256024,
+          "sha256": "b062f760b281d0b6e7866e5c64371d84f34492cb135608d0fdccd4db6e910aa4",
+          "compressedBytes": {
+            "br": 538013,
+            "gzip": 855331
+          }
+        },
+        "hq": {
+          "url": "/zestafona-vegetation-hq.7f1987c0cad7f96c.pack",
+          "bytes": 2252208,
+          "sha256": "7f1987c0cad7f96cf64e510919fc8d0f9fedacb97aec230882de8bc8b6c09ca3",
+          "compressedBytes": {
+            "br": 537526,
+            "gzip": 855231
+          }
+        },
+        "bands": {
+          "url": "/zestafona-vegetation-bands.f8891c8e64b3f498.pack",
+          "bytes": 5107272,
+          "sha256": "f8891c8e64b3f498d3f8ca156c96a41c3dec78c890ff577a7072f48689263fc1",
+          "compressedBytes": {
+            "br": 2549948,
+            "gzip": 2744831
+          }
+        },
+        "cones": {
+          "url": "/zestafona-vegetation-cones.3e20d1a0a7794546.pack",
+          "bytes": 707944,
+          "sha256": "3e20d1a0a779454674d194e14f26c9999b9f2b9e244475c7cfbcb0712a3cdc19",
+          "compressedBytes": {
+            "br": 421459,
+            "gzip": 442718
+          }
+        }
+      },
+      "surround": {
+        "url": "/zestafona-surround.6833def8d23f09d7.pack",
+        "bytes": 2430952,
+        "sha256": "6833def8d23f09d70d98c4aeefce8b78ad2609664edb4a908e0466fd1ad20993",
+        "compressedBytes": {
+          "br": 2430961,
+          "gzip": 2424025
+        }
+      },
+      "roads": {
+        "url": "/zestafona-roads.82689877891df013.pack",
+        "bytes": 81104,
+        "sha256": "82689877891df013600f2ce28538a2e10d38865b5a54600bd5de72d20709687e",
+        "compressedBytes": {
+          "br": 24921,
+          "gzip": 27528
+        }
+      },
+      "world": {
+        "map": "northamerica",
+        "site": "zestafona",
+        "worldM": 16384,
+        "cellSizeM": 1024,
+        "cellCount": 16,
+        "offset": [
+          -1136.503466666666,
+          -2121.181866666666
+        ],
+        "refElevM": 83.51,
+        "docs": "World pack contract v1; see viewer/docs/object-scaling-proposal.md, \"Appendix: world pack format\". Placements are Float32 x10 TRS (px,py,pz,qx,qy,qz,qw,sx,sy,sz) in site-local metres: site-local = map-centred world metres - (mean(map.towers[].pos) - 0.5) * worldM, and Y = (cell.centreElevM - site.centreElevM) + py. Library geometry carries position/normal plus normalized 8-bit vertex colours baked from the cell scene materials[name].color; one shared MeshStandardMaterial (roughness 0.92, metalness 0.04, vertexColors) reproduces the site packs' per-material baseColorFactor exactly. Mirrored (negative determinant) placements reference the reflected geometry \"<model>:m\". Vegetation exists at LQ only, and models whose largest bounding-box dimension is under 2 m are absent from the MQ library; the runtime skips a placement whose active tier lacks its model.",
+        "base": {
+          "url": "/zestafona-world-base.ac5ab0ad13bd29aa.pack",
+          "bytes": 26242400,
+          "sha256": "ac5ab0ad13bd29aa155e3fd1be28a4c3eb9475035f499e98f4ee599239b7b564",
+          "compressedBytes": {
+            "br": 7232193,
+            "gzip": 8503944
+          }
+        },
+        "heights": {
+          "url": "/zestafona-world-heights.be773af5e3b7f7a1.pack",
+          "bytes": 15700312,
+          "sha256": "be773af5e3b7f7a1cba5b56a7d653c4c0dcdc3b3e1e8e1b611a46ed74a2f3c3c",
+          "compressedBytes": {
+            "br": 15611538,
+            "gzip": 15542950
+          }
+        },
+        "cells": {
+          "4_1": {
+            "structures": {
+              "url": "/zestafona-world-cell-4_1.1dd2233962fda79e.pack",
+              "bytes": 24960,
+              "sha256": "1dd2233962fda79ec322daa9b6ded72c99662258e907312ce91a5d1b80c32821",
+              "compressedBytes": {
+                "br": 11360,
+                "gzip": 12542
+              }
+            },
+            "placements": 579,
+            "tris": {
+              "mq": 41214,
+              "hq": 183264
+            },
+            "centre": [
+              -2447.496533333334,
+              -4534.818133333334
+            ],
+            "centreElevM": 132.42
+          },
+          "5_1": {
+            "structures": {
+              "url": "/zestafona-world-cell-5_1.260e6e9adeeee9b6.pack",
+              "bytes": 13352,
+              "sha256": "260e6e9adeeee9b64d380d2846d7f1b77c097937e20875f3c5df7a35395ac210",
+              "compressedBytes": {
+                "br": 6336,
+                "gzip": 7047
+              }
+            },
+            "placements": 289,
+            "tris": {
+              "mq": 20386,
+              "hq": 90944
+            },
+            "centre": [
+              -1423.496533333334,
+              -4534.818133333334
+            ],
+            "centreElevM": 152.49
+          },
+          "3_2": {
+            "structures": {
+              "url": "/zestafona-world-cell-3_2.d8abda0c80ed6cc2.pack",
+              "bytes": 5032,
+              "sha256": "d8abda0c80ed6cc2caec7956343e4fb87909121aa1d71cd62383b54f1734aef0",
+              "compressedBytes": {
+                "br": 1791,
+                "gzip": 1968
+              }
+            },
+            "placements": 71,
+            "tris": {
+              "mq": 4266,
+              "hq": 19673
+            },
+            "centre": [
+              -3471.496533333334,
+              -3510.818133333334
+            ],
+            "centreElevM": 88.27
+          },
+          "5_2": {
+            "structures": {
+              "url": "/zestafona-world-cell-5_2.b45b7b978847df31.pack",
+              "bytes": 33440,
+              "sha256": "b45b7b978847df31adc2e89ba066464d11e92bd4916254b88c2b2636cccaa3a4",
+              "compressedBytes": {
+                "br": 15600,
+                "gzip": 16935
+              }
+            },
+            "placements": 791,
+            "tris": {
+              "mq": 55902,
+              "hq": 249216
+            },
+            "centre": [
+              -1423.496533333334,
+              -3510.818133333334
+            ],
+            "centreElevM": 66.11
+          },
+          "2_3": {
+            "structures": {
+              "url": "/zestafona-world-cell-2_3.bbeb8729a6b5679d.pack",
+              "bytes": 2016,
+              "sha256": "bbeb8729a6b5679ddc03c49be20f7c0cace0dacdb38175e3e441f901a58aa52e",
+              "compressedBytes": {
+                "br": 1294,
+                "gzip": 1419
+              }
+            },
+            "placements": 13,
+            "tris": {
+              "mq": 1820,
+              "hq": 2600
+            },
+            "centre": [
+              -4495.496533333334,
+              -2486.818133333334
+            ],
+            "centreElevM": 300.38
+          },
+          "3_3": {
+            "structures": {
+              "url": "/zestafona-world-cell-3_3.13bcad03f848a7a7.pack",
+              "bytes": 202280,
+              "sha256": "13bcad03f848a7a720da58a2d3c5ce50a4b4b98fa0b2fa7688ec83fadc3f5487",
+              "compressedBytes": {
+                "br": 44877,
+                "gzip": 51066
+              }
+            },
+            "placements": 3999,
+            "tris": {
+              "mq": 421624,
+              "hq": 1776886
+            },
+            "centre": [
+              -3471.496533333334,
+              -2486.818133333334
+            ],
+            "centreElevM": 121.04
+          },
+          "4_3": {
+            "structures": {
+              "url": "/zestafona-world-cell-4_3.3b7a9fe175376558.pack",
+              "bytes": 203728,
+              "sha256": "3b7a9fe175376558a68f5449781a3029d582ac923a3f0732d9f7c2b5066a4d53",
+              "compressedBytes": {
+                "br": 48779,
+                "gzip": 55796
+              }
+            },
+            "placements": 4240,
+            "tris": {
+              "mq": 491077,
+              "hq": 2040109
+            },
+            "centre": [
+              -2447.496533333334,
+              -2486.818133333334
+            ],
+            "centreElevM": 79.86
+          },
+          "5_3": {
+            "structures": {
+              "url": "/zestafona-world-cell-5_3.07c5ed1c7458662c.pack",
+              "bytes": 65080,
+              "sha256": "07c5ed1c7458662c2146af6a4e9d52bea6999b3edc32b46be0894429ee988867",
+              "compressedBytes": {
+                "br": 22396,
+                "gzip": 24636
+              }
+            },
+            "placements": 1153,
+            "tris": {
+              "mq": 145699,
+              "hq": 567225
+            },
+            "centre": [
+              -1423.496533333334,
+              -2486.818133333334
+            ],
+            "centreElevM": 54.77
+          },
+          "13_3": {
+            "structures": {
+              "url": "/zestafona-world-cell-13_3.7e4a40e16c14d994.pack",
+              "bytes": 2136,
+              "sha256": "7e4a40e16c14d994159d64bd395f8bb8711d57441d1cdecaf13560f994cb2feb",
+              "compressedBytes": {
+                "br": 1204,
+                "gzip": 1289
+              }
+            },
+            "placements": 9,
+            "tris": {
+              "mq": 226,
+              "hq": 924
+            },
+            "centre": [
+              6768.503466666666,
+              -2486.818133333334
+            ],
+            "centreElevM": 205.04
+          },
+          "3_4": {
+            "structures": {
+              "url": "/zestafona-world-cell-3_4.931b77a281913b81.pack",
+              "bytes": 48624,
+              "sha256": "931b77a281913b816af9627956959589613a08db38f42035d28121ecd4f271a9",
+              "compressedBytes": {
+                "br": 12335,
+                "gzip": 13698
+              }
+            },
+            "placements": 684,
+            "tris": {
+              "mq": 57699,
+              "hq": 283307
+            },
+            "centre": [
+              -3471.496533333334,
+              -1462.8181333333341
+            ],
+            "centreElevM": 90.24
+          },
+          "4_4": {
+            "structures": {
+              "url": "/zestafona-world-cell-4_4.c89dbcb38aef2540.pack",
+              "bytes": 186680,
+              "sha256": "c89dbcb38aef2540b72f09932052260cb8006f65836cd6e5bde60a29b70487b6",
+              "compressedBytes": {
+                "br": 45341,
+                "gzip": 51597
+              }
+            },
+            "placements": 3580,
+            "tris": {
+              "mq": 373367,
+              "hq": 1568162
+            },
+            "centre": [
+              -2447.496533333334,
+              -1462.8181333333341
+            ],
+            "centreElevM": 75.57
+          },
+          "5_4": {
+            "structures": {
+              "url": "/zestafona-world-cell-5_4.073afd5f6e65921b.pack",
+              "bytes": 10520,
+              "sha256": "073afd5f6e65921b09cac70091848368fe7f8ef77f578b733b00d8665352d548",
+              "compressedBytes": {
+                "br": 5358,
+                "gzip": 5705
+              }
+            },
+            "placements": 181,
+            "tris": {
+              "mq": 31132,
+              "hq": 107555
+            },
+            "centre": [
+              -1423.496533333334,
+              -1462.8181333333341
+            ],
+            "centreElevM": 53.62
+          },
+          "6_4": {
+            "structures": {
+              "url": "/zestafona-world-cell-6_4.1148bce5f52d1e48.pack",
+              "bytes": 40696,
+              "sha256": "1148bce5f52d1e4848a5d47d34a1bdbde20f16dcab1351d1ee4fd6cdb11cd45d",
+              "compressedBytes": {
+                "br": 17341,
+                "gzip": 19005
+              }
+            },
+            "placements": 918,
+            "tris": {
+              "mq": 82738,
+              "hq": 372749
+            },
+            "centre": [
+              -399.4965333333339,
+              -1462.8181333333341
+            ],
+            "centreElevM": 86.03
+          },
+          "7_4": {
+            "structures": {
+              "url": "/zestafona-world-cell-7_4.f1be6942c4584fbd.pack",
+              "bytes": 5080,
+              "sha256": "f1be6942c4584fbdcaf73697bc762e47beb100309ac0664bb0370a7d9d756f7a",
+              "compressedBytes": {
+                "br": 1643,
+                "gzip": 1802
+              }
+            },
+            "placements": 65,
+            "tris": {
+              "mq": 14006,
+              "hq": 67339
+            },
+            "centre": [
+              624.5034666666661,
+              -1462.8181333333341
+            ],
+            "centreElevM": 131.18
+          },
+          "8_4": {
+            "structures": {
+              "url": "/zestafona-world-cell-8_4.5a2b275ffc92713b.pack",
+              "bytes": 43984,
+              "sha256": "5a2b275ffc92713b643a2ce1e73a2bc360e91a822ce66eec9f9153d033ddb7a7",
+              "compressedBytes": {
+                "br": 11326,
+                "gzip": 13582
+              }
+            },
+            "placements": 1024,
+            "tris": {
+              "mq": 33798,
+              "hq": 196260
+            },
+            "centre": [
+              1648.503466666666,
+              -1462.8181333333341
+            ],
+            "centreElevM": 116.38
+          },
+          "9_4": {
+            "structures": {
+              "url": "/zestafona-world-cell-9_4.20ba58adacf2c29e.pack",
+              "bytes": 183904,
+              "sha256": "20ba58adacf2c29e8cb9913e32dbd4e3af02cd5965618136e82cabe1a434ddbb",
+              "compressedBytes": {
+                "br": 49745,
+                "gzip": 56863
+              }
+            },
+            "placements": 3789,
+            "tris": {
+              "mq": 251841,
+              "hq": 1285822
+            },
+            "centre": [
+              2672.503466666666,
+              -1462.8181333333341
+            ],
+            "centreElevM": 131.32
+          },
+          "10_4": {
+            "structures": {
+              "url": "/zestafona-world-cell-10_4.c23b395541026a17.pack",
+              "bytes": 315576,
+              "sha256": "c23b395541026a170d071797ba726dcdff50be39a2678167c6e548ac3bb0a4a6",
+              "compressedBytes": {
+                "br": 88708,
+                "gzip": 102739
+              }
+            },
+            "placements": 6703,
+            "tris": {
+              "mq": 414326,
+              "hq": 2150367
+            },
+            "centre": [
+              3696.503466666666,
+              -1462.8181333333341
+            ],
+            "centreElevM": 145.77
+          },
+          "11_4": {
+            "structures": {
+              "url": "/zestafona-world-cell-11_4.9dc60b1e06fde0d3.pack",
+              "bytes": 151584,
+              "sha256": "9dc60b1e06fde0d3a2c2779d3fc951fb906f59e6f3855de7bff7a5c9cf62186a",
+              "compressedBytes": {
+                "br": 40143,
+                "gzip": 48355
+              }
+            },
+            "placements": 3670,
+            "tris": {
+              "mq": 104496,
+              "hq": 691664
+            },
+            "centre": [
+              4720.503466666666,
+              -1462.8181333333341
+            ],
+            "centreElevM": 156.56
+          },
+          "3_5": {
+            "structures": {
+              "url": "/zestafona-world-cell-3_5.bc64d32179cec005.pack",
+              "bytes": 5864,
+              "sha256": "bc64d32179cec005c647cb263bdfdf8131f08bf9252143298d6b91659af549bf",
+              "compressedBytes": {
+                "br": 1857,
+                "gzip": 1999
+              }
+            },
+            "placements": 78,
+            "tris": {
+              "mq": 3358,
+              "hq": 16544
+            },
+            "centre": [
+              -3471.496533333334,
+              -438.8181333333341
+            ],
+            "centreElevM": 162.22
+          },
+          "4_5": {
+            "structures": {
+              "url": "/zestafona-world-cell-4_5.1fc5c6a16f141f69.pack",
+              "bytes": 60712,
+              "sha256": "1fc5c6a16f141f69cf3ed0453c3311c5d8731203fcfc24b1f54bec2a4297629e",
+              "compressedBytes": {
+                "br": 26208,
+                "gzip": 28439
+              }
+            },
+            "placements": 1383,
+            "tris": {
+              "mq": 93935,
+              "hq": 418032
+            },
+            "centre": [
+              -2447.496533333334,
+              -438.8181333333341
+            ],
+            "centreElevM": 74.33
+          },
+          "5_5": {
+            "structures": {
+              "url": "/zestafona-world-cell-5_5.0c1f8d92d9baa781.pack",
+              "bytes": 69784,
+              "sha256": "0c1f8d92d9baa781f0e16865d977263841d22648f6abc5eec26953e47a74ed56",
+              "compressedBytes": {
+                "br": 18632,
+                "gzip": 20764
+              }
+            },
+            "placements": 1288,
+            "tris": {
+              "mq": 124669,
+              "hq": 574607
+            },
+            "centre": [
+              -1423.496533333334,
+              -438.8181333333341
+            ],
+            "centreElevM": 111.9
+          },
+          "6_5": {
+            "structures": {
+              "url": "/zestafona-world-cell-6_5.2b123c5d9dd9dd0f.pack",
+              "bytes": 73360,
+              "sha256": "2b123c5d9dd9dd0f7f51385318d1824f4a582100d3a2c54e28f0cc3ef0f2e98c",
+              "compressedBytes": {
+                "br": 28962,
+                "gzip": 31329
+              }
+            },
+            "placements": 1531,
+            "tris": {
+              "mq": 131790,
+              "hq": 615164
+            },
+            "centre": [
+              -399.4965333333339,
+              -438.8181333333341
+            ],
+            "centreElevM": 77.44
+          },
+          "7_5": {
+            "structures": {
+              "url": "/zestafona-world-cell-7_5.30cfaa9f0283a476.pack",
+              "bytes": 432560,
+              "sha256": "30cfaa9f0283a47651bccfea3e38ec9e00086ee652c1edbe9d748d31413ebbf9",
+              "compressedBytes": {
+                "br": 105793,
+                "gzip": 120553
+              }
+            },
+            "placements": 9616,
+            "tris": {
+              "mq": 830292,
+              "hq": 3570171
+            },
+            "centre": [
+              624.5034666666661,
+              -438.8181333333341
+            ],
+            "centreElevM": 85.85
+          },
+          "8_5": {
+            "structures": {
+              "url": "/zestafona-world-cell-8_5.469288907a271e93.pack",
+              "bytes": 303224,
+              "sha256": "469288907a271e932bb927d6d496d314eb540c368724735ca050c12e58789baa",
+              "compressedBytes": {
+                "br": 73000,
+                "gzip": 84112
+              }
+            },
+            "placements": 6614,
+            "tris": {
+              "mq": 565828,
+              "hq": 2391683
+            },
+            "centre": [
+              1648.503466666666,
+              -438.8181333333341
+            ],
+            "centreElevM": 126.8
+          },
+          "9_5": {
+            "structures": {
+              "url": "/zestafona-world-cell-9_5.daddaf078cf4462e.pack",
+              "bytes": 127696,
+              "sha256": "daddaf078cf4462e35c732dacd3b2779d50e67464cfc6bd0983dae112924e899",
+              "compressedBytes": {
+                "br": 26166,
+                "gzip": 30901
+              }
+            },
+            "placements": 2663,
+            "tris": {
+              "mq": 180108,
+              "hq": 768841
+            },
+            "centre": [
+              2672.503466666666,
+              -438.8181333333341
+            ],
+            "centreElevM": 136.9
+          },
+          "3_6": {
+            "structures": {
+              "url": "/zestafona-world-cell-3_6.ccb61151342add1a.pack",
+              "bytes": 37000,
+              "sha256": "ccb61151342add1ab68bd39540125513d2590cb961452ddb0fe5eb880c8e7a94",
+              "compressedBytes": {
+                "br": 19476,
+                "gzip": 21497
+              }
+            },
+            "placements": 880,
+            "tris": {
+              "mq": 61752,
+              "hq": 276000
+            },
+            "centre": [
+              -3471.496533333334,
+              585.1818666666659
+            ],
+            "centreElevM": 126.75
+          },
+          "4_6": {
+            "structures": {
+              "url": "/zestafona-world-cell-4_6.11cf02ef5e46dd54.pack",
+              "bytes": 13640,
+              "sha256": "11cf02ef5e46dd541713c4b52a1f56710e2acc47cedb5295b3b367a2932d195c",
+              "compressedBytes": {
+                "br": 6435,
+                "gzip": 6878
+              }
+            },
+            "placements": 255,
+            "tris": {
+              "mq": 24417,
+              "hq": 112607
+            },
+            "centre": [
+              -2447.496533333334,
+              585.1818666666659
+            ],
+            "centreElevM": 54.82
+          },
+          "5_6": {
+            "structures": {
+              "url": "/zestafona-world-cell-5_6.cf614955c1a00fe9.pack",
+              "bytes": 111600,
+              "sha256": "cf614955c1a00fe923023a9530123f5bd29490d8405b0006237895b96af459f4",
+              "compressedBytes": {
+                "br": 31958,
+                "gzip": 34945
+              }
+            },
+            "placements": 2044,
+            "tris": {
+              "mq": 149742,
+              "hq": 751219
+            },
+            "centre": [
+              -1423.496533333334,
+              585.1818666666659
+            ],
+            "centreElevM": 68.62
+          },
+          "6_6": {
+            "structures": {
+              "url": "/zestafona-world-cell-6_6.44f81affc7d98b2a.pack",
+              "bytes": 215632,
+              "sha256": "44f81affc7d98b2a723c8face853f7cd5eacb1c36e444c2d982a7c648c27a7c6",
+              "compressedBytes": {
+                "br": 63979,
+                "gzip": 70658
+              }
+            },
+            "placements": 4554,
+            "tris": {
+              "mq": 358545,
+              "hq": 1614178
+            },
+            "centre": [
+              -399.4965333333339,
+              585.1818666666659
+            ],
+            "centreElevM": 81.64
+          },
+          "7_6": {
+            "structures": {
+              "url": "/zestafona-world-cell-7_6.7cf3d0b89d47cd5c.pack",
+              "bytes": 151296,
+              "sha256": "7cf3d0b89d47cd5c1b762b93b25c85eb1fb6929c53703f0d43a217c0680c22ce",
+              "compressedBytes": {
+                "br": 55894,
+                "gzip": 62561
+              }
+            },
+            "placements": 3552,
+            "tris": {
+              "mq": 188083,
+              "hq": 1119836
+            },
+            "centre": [
+              624.5034666666661,
+              585.1818666666659
+            ],
+            "centreElevM": 89.73
+          },
+          "8_6": {
+            "structures": {
+              "url": "/zestafona-world-cell-8_6.3b236fb317ee3719.pack",
+              "bytes": 43112,
+              "sha256": "3b236fb317ee371928c1e3550a2286c0a9bad89b37262400c279469a64f9c356",
+              "compressedBytes": {
+                "br": 18035,
+                "gzip": 19737
+              }
+            },
+            "placements": 999,
+            "tris": {
+              "mq": 56360,
+              "hq": 309248
+            },
+            "centre": [
+              1648.503466666666,
+              585.1818666666659
+            ],
+            "centreElevM": 152.03
+          },
+          "9_6": {
+            "structures": {
+              "url": "/zestafona-world-cell-9_6.17bf3911a788cdd9.pack",
+              "bytes": 1512,
+              "sha256": "17bf3911a788cdd93e019d00a0c3f1513be430e4b3dfbe80677f3697ff019608",
+              "compressedBytes": {
+                "br": 867,
+                "gzip": 912
+              }
+            },
+            "placements": 1,
+            "tris": {
+              "mq": 0,
+              "hq": 2
+            },
+            "centre": [
+              2672.503466666666,
+              585.1818666666659
+            ],
+            "centreElevM": 132.74
+          },
+          "1_7": {
+            "structures": {
+              "url": "/zestafona-world-cell-1_7.0279773900eae2dc.pack",
+              "bytes": 24880,
+              "sha256": "0279773900eae2dcd57a18da3585b81d93e980f3002a5d4125b0ba9ce12cf6f4",
+              "compressedBytes": {
+                "br": 8094,
+                "gzip": 10070
+              }
+            },
+            "placements": 577,
+            "tris": {
+              "mq": 43635,
+              "hq": 188719
+            },
+            "centre": [
+              -5519.496533333334,
+              1609.1818666666659
+            ],
+            "centreElevM": 293.75
+          },
+          "2_7": {
+            "structures": {
+              "url": "/zestafona-world-cell-2_7.96f43b36d4f1f407.pack",
+              "bytes": 29520,
+              "sha256": "96f43b36d4f1f407b0d00880bbd752ee1ffa9bd7ce45b2459187865198877b94",
+              "compressedBytes": {
+                "br": 13674,
+                "gzip": 15807
+              }
+            },
+            "placements": 693,
+            "tris": {
+              "mq": 51567,
+              "hq": 222939
+            },
+            "centre": [
+              -4495.496533333334,
+              1609.1818666666659
+            ],
+            "centreElevM": 282.19
+          },
+          "3_7": {
+            "structures": {
+              "url": "/zestafona-world-cell-3_7.e96d1d0d4ec59894.pack",
+              "bytes": 51760,
+              "sha256": "e96d1d0d4ec59894f166f6dc2252992c953614df97aabfa48c77b7ab08444cbd",
+              "compressedBytes": {
+                "br": 25793,
+                "gzip": 29512
+              }
+            },
+            "placements": 1249,
+            "tris": {
+              "mq": 88658,
+              "hq": 394624
+            },
+            "centre": [
+              -3471.496533333334,
+              1609.1818666666659
+            ],
+            "centreElevM": 248.5
+          },
+          "4_7": {
+            "structures": {
+              "url": "/zestafona-world-cell-4_7.faf336646676b425.pack",
+              "bytes": 8528,
+              "sha256": "faf336646676b42594efaf7449ff4bf799181c6b1ae3d4bb55eb61d8b2a3b2f6",
+              "compressedBytes": {
+                "br": 3891,
+                "gzip": 4504
+              }
+            },
+            "placements": 151,
+            "tris": {
+              "mq": 12116,
+              "hq": 55064
+            },
+            "centre": [
+              -2447.496533333334,
+              1609.1818666666659
+            ],
+            "centreElevM": 79.22
+          },
+          "5_7": {
+            "structures": {
+              "url": "/zestafona-world-cell-5_7.983b26c4787cac11.pack",
+              "bytes": 46552,
+              "sha256": "983b26c4787cac113262aaf828d073881c406a1f85734d8fb66f26d7b6ffb974",
+              "compressedBytes": {
+                "br": 9397,
+                "gzip": 10682
+              }
+            },
+            "placements": 877,
+            "tris": {
+              "mq": 71303,
+              "hq": 387165
+            },
+            "centre": [
+              -1423.496533333334,
+              1609.1818666666659
+            ],
+            "centreElevM": 61.67
+          },
+          "6_7": {
+            "structures": {
+              "url": "/zestafona-world-cell-6_7.95967ec0c4e90028.pack",
+              "bytes": 405680,
+              "sha256": "95967ec0c4e90028bc9283e4349e881dafb0b0169fdf5b3cba43dce81b92ec95",
+              "compressedBytes": {
+                "br": 112635,
+                "gzip": 125270
+              }
+            },
+            "placements": 8629,
+            "tris": {
+              "mq": 504516,
+              "hq": 2409380
+            },
+            "centre": [
+              -399.4965333333339,
+              1609.1818666666659
+            ],
+            "centreElevM": 93.94
+          },
+          "7_7": {
+            "structures": {
+              "url": "/zestafona-world-cell-7_7.f1911ed73414cbe3.pack",
+              "bytes": 256944,
+              "sha256": "f1911ed73414cbe3a8ce623b356b23b4dcc9ac963ea51ab7fbef963cb9277de0",
+              "compressedBytes": {
+                "br": 85230,
+                "gzip": 94450
+              }
+            },
+            "placements": 6098,
+            "tris": {
+              "mq": 304031,
+              "hq": 1680731
+            },
+            "centre": [
+              624.5034666666661,
+              1609.1818666666659
+            ],
+            "centreElevM": 104.13
+          },
+          "8_7": {
+            "structures": {
+              "url": "/zestafona-world-cell-8_7.b74bf8db2eddaba7.pack",
+              "bytes": 117248,
+              "sha256": "b74bf8db2eddaba759a2eb4c4838a1c7232a437ddd2657877a33de35545acc4d",
+              "compressedBytes": {
+                "br": 37386,
+                "gzip": 45536
+              }
+            },
+            "placements": 2852,
+            "tris": {
+              "mq": 170808,
+              "hq": 898478
+            },
+            "centre": [
+              1648.503466666666,
+              1609.1818666666659
+            ],
+            "centreElevM": 103.08
+          },
+          "3_8": {
+            "structures": {
+              "url": "/zestafona-world-cell-3_8.49382ea5b8f82481.pack",
+              "bytes": 30624,
+              "sha256": "49382ea5b8f82481c9bfe2fb82a92cf773b2f80043cd2959f35e813526789e7d",
+              "compressedBytes": {
+                "br": 15075,
+                "gzip": 17186
+              }
+            },
+            "placements": 703,
+            "tris": {
+              "mq": 50188,
+              "hq": 226296
+            },
+            "centre": [
+              -3471.496533333334,
+              2633.181866666666
+            ],
+            "centreElevM": 194.44
+          },
+          "4_8": {
+            "structures": {
+              "url": "/zestafona-world-cell-4_8.671b131a015cb937.pack",
+              "bytes": 25216,
+              "sha256": "671b131a015cb93770cf7cb6130fb6deb27fd78f8b7ada7ec5401f3e303f788f",
+              "compressedBytes": {
+                "br": 12016,
+                "gzip": 13679
+              }
+            },
+            "placements": 568,
+            "tris": {
+              "mq": 43340,
+              "hq": 196040
+            },
+            "centre": [
+              -2447.496533333334,
+              2633.181866666666
+            ],
+            "centreElevM": 135.43
+          },
+          "6_8": {
+            "structures": {
+              "url": "/zestafona-world-cell-6_8.9df1be4d9a728064.pack",
+              "bytes": 292608,
+              "sha256": "9df1be4d9a728064281c7a6b5fe896c84cd68e506bc55d6de62ff6ebf9aab4f0",
+              "compressedBytes": {
+                "br": 82104,
+                "gzip": 91070
+              }
+            },
+            "placements": 6160,
+            "tris": {
+              "mq": 603593,
+              "hq": 2539824
+            },
+            "centre": [
+              -399.4965333333339,
+              2633.181866666666
+            ],
+            "centreElevM": 73.7
+          },
+          "7_8": {
+            "structures": {
+              "url": "/zestafona-world-cell-7_8.a97ec14710082fff.pack",
+              "bytes": 165536,
+              "sha256": "a97ec14710082fffd854404a7b623e302fee536b8c05e2608057fe8013cdda21",
+              "compressedBytes": {
+                "br": 41143,
+                "gzip": 45982
+              }
+            },
+            "placements": 3051,
+            "tris": {
+              "mq": 324894,
+              "hq": 1258925
+            },
+            "centre": [
+              624.5034666666661,
+              2633.181866666666
+            ],
+            "centreElevM": 151.48
+          },
+          "8_8": {
+            "structures": {
+              "url": "/zestafona-world-cell-8_8.1d4f32af44e8b858.pack",
+              "bytes": 8496,
+              "sha256": "1d4f32af44e8b8580e80745f9ae14241226bfb0a57efbdbc21a14959d996d83a",
+              "compressedBytes": {
+                "br": 2974,
+                "gzip": 3346
+              }
+            },
+            "placements": 150,
+            "tris": {
+              "mq": 16666,
+              "hq": 81400
+            },
+            "centre": [
+              1648.503466666666,
+              2633.181866666666
+            ],
+            "centreElevM": 187.22
+          },
+          "9_8": {
+            "structures": {
+              "url": "/zestafona-world-cell-9_8.be61dd4be5f5f4bd.pack",
+              "bytes": 80344,
+              "sha256": "be61dd4be5f5f4bd08364fe6ed558e5214b26b1784cf60c2899d239fb6f790a2",
+              "compressedBytes": {
+                "br": 23342,
+                "gzip": 29460
+              }
+            },
+            "placements": 1946,
+            "tris": {
+              "mq": 145524,
+              "hq": 649408
+            },
+            "centre": [
+              2672.503466666666,
+              2633.181866666666
+            ],
+            "centreElevM": 119.44
+          },
+          "5_9": {
+            "structures": {
+              "url": "/zestafona-world-cell-5_9.dab5d84722ea4afc.pack",
+              "bytes": 1520,
+              "sha256": "dab5d84722ea4afc2120ebfe342b9351bf2fa214063e32b85d0ddcd7b68b7163",
+              "compressedBytes": {
+                "br": 877,
+                "gzip": 919
+              }
+            },
+            "placements": 1,
+            "tris": {
+              "mq": 0,
+              "hq": 2
+            },
+            "centre": [
+              -1423.496533333334,
+              3657.181866666666
+            ],
+            "centreElevM": 132.01
+          },
+          "6_9": {
+            "structures": {
+              "url": "/zestafona-world-cell-6_9.0d0d5f6080e1eb42.pack",
+              "bytes": 302640,
+              "sha256": "0d0d5f6080e1eb4222163d4d20dd06aac4606d3ebdedd1c801a1c15a79d59c29",
+              "compressedBytes": {
+                "br": 69680,
+                "gzip": 78588
+              }
+            },
+            "placements": 5741,
+            "tris": {
+              "mq": 731801,
+              "hq": 2895940
+            },
+            "centre": [
+              -399.4965333333339,
+              3657.181866666666
+            ],
+            "centreElevM": 68.3
+          },
+          "7_9": {
+            "structures": {
+              "url": "/zestafona-world-cell-7_9.3c2eb17e076001c6.pack",
+              "bytes": 115984,
+              "sha256": "3c2eb17e076001c6e628de56ff903875e4d2a9940275a000ff06decd6da903e2",
+              "compressedBytes": {
+                "br": 27378,
+                "gzip": 30040
+              }
+            },
+            "placements": 1974,
+            "tris": {
+              "mq": 238979,
+              "hq": 904127
+            },
+            "centre": [
+              624.5034666666661,
+              3657.181866666666
+            ],
+            "centreElevM": 172.68
+          },
+          "8_9": {
+            "structures": {
+              "url": "/zestafona-world-cell-8_9.b49c5b6177f5dde3.pack",
+              "bytes": 4232,
+              "sha256": "b49c5b6177f5dde36fed7b0cae88a7823df4391b876c9b3269b2f7075edfc0d3",
+              "compressedBytes": {
+                "br": 1574,
+                "gzip": 1719
+              }
+            },
+            "placements": 54,
+            "tris": {
+              "mq": 7494,
+              "hq": 37608
+            },
+            "centre": [
+              1648.503466666666,
+              3657.181866666666
+            ],
+            "centreElevM": 197.04
+          },
+          "9_9": {
+            "structures": {
+              "url": "/zestafona-world-cell-9_9.0e4070034d4c46d9.pack",
+              "bytes": 28096,
+              "sha256": "0e4070034d4c46d9cfe830b162a285667d8935a1eaaad9ddd6e452d694b982ad",
+              "compressedBytes": {
+                "br": 12218,
+                "gzip": 13681
+              }
+            },
+            "placements": 640,
+            "tris": {
+              "mq": 47094,
+              "hq": 210328
+            },
+            "centre": [
+              2672.503466666666,
+              3657.181866666666
+            ],
+            "centreElevM": 197.14
+          },
+          "10_9": {
+            "structures": {
+              "url": "/zestafona-world-cell-10_9.381730541ff8226d.pack",
+              "bytes": 46360,
+              "sha256": "381730541ff8226d5e3cad9f338d17b343ea4773c16dc6cdca7a065585876a27",
+              "compressedBytes": {
+                "br": 15766,
+                "gzip": 19194
+              }
+            },
+            "placements": 1114,
+            "tris": {
+              "mq": 80284,
+              "hq": 355424
+            },
+            "centre": [
+              3696.503466666666,
+              3657.181866666666
+            ],
+            "centreElevM": 120.17
+          },
+          "11_9": {
+            "structures": {
+              "url": "/zestafona-world-cell-11_9.836b0850ffc527e7.pack",
+              "bytes": 19520,
+              "sha256": "836b0850ffc527e767d60f07a7ddd5bc5ae21c16c456f1d246610fe5df76a4c0",
+              "compressedBytes": {
+                "br": 8215,
+                "gzip": 9512
+              }
+            },
+            "placements": 443,
+            "tris": {
+              "mq": 32062,
+              "hq": 141728
+            },
+            "centre": [
+              4720.503466666666,
+              3657.181866666666
+            ],
+            "centreElevM": 159.71
+          },
+          "6_10": {
+            "structures": {
+              "url": "/zestafona-world-cell-6_10.b473c30e5b0ff41a.pack",
+              "bytes": 8112,
+              "sha256": "b473c30e5b0ff41a34aa576d8d5a8bfc7f73bf5fa7932262a5a8989e56e2ccbf",
+              "compressedBytes": {
+                "br": 2549,
+                "gzip": 2812
+              }
+            },
+            "placements": 102,
+            "tris": {
+              "mq": 21750,
+              "hq": 110069
+            },
+            "centre": [
+              -399.4965333333339,
+              4681.181866666666
+            ],
+            "centreElevM": 81.14
+          },
+          "7_10": {
+            "structures": {
+              "url": "/zestafona-world-cell-7_10.b45aeb2ed885fb76.pack",
+              "bytes": 3024,
+              "sha256": "b45aeb2ed885fb76c782d13e614c3e13aa6ea2fa54fa8e1744baefdc4ea3ed3a",
+              "compressedBytes": {
+                "br": 1328,
+                "gzip": 1435
+              }
+            },
+            "placements": 21,
+            "tris": {
+              "mq": 2498,
+              "hq": 12542
+            },
+            "centre": [
+              624.5034666666661,
+              4681.181866666666
+            ],
+            "centreElevM": 78.5
+          },
+          "8_10": {
+            "structures": {
+              "url": "/zestafona-world-cell-8_10.def2337fe0ee5a2f.pack",
+              "bytes": 2792,
+              "sha256": "def2337fe0ee5a2f36f45d6993e7797c9cb910906027b34201422fd131bc3b3b",
+              "compressedBytes": {
+                "br": 1249,
+                "gzip": 1337
+              }
+            },
+            "placements": 18,
+            "tris": {
+              "mq": 2498,
+              "hq": 12536
+            },
+            "centre": [
+              1648.503466666666,
+              4681.181866666666
+            ],
+            "centreElevM": 182.01
+          },
+          "10_10": {
+            "structures": {
+              "url": "/zestafona-world-cell-10_10.efc64496bd4a21fd.pack",
+              "bytes": 30640,
+              "sha256": "efc64496bd4a21fd40fcedd6056a605d1a1d345d2df88e3f14e16b7a59b1664b",
+              "compressedBytes": {
+                "br": 11168,
+                "gzip": 13397
+              }
+            },
+            "placements": 718,
+            "tris": {
+              "mq": 51922,
+              "hq": 229474
+            },
+            "centre": [
+              3696.503466666666,
+              4681.181866666666
+            ],
+            "centreElevM": 116.19
+          },
+          "11_10": {
+            "structures": {
+              "url": "/zestafona-world-cell-11_10.bda93c6683a45e76.pack",
+              "bytes": 13872,
+              "sha256": "bda93c6683a45e7697bc20ecd53ee1476b878af81e397ead713e6bb13322f980",
+              "compressedBytes": {
+                "br": 5136,
+                "gzip": 6137
+              }
+            },
+            "placements": 302,
+            "tris": {
+              "mq": 21876,
+              "hq": 96672
+            },
+            "centre": [
+              4720.503466666666,
+              4681.181866666666
+            ],
+            "centreElevM": 194.4
+          },
+          "12_10": {
+            "structures": {
+              "url": "/zestafona-world-cell-12_10.1c122dedd5cf1a80.pack",
+              "bytes": 33880,
+              "sha256": "1c122dedd5cf1a80ffd2ee88ece90a367af269519fb54bd6b22eb6fb3444c134",
+              "compressedBytes": {
+                "br": 11634,
+                "gzip": 14618
+              }
+            },
+            "placements": 799,
+            "tris": {
+              "mq": 57764,
+              "hq": 255330
+            },
+            "centre": [
+              5744.503466666666,
+              4681.181866666666
+            ],
+            "centreElevM": 138.77
+          },
+          "13_10": {
+            "structures": {
+              "url": "/zestafona-world-cell-13_10.4efd0ac0fe6fac7f.pack",
+              "bytes": 3912,
+              "sha256": "4efd0ac0fe6fac7faf845fc8afd558ad948f916382980877cb7e569a6b639e68",
+              "compressedBytes": {
+                "br": 1854,
+                "gzip": 2089
+              }
+            },
+            "placements": 53,
+            "tris": {
+              "mq": 3826,
+              "hq": 16928
+            },
+            "centre": [
+              6768.503466666666,
+              4681.181866666666
+            ],
+            "centreElevM": 182.87
+          },
+          "7_11": {
+            "structures": {
+              "url": "/zestafona-world-cell-7_11.d0667532e4d018b9.pack",
+              "bytes": 3512,
+              "sha256": "d0667532e4d018b9de7dd37780ddb7fa6737f4739aa6eaa9682b2dc98e1596a2",
+              "compressedBytes": {
+                "br": 1437,
+                "gzip": 1544
+              }
+            },
+            "placements": 36,
+            "tris": {
+              "mq": 4996,
+              "hq": 25072
+            },
+            "centre": [
+              624.5034666666661,
+              5705.181866666666
+            ],
+            "centreElevM": 50.89
+          },
+          "10_11": {
+            "structures": {
+              "url": "/zestafona-world-cell-10_11.7ceec91180acc3a7.pack",
+              "bytes": 30880,
+              "sha256": "7ceec91180acc3a7b3526fabe31fb9417183955225cd80ecbbe74a98a573e2c6",
+              "compressedBytes": {
+                "br": 11797,
+                "gzip": 14208
+              }
+            },
+            "placements": 727,
+            "tris": {
+              "mq": 51470,
+              "hq": 229312
+            },
+            "centre": [
+              3696.503466666666,
+              5705.181866666666
+            ],
+            "centreElevM": 187.86
+          },
+          "13_11": {
+            "structures": {
+              "url": "/zestafona-world-cell-13_11.91ace7121a8c7365.pack",
+              "bytes": 28680,
+              "sha256": "91ace7121a8c73653e45265a342c3265c00891833faf614a134fe55d5f1aac9d",
+              "compressedBytes": {
+                "br": 9919,
+                "gzip": 12379
+              }
+            },
+            "placements": 672,
+            "tris": {
+              "mq": 48664,
+              "hq": 215072
+            },
+            "centre": [
+              6768.503466666666,
+              5705.181866666666
+            ],
+            "centreElevM": 201.57
+          },
+          "14_11": {
+            "structures": {
+              "url": "/zestafona-world-cell-14_11.4f504ec637531023.pack",
+              "bytes": 27600,
+              "sha256": "4f504ec6375310230831d3ce35752fac773af5c13c9093237b4bea2724c733de",
+              "compressedBytes": {
+                "br": 9594,
+                "gzip": 11966
+              }
+            },
+            "placements": 645,
+            "tris": {
+              "mq": 46698,
+              "hq": 206400
+            },
+            "centre": [
+              7792.503466666666,
+              5705.181866666666
+            ],
+            "centreElevM": 264.83
+          },
+          "10_12": {
+            "structures": {
+              "url": "/zestafona-world-cell-10_12.d8e90c0b93b2cde7.pack",
+              "bytes": 3384,
+              "sha256": "d8e90c0b93b2cde7f72f078d731669607ee0a7e96e63dde1244577e2c40f1c74",
+              "compressedBytes": {
+                "br": 1554,
+                "gzip": 1772
+              }
+            },
+            "placements": 40,
+            "tris": {
+              "mq": 2896,
+              "hq": 12800
+            },
+            "centre": [
+              3696.503466666666,
+              6729.181866666666
+            ],
+            "centreElevM": 276.98
+          },
+          "11_12": {
+            "structures": {
+              "url": "/zestafona-world-cell-11_12.4503423874210cc7.pack",
+              "bytes": 30240,
+              "sha256": "4503423874210cc74d9e9be7b93b6ad36ac736f59b8c742c3f1bd38f81e1a19c",
+              "compressedBytes": {
+                "br": 12610,
+                "gzip": 14829
+              }
+            },
+            "placements": 711,
+            "tris": {
+              "mq": 51454,
+              "hq": 227456
+            },
+            "centre": [
+              4720.503466666666,
+              6729.181866666666
+            ],
+            "centreElevM": 186.72
+          },
+          "14_12": {
+            "structures": {
+              "url": "/zestafona-world-cell-14_12.5427d7d4fcbd7a6f.pack",
+              "bytes": 6872,
+              "sha256": "5427d7d4fcbd7a6f7f6191744973835ace10017d20509cb514684e995d2bdd7b",
+              "compressedBytes": {
+                "br": 2622,
+                "gzip": 3275
+              }
+            },
+            "placements": 127,
+            "tris": {
+              "mq": 9206,
+              "hq": 40672
+            },
+            "centre": [
+              7792.503466666666,
+              6729.181866666666
+            ],
+            "centreElevM": 261.99
+          },
+          "15_12": {
+            "structures": {
+              "url": "/zestafona-world-cell-15_12.485ea303350b4e81.pack",
+              "bytes": 12400,
+              "sha256": "485ea303350b4e81e00f38e1eed5c21484b2f5fe42474b7dbdd156c2fe707b01",
+              "compressedBytes": {
+                "br": 4342,
+                "gzip": 5219
+              }
+            },
+            "placements": 265,
+            "tris": {
+              "mq": 19186,
+              "hq": 84800
+            },
+            "centre": [
+              8816.503466666665,
+              6729.181866666666
+            ],
+            "centreElevM": 191.65
+          },
+          "11_13": {
+            "structures": {
+              "url": "/zestafona-world-cell-11_13.c00cf814819ae5a7.pack",
+              "bytes": 25320,
+              "sha256": "c00cf814819ae5a7f2bdf0032c046a848852492d4ec3ce95ac516c833498c1f5",
+              "compressedBytes": {
+                "br": 11566,
+                "gzip": 13096
+              }
+            },
+            "placements": 588,
+            "tris": {
+              "mq": 41119,
+              "hq": 184041
+            },
+            "centre": [
+              4720.503466666666,
+              7753.181866666666
+            ],
+            "centreElevM": 158.79
+          }
+        }
+      }
+    }
+  },
+  "shared": {
+    "structures": {
+      "lq": {
+        "url": "/shared-structures-lq.68cbf495183cb340.pack",
+        "bytes": 1896,
+        "sha256": "68cbf495183cb34059ba51198849ce6b5b2394496fd04c622401f13ae4041342",
+        "compressedBytes": {
+          "br": 545,
+          "gzip": 580
+        }
+      },
+      "mq": {
+        "url": "/shared-structures-mq.d88e9fcd0e162fb7.pack",
+        "bytes": 15890400,
+        "sha256": "d88e9fcd0e162fb707ee96c3a7534cff41362853856814ce1da1f8b36447c631",
+        "compressedBytes": {
+          "br": 6661996,
+          "gzip": 8092623
+        }
+      },
+      "hq": {
+        "url": "/shared-structures-hq.c245c9a5b0a9d517.pack",
+        "bytes": 46119696,
+        "sha256": "c245c9a5b0a9d517cb2b2eddd1606580b600cf67bea6117d4520a58ecde63ede",
+        "compressedBytes": {
+          "br": 18910513,
+          "gzip": 23568883
+        }
+      }
+    },
+    "vegetation": {
+      "lq": {
+        "url": "/shared-vegetation-lq.966e6492c42da733.pack",
+        "bytes": 2632,
+        "sha256": "966e6492c42da7338333aaaabc219654e2a63e17ad851c759bf0d09a5351d7b6",
+        "compressedBytes": {
+          "br": 730,
+          "gzip": 758
+        }
+      },
+      "mq": {
+        "url": "/shared-vegetation-mq.41d32ee4b863e14f.pack",
+        "bytes": 2955080,
+        "sha256": "41d32ee4b863e14f13dce83eb4186779991f11a3cb23a0b2c53e97b5aa05b263",
+        "compressedBytes": {
+          "br": 1787397,
+          "gzip": 2126432
+        }
+      },
+      "hq": {
+        "url": "/shared-vegetation-hq.5d7ebf2d0ea2a3e3.pack",
+        "bytes": 7829320,
+        "sha256": "5d7ebf2d0ea2a3e379bc5b45df6593bdc637f67da35a6c877f1eb6e6efcdd65a",
+        "compressedBytes": {
+          "br": 4542999,
+          "gzip": 5641008
+        }
+      },
+      "bands": {
+        "url": "/shared-vegetation-lq.966e6492c42da733.pack",
+        "bytes": 2632,
+        "sha256": "966e6492c42da7338333aaaabc219654e2a63e17ad851c759bf0d09a5351d7b6",
+        "compressedBytes": {
+          "br": 730,
+          "gzip": 758
+        }
+      }
+    },
+    "world": {
+      "lq": {
+        "url": "/world-library-lq.85ac06032eb1bd4f.pack",
+        "bytes": 7909024,
+        "sha256": "85ac06032eb1bd4fba580a1d16a4b9c216e79f0fa766a3f4901916a48b6d7c99",
+        "compressedBytes": {
+          "br": 788790,
+          "gzip": 1059247
+        }
+      },
+      "mq": {
+        "url": "/world-library-mq.baaca923670aa803.pack",
+        "bytes": 15878512,
+        "sha256": "baaca923670aa803185f0631e2e8b3be4a93b8ba0791235a2cef1cc8f86dbdf8",
+        "compressedBytes": {
+          "br": 5881515,
+          "gzip": 7449238
+        }
+      },
+      "hq": {
+        "url": "/world-library-hq.c86164f79977f3da.pack",
+        "bytes": 61080168,
+        "sha256": "c86164f79977f3da57984b5e70aa3eebc570b4aa738fb2abb1d353e290800fcd",
+        "compressedBytes": {
+          "br": 22189037,
+          "gzip": 28963218
+        }
+      },
+      "docs": "World pack contract v1; see viewer/docs/object-scaling-proposal.md, \"Appendix: world pack format\". Placements are Float32 x10 TRS (px,py,pz,qx,qy,qz,qw,sx,sy,sz) in site-local metres: site-local = map-centred world metres - (mean(map.towers[].pos) - 0.5) * worldM, and Y = (cell.centreElevM - site.centreElevM) + py. Library geometry carries position/normal plus normalized 8-bit vertex colours baked from the cell scene materials[name].color; one shared MeshStandardMaterial (roughness 0.92, metalness 0.04, vertexColors) reproduces the site packs' per-material baseColorFactor exactly. Mirrored (negative determinant) placements reference the reflected geometry \"<model>:m\". Vegetation exists at LQ only, and models whose largest bounding-box dimension is under 2 m are absent from the MQ library; the runtime skips a placement whose active tier lacks its model."
+    }
+  },
+  "misc": {
+    "url": "/misc.00543b8ec637a978.pack",
+    "bytes": 27648136,
+    "sha256": "00543b8ec637a978fedc67ccd0c47e51c1c666cd07d5c55f84014ae732028d13",
+    "compressedBytes": {
+      "br": 7973079,
+      "gzip": 11293214
+    }
+  },
+  "build": {
+    "lq": {
+      "url": "/build-lq.e85ed8e306da33e8.pack",
+      "bytes": 7811120,
+      "sha256": "e85ed8e306da33e8266bf92b51cf105ea6bc9abdef4fcfe904de75e667162ad2",
+      "compressedBytes": {
+        "br": 6004886,
+        "gzip": 6567125
+      }
+    },
+    "hq": {
+      "url": "/build-hq.3ba1bba18086d32f.pack",
+      "bytes": 13501616,
+      "sha256": "3ba1bba18086d32f0bc92039d9ef66b0df95dabf5d330ffa64f741fd9e3cf04e",
+      "compressedBytes": {
+        "br": 9818121,
+        "gzip": 11142455
+      }
+    }
+  },
+  "source": {
+    "sourceFingerprint": "849646d685f42470de74dc84363c56b260b62e74bad8769e60ccc1034d25ae02",
+    "worldFingerprint": "1:3a30a3dca19344e4451ab2226e845e7bb317782a2e4556c74ab9c6998ee1eb27"
+  }
+}
