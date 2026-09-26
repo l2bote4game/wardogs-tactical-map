@@ -1,0 +1,421 @@
+/* ============================================================
+   WARDOGS 3D TACTICAL MAP — STYLESHEET
+   Tactical Military C2 / OSINT Console Design System
+   ============================================================ */
+
+:root {
+    --bg-dark: #080a0f;
+    --bg-panel: rgba(13, 17, 24, 0.88);
+    --bg-panel-hover: rgba(22, 28, 40, 0.94);
+    --line: rgba(0, 242, 254, 0.2);
+    --line-active: rgba(0, 242, 254, 0.6);
+    --cyan: #00f2fe;
+    --green: #10b981;
+    --amber: #f59e0b;
+    --red: #ef4444;
+    --blue: #3b82f6;
+    --text-main: #f8fafc;
+    --text-muted: #828ea0;
+    --font-mono: 'JetBrains Mono', monospace;
+    --font-sans: 'Space Grotesk', -apple-system, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: var(--font-sans);
+    overflow: hidden;
+    user-select: none;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* 3D Canvas Viewport */
+#map-viewport {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    cursor: crosshair;
+}
+
+/* Glass Panels */
+.hud-panel {
+    background: var(--bg-panel);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    position: relative;
+}
+
+.hud-panel::before {
+    content: '+';
+    position: absolute;
+    top: 3px;
+    left: 4px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--line-active);
+    pointer-events: none;
+}
+
+.hud-panel::after {
+    content: '+';
+    position: absolute;
+    bottom: 3px;
+    right: 4px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--line-active);
+    pointer-events: none;
+}
+
+/* Header Top Bar */
+.top-bar {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    right: 14px;
+    height: 52px;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+}
+
+/* Map Selector Segmented Controls */
+.map-selector {
+    display: flex;
+    gap: 4px;
+    background: rgba(0, 0, 0, 0.45);
+    padding: 3px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+}
+
+.map-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    padding: 5px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.map-btn:hover {
+    color: var(--text-main);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.map-btn.active {
+    background: var(--cyan);
+    color: #05070a;
+    box-shadow: 0 0 12px rgba(0, 242, 254, 0.4);
+}
+
+/* Left Tactical Tool Rail */
+.tool-rail {
+    position: absolute;
+    top: 80px;
+    left: 14px;
+    z-index: 30;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px;
+}
+
+.tool-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--line);
+    color: var(--text-muted);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.tool-btn:hover {
+    color: var(--text-main);
+    border-color: var(--cyan);
+    background: rgba(0, 242, 254, 0.1);
+}
+
+.tool-btn.active {
+    color: #05070a;
+    background: var(--cyan);
+    border-color: var(--cyan);
+    box-shadow: 0 0 14px rgba(0, 242, 254, 0.5);
+}
+
+.tool-badge {
+    position: absolute;
+    bottom: 2px;
+    right: 4px;
+    font-family: var(--font-mono);
+    font-size: 8px;
+    font-weight: 700;
+}
+
+/* Right Controls Panel */
+.controls-panel {
+    position: absolute;
+    top: 80px;
+    right: 14px;
+    width: 320px;
+    max-height: calc(100vh - 280px);
+    overflow-y: auto;
+    z-index: 30;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.section-title {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Sliders */
+.slider-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.slider-header {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.slider-val {
+    color: var(--cyan);
+    font-weight: 700;
+}
+
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.14);
+    border-radius: 2px;
+    outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--cyan);
+    cursor: pointer;
+    box-shadow: 0 0 8px var(--cyan);
+    transition: transform 0.15s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.3);
+}
+
+/* Stance Buttons Grid */
+.stance-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+}
+
+.stance-btn {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--line);
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    padding: 6px 4px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.stance-btn:hover {
+    color: var(--text-main);
+    border-color: var(--cyan);
+}
+
+.stance-btn.active {
+    background: rgba(0, 242, 254, 0.2);
+    border-color: var(--cyan);
+    color: var(--cyan);
+    font-weight: 700;
+}
+
+/* Bottom Elevation Drawer */
+.bottom-drawer {
+    position: absolute;
+    bottom: 14px;
+    left: 14px;
+    right: 250px;
+    height: 175px;
+    z-index: 30;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.metrics-strip {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+}
+
+.metric-pill {
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid var(--line);
+    padding: 3px 10px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.status-indicator {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+.status-indicator.clear {
+    background: var(--green);
+    box-shadow: 0 0 8px var(--green);
+}
+
+.status-indicator.blocked {
+    background: var(--red);
+    box-shadow: 0 0 8px var(--red);
+}
+
+#elevation-canvas {
+    width: 100%;
+    flex: 1;
+    min-height: 0;
+}
+
+/* Minimap Floating Window */
+.minimap-panel {
+    position: absolute;
+    bottom: 14px;
+    right: 14px;
+    width: 220px;
+    height: 220px;
+    z-index: 30;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+#minimap-canvas {
+    width: 100%;
+    height: 100%;
+    cursor: crosshair;
+}
+
+/* Reticle / Scope Overlay for First Person */
+#scope-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    pointer-events: none;
+    display: none;
+}
+
+#scope-overlay.active {
+    display: block;
+}
+
+.scope-circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 420px;
+    height: 420px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 2px solid rgba(0, 242, 254, 0.4);
+    box-shadow: 0 0 0 9999px rgba(0, 5, 10, 0.85);
+}
+
+.scope-crosshair {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+}
+
+.scope-crosshair::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--cyan);
+}
+
+.scope-crosshair::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1px;
+    background: var(--cyan);
+}
+
+/* Tooltip Badge */
+.coords-tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--cyan);
+}

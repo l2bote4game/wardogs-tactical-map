@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WARDOGS 3D Tactical Map — Line of Sight, Viewshed &amp; Ballistics</title>
+    <meta name="description" content="Interactive 3D tactical terrain map, Line of Sight (LOS) viewshed raymarcher, artillery/mortar ballistics, and air defense radar simulator for WARDOGS FPS.">
+    <meta name="theme-color" content="#080a0f">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/css/tactical.css">
+
+    <!-- Three.js r170 pinned -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+        }
+    }
+    </script>
+</head>
+<body>
+
+    <!-- 3D Canvas Viewport -->
+    <div id="map-viewport"></div>
+
+    <!-- First-Person Sniper Scope Overlay -->
+    <div id="scope-overlay">
+        <div class="scope-circle">
+            <div class="scope-crosshair"></div>
+        </div>
+    </div>
+
+    <!-- Top Bar: Tactical Header & Telemetry -->
+    <header class="top-bar hud-panel">
+        <div class="flex items-center gap-4">
+            <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-[color:var(--cyan)] shadow-[0_0_8px_var(--cyan)]"></span>
+                <span class="font-extrabold text-sm tracking-wider">WARDOGS</span>
+                <span class="font-mono text-xs text-[color:var(--cyan)] font-bold">// 3D TACTICAL INTEL</span>
+            </div>
+
+            <!-- Map Selector Segmented Buttons -->
+            <div class="map-selector" id="map-selector">
+                <button class="map-btn active" data-map="bakurani">BAKURANI</button>
+                <button class="map-btn" data-map="ozeti">OZETI</button>
+                <button class="map-btn" data-map="zestafona">ZESTAFONA</button>
+            </div>
+        </div>
+
+        <!-- Center In-Game Coordinates Telemetry -->
+        <div class="hidden md:flex items-center gap-4 font-mono text-xs">
+            <div class="metric-pill">
+                <span class="text-gray-400">CURSOR:</span>
+                <span id="telemetry-cursor" class="coords-tag">X: 1000  Y: 1000  Z: 180m</span>
+            </div>
+            <div class="metric-pill">
+                <span class="text-gray-400">GRID:</span>
+                <span id="telemetry-grid" class="coords-tag">J-10</span>
+            </div>
+        </div>
+
+        <!-- Camera View & Display Toggles -->
+        <div class="flex items-center gap-2">
+            <button id="btn-view-orbit" class="map-btn active" title="3D Free Orbit Camera">3D ORBIT</button>
+            <button id="btn-view-topdown" class="map-btn" title="2D Top-Down Tactical View">2D MAP</button>
+            <button id="btn-view-scope" class="map-btn" title="First-Person Observer Eye View">FPV SCOPE</button>
+            <div class="w-px h-5 bg-gray-700 mx-1"></div>
+            <button id="btn-toggle-contours" class="map-btn active" title="Toggle 10m/50m Topographic Contours">CONTOURS</button>
+            <button id="btn-toggle-grid" class="map-btn active" title="Toggle 100m Military Grid">GRID</button>
+        </div>
+    </header>
+
+    <!-- Left Tool Rail -->
+    <nav class="tool-rail hud-panel" aria-label="Tactical Tool Palette">
+        <button id="tool-obs" class="tool-btn active" title="Place Observer (O) — Calculates Line of Sight">
+            <span>👁️</span>
+            <span class="tool-badge text-[color:var(--cyan)]">OBS</span>
+        </button>
+        <button id="tool-tgt" class="tool-btn" title="Place Target (T) — Calculates Distance &amp; Pitch">
+            <span>🎯</span>
+            <span class="tool-badge text-[color:var(--amber)]">TGT</span>
+        </button>
+        <button id="tool-arty" class="tool-btn" title="Place Mortar / Artillery Battery (A)">
+            <span>💣</span>
+            <span class="tool-badge text-[color:var(--green)]">ARTY</span>
+        </button>
+        <button id="tool-pvo" class="tool-btn" title="Place ПВО / Air Defense Site (P)">
+            <span>📡</span>
+            <span class="tool-badge text-[color:var(--blue)]">ПВО</span>
+        </button>
+        <button id="tool-cz" class="tool-btn" title="Toggle 2x2km Control Zone (KOTH)">
+            <span>⛶</span>
+            <span class="tool-badge text-yellow-400">CZ</span>
+        </button>
+    </nav>
+
+    <!-- Right Tactical Settings & Firing Solution Panel -->
+    <aside class="controls-panel hud-panel">
+        <!-- 01 VIEWSHED & SIGHTLINES -->
+        <div>
+            <div class="section-title">
+                <span>👁️</span>
+                <span>VIEWSHED // ОБЗОР МЕСТНОСТИ</span>
+            </div>
+            <p class="text-xs text-gray-400 mt-1 mb-3">Green = 100% Line of Sight. Red = Blind zone behind ridges.</p>
+
+            <!-- Stance Presets -->
+            <div class="mb-3">
+                <label class="font-mono text-[10px] text-gray-400 block mb-1">OBSERVER STANCE / HEIGHT:</label>
+                <div class="stance-grid" id="stance-buttons">
+                    <button class="stance-btn" data-stance="prone">Prone<br><span class="text-gray-500">0.35m</span></button>
+                    <button class="stance-btn" data-stance="crouch">Crouch<br><span class="text-gray-500">1.05m</span></button>
+                    <button class="stance-btn active" data-stance="standing">Stand<br><span class="text-gray-500">1.75m</span></button>
+                    <button class="stance-btn" data-stance="vehicle">Vehicle<br><span class="text-gray-500">3.2m</span></button>
+                    <button class="stance-btn" data-stance="tower">Tower<br><span class="text-gray-500">14m</span></button>
+                    <button class="stance-btn" data-stance="drone">Drone<br><span class="text-gray-500">45m</span></button>
+                </div>
+            </div>
+
+            <!-- Radius Slider -->
+            <div class="slider-group mb-3">
+                <div class="slider-header">
+                    <span>VIEW RADIUS:</span>
+                    <span id="val-radius" class="slider-val">1200 m</span>
+                </div>
+                <input type="range" id="input-radius" min="200" max="2500" step="50" value="1200">
+            </div>
+
+            <!-- FOV Slider -->
+            <div class="slider-group mb-3">
+                <div class="slider-header">
+                    <span>FOV SECTOR:</span>
+                    <span id="val-fov" class="slider-val">360° (Full)</span>
+                </div>
+                <input type="range" id="input-fov" min="30" max="360" step="15" value="360">
+            </div>
+
+            <!-- Heading Slider -->
+            <div class="slider-group mb-3">
+                <div class="slider-header">
+                    <span>LOOK AZIMUTH:</span>
+                    <span id="val-azimuth" class="slider-val">135°</span>
+                </div>
+                <input type="range" id="input-azimuth" min="0" max="355" step="5" value="135">
+            </div>
+
+            <!-- Toggles -->
+            <div class="flex items-center justify-between text-xs font-mono text-gray-300 mt-2">
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" id="chk-viewshed" checked class="accent-[color:var(--cyan)]">
+                    <span>Show Viewshed</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" id="chk-blind" checked class="accent-red-500">
+                    <span>Show Blind Zones</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="w-full h-px bg-gray-800"></div>
+
+        <!-- 02 ARTILLERY & MORTAR BALLISTICS -->
+        <div>
+            <div class="section-title">
+                <span>💣</span>
+                <span>BALLISTICS // АРТИЛЛЕРИЯ &amp; МИНОМЁТ</span>
+            </div>
+
+            <div class="mt-2 mb-3">
+                <label class="font-mono text-[10px] text-gray-400 block mb-1">WEAPON SYSTEM:</label>
+                <select id="select-weapon" class="w-full bg-black/60 border border-[color:var(--line)] text-xs text-white font-mono rounded px-2 py-1.5 outline-none">
+                    <option value="l81">L81 81mm Mortar (350m - 1800m)</option>
+                    <option value="sph2">SPH-2 155mm Howitzer (750m - 3800m)</option>
+                    <option value="sniper">AWM-338 Sniper Rifle (Flat Line)</option>
+                </select>
+            </div>
+
+            <!-- Arc Mode (High Arc vs Low Arc) -->
+            <div class="flex gap-2 mb-3">
+                <button id="btn-arc-high" class="map-btn active flex-1 text-center" title="Plunging Fire (Over Hills)">HIGH ARC (MORTAR)</button>
+                <button id="btn-arc-low" class="map-btn flex-1 text-center" title="Direct Trajectory">LOW ARC</button>
+            </div>
+
+            <!-- Firing Solution Card -->
+            <div class="bg-black/50 border border-[color:var(--line)] rounded p-2.5 font-mono text-xs space-y-1.5" id="firing-solution-card">
+                <div class="flex justify-between">
+                    <span class="text-gray-400">RANGE:</span>
+                    <span id="sol-range" class="text-white font-bold">-- m</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-400">AZIMUTH:</span>
+                    <span id="sol-azimuth" class="text-[color:var(--cyan)] font-bold">--° (-- MIL)</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-400">ELEVATION (MIL):</span>
+                    <span id="sol-elevation" class="text-[color:var(--amber)] font-bold">-- MIL</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-400">TIME OF FLIGHT:</span>
+                    <span id="sol-tof" class="text-white">-- s</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-400">CREST STATUS:</span>
+                    <span id="sol-crest" class="text-[color:var(--green)] font-bold">CLEAR</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full h-px bg-gray-800"></div>
+
+        <!-- 03 ПВО / AIR DEFENSE -->
+        <div>
+            <div class="section-title">
+                <span>📡</span>
+                <span>AIR DEFENSE // ПВО DOME</span>
+            </div>
+            <div class="flex items-center justify-between text-xs font-mono text-gray-300 mt-2">
+                <span>3D Radar Search Dome (2.5km)</span>
+                <input type="checkbox" id="chk-pvo" class="accent-blue-500">
+            </div>
+        </div>
+
+        <div class="w-full h-px bg-gray-800"></div>
+
+        <!-- 04 QUICK POI VANTAGE POINTS -->
+        <div>
+            <div class="section-title">
+                <span>📍</span>
+                <span>TACTICAL KEY POINTS // ВЫСОТЫ</span>
+            </div>
+            <div class="space-y-1 mt-2" id="poi-list">
+                <!-- Dynamically populated per map -->
+            </div>
+        </div>
+    </aside>
+
+    <!-- Bottom Drawer: Real-time Elevation Cross-Section Profile -->
+    <section class="bottom-drawer hud-panel" aria-label="Elevation Cross-Section Profile">
+        <div class="drawer-header">
+            <div class="flex items-center gap-3">
+                <span class="font-mono text-xs font-bold tracking-wider text-[color:var(--cyan)]">ELEVATION PROFILE &amp; LINE OF SIGHT</span>
+                <span class="font-mono text-[10px] text-gray-400">// CROSS-SECTION SLICE</span>
+            </div>
+
+            <!-- Status Indicator Strip -->
+            <div class="metrics-strip">
+                <div class="metric-pill">
+                    <span class="status-indicator clear" id="los-status-dot"></span>
+                    <span id="los-status-text" class="font-bold text-[color:var(--green)]">LOS: CLEAR (100%)</span>
+                </div>
+                <div class="metric-pill">
+                    <span class="text-gray-400">DIST:</span>
+                    <span id="los-dist-text" class="text-white font-bold">-- m</span>
+                </div>
+                <div class="metric-pill">
+                    <span class="text-gray-400">Δh:</span>
+                    <span id="los-dh-text" class="text-white font-bold">-- m</span>
+                </div>
+                <div class="metric-pill">
+                    <span class="text-gray-400">SLOPE:</span>
+                    <span id="los-slope-text" class="text-white font-bold">--°</span>
+                </div>
+                <div class="metric-pill">
+                    <span class="text-gray-400">AZIMUTH:</span>
+                    <span id="los-azimuth-text" class="text-white font-bold">--°</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2D Canvas Graph -->
+        <canvas id="elevation-canvas"></canvas>
+    </section>
+
+    <!-- Synchronized 2D Minimap Window -->
+    <aside class="minimap-panel hud-panel">
+        <div class="flex items-center justify-between mb-1 font-mono text-[10px] text-[color:var(--cyan)]">
+            <span>2D TACTICAL RADAR</span>
+            <span id="minimap-scale">2000m</span>
+        </div>
+        <canvas id="minimap-canvas"></canvas>
+    </aside>
+
+    <!-- Application Script Bundle -->
+    <script type="module" src="assets/js/app.js"></script>
+</body>
+</html>
