@@ -4,7 +4,7 @@
    ============================================================ */
 
 import * as THREE from 'three';
-import { MAP_CONFIGS, STANCE_PRESETS, WEAPON_CONFIGS, TACTICAL_GRID } from './config.js';
+import { MAP_CONFIGS, STANCE_PRESETS, OFFICIAL_WEAPON_TABLES, TACTICAL_GRID } from './config.js';
 import { TerrainEngine } from './terrain-engine.js';
 import { ViewshedEngine } from './viewshed-engine.js';
 import { BallisticsEngine } from './ballistics-engine.js';
@@ -168,11 +168,31 @@ class TacticalApp {
             this.viewshed.toggleBlindZones(e.target.checked);
         });
 
-        // ПВО Toggle
-        document.getElementById('chk-pvo').addEventListener('change', (e) => {
+        // ПВО Toggle & System Selection
+        const chkPvo = document.getElementById('chk-pvo');
+        chkPvo.addEventListener('change', (e) => {
             this.airdefense.setVisible(e.target.checked);
             tacticalAudio.playClick();
         });
+
+        const selectPvo = document.getElementById('select-pvo-system');
+        if (selectPvo) {
+            selectPvo.addEventListener('change', (e) => {
+                const sysId = e.target.value;
+                this.airdefense.setSystem(sysId);
+                const descEl = document.getElementById('pvo-description');
+                if (descEl) {
+                    if (sysId === 'verba') {
+                        descEl.textContent = '9K333 Verba: Infantry shoulder-fired IR homing missile (Support Lv.16). Locks onto AH-6M/AH-6R scout helicopters within 1200m. Requires direct Line of Sight.';
+                    } else if (sysId === 'zu23') {
+                        descEl.textContent = 'FOB ZU-23-2: Base stationary twin 23mm flak battery. 1500m protective bubble. High rate-of-fire shredder against low-altitude transport and scout helis.';
+                    } else if (sysId === 'infantry') {
+                        descEl.textContent = 'Player Threat Rings: Red = 50m CQB / SMG; Amber = 300m Assault Rifle; Yellow = 600m DMR; Cyan = 1200m Sniper Killzone; Gray = 1500m Draw Distance.';
+                    }
+                }
+                tacticalAudio.playClick();
+            });
+        }
     }
 
     setupBallisticsControls() {
@@ -234,14 +254,35 @@ class TacticalApp {
             tacticalAudio.playLaserPing();
         });
 
-        // Contours & Grid
-        const btnContour = document.getElementById('btn-toggle-contours');
-        btnContour.addEventListener('click', () => {
-            const flag = !this.terrain.showContours;
-            this.terrain.toggleContours(flag);
-            btnContour.classList.toggle('active', flag);
+        // Map Render Style Buttons (Hybrid / Satellite / Topo)
+        const btnHybrid = document.getElementById('btn-style-hybrid');
+        const btnSat = document.getElementById('btn-style-sat');
+        const btnTopo = document.getElementById('btn-style-topo');
+
+        const setStyleBtn = (active) => {
+            [btnHybrid, btnSat, btnTopo].forEach(b => b && b.classList.remove('active'));
+            if (active) active.classList.add('active');
             tacticalAudio.playClick();
-        });
+        };
+
+        if (btnHybrid) {
+            btnHybrid.addEventListener('click', () => {
+                setStyleBtn(btnHybrid);
+                this.terrain.setRenderStyle('hybrid');
+            });
+        }
+        if (btnSat) {
+            btnSat.addEventListener('click', () => {
+                setStyleBtn(btnSat);
+                this.terrain.setRenderStyle('satellite');
+            });
+        }
+        if (btnTopo) {
+            btnTopo.addEventListener('click', () => {
+                setStyleBtn(btnTopo);
+                this.terrain.setRenderStyle('contour');
+            });
+        }
 
         const btnGrid = document.getElementById('btn-toggle-grid');
         btnGrid.addEventListener('click', () => {
@@ -395,7 +436,7 @@ class TacticalApp {
         if (ballistic && ballistic.valid) {
             document.getElementById('sol-range').textContent = `${ballistic.distance} m (Δh: ${ballistic.elevationDelta > 0 ? '+' : ''}${ballistic.elevationDelta}m)`;
             document.getElementById('sol-azimuth').textContent = `${ballistic.azimuthDeg}° (${ballistic.azimuthMil} MIL)`;
-            document.getElementById('sol-elevation').textContent = `${ballistic.elevationAngleMil} MIL (${ballistic.elevationAngleDeg}°)`;
+            document.getElementById('sol-elevation').textContent = `${ballistic.officialMil || ballistic.elevationAngleMil} MIL (Calc: ${ballistic.elevationAngleDeg}°)`;
             document.getElementById('sol-tof').textContent = `${ballistic.timeOfFlight} s (Apex: ${ballistic.apexHeight}m)`;
 
             const crestEl = document.getElementById('sol-crest');
@@ -409,7 +450,7 @@ class TacticalApp {
         } else if (ballistic && !ballistic.valid) {
             document.getElementById('sol-range').textContent = `${ballistic.distance || '--'} m`;
             document.getElementById('sol-azimuth').textContent = `${ballistic.azimuthMil || '--'} MIL`;
-            document.getElementById('sol-elevation').textContent = 'OUT OF ENVELOPE';
+            document.getElementById('sol-elevation').textContent = ballistic.officialMil ? `${ballistic.officialMil} MIL` : 'OUT OF ENVELOPE';
             document.getElementById('sol-tof').textContent = '--';
             const crestEl = document.getElementById('sol-crest');
             crestEl.textContent = ballistic.reason || 'UNREACHABLE';

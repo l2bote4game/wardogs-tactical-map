@@ -10,12 +10,12 @@
    ============================================================ */
 
 import * as THREE from 'three';
-import { WEAPON_CONFIGS } from './config.js';
+import { OFFICIAL_WEAPON_TABLES } from './config.js';
 
 export class BallisticsEngine {
     constructor(terrainEngine) {
         this.terrain = terrainEngine;
-        this.currentWeaponId = 'l81';
+        this.currentWeaponId = 'mortar'; // 'mortar' (L81) or 'sph2' (155mm)
         this.arcMode = 'high'; // 'high' (mortar/plunging) or 'low' (direct)
 
         // Active Battery Position & Target
@@ -57,13 +57,43 @@ export class BallisticsEngine {
     }
 
     /* ------------------------------------------------------------
+       Official Game Firing Table Interpolation
+       ------------------------------------------------------------ */
+    lookupOfficialMil(dist) {
+        if (this.currentWeaponId === 'mortar') {
+            const table = OFFICIAL_WEAPON_TABLES.mortar.table;
+            return this.interpolateTable(table, dist);
+        } else if (this.currentWeaponId === 'sph2') {
+            const table = (this.arcMode === 'low') 
+                ? OFFICIAL_WEAPON_TABLES.sph2.lowArc 
+                : OFFICIAL_WEAPON_TABLES.sph2.highArc;
+            return this.interpolateTable(table, dist);
+        }
+        return null;
+    }
+
+    interpolateTable(table, dist) {
+        if (!table || table.length === 0) return null;
+        if (dist <= table[0][0]) return table[0][1];
+        if (dist >= table[table.length - 1][0]) return table[table.length - 1][1];
+
+        for (let i = 0; i < table.length - 1; i++) {
+            const p0 = table[i];
+            const p1 = table[i + 1];
+            if (dist >= p0[0] && dist <= p1[0]) {
+                const frac = (dist - p0[0]) / (p1[0] - p0[0]);
+                const mil = p0[1] + frac * (p1[1] - p0[1]);
+                return Math.round(mil);
+            }
+        }
+        return null;
+    }
+
+    /* ------------------------------------------------------------
        Ballistic Trajectory Solver with Elevation Differential
        ------------------------------------------------------------ */
     solveTrajectory() {
-        const wpn = WEAPON_CONFIGS[this.currentWeaponId] || WEAPON_CONFIGS.l81;
-        const v0 = wpn.muzzleVelocity; // m/s
-        const g = 9.80665; // m/s^2
-
+        const wpnTable = OFFICIAL_WEAPON_TABLES[this.currentWeaponId] || OFFICIAL_WEAPON_TABLES.mortar;
         const fx = this.battery.x;
         const fy = this.battery.y;
         const fz = this.terrain.getElevation(fx, fy) + 1.5; // Battery muzzle height
@@ -83,16 +113,32 @@ export class BallisticsEngine {
         const azDeg = (azRad * 180) / Math.PI;
         const azMil = Math.round((azDeg / 360) * 6400);
 
+        // Official Game MIL Value
+        const officialMil = this.lookupOfficialMil(d);
+
         // Check weapon minimum & maximum physical range limits
-        if (d < wpn.minRange) {
-            return { valid: false, reason: `Target too close (${Math.round(d)}m < min ${wpn.minRange}m)`, distance: Math.round(d), azimuthMil: azMil };
+        if (d < wpnTable.minRange) {
+            return { 
+                valid: false, 
+                reason: `Target too close (${Math.round(d)}m < min ${wpnTable.minRange}m)`, 
+                distance: Math.round(d), 
+                azimuthMil: azMil,
+                officialMil
+            };
         }
-        if (d > wpn.maxRange) {
-            return { valid: false, reason: `Target out of range (${Math.round(d)}m > max ${wpn.maxRange}m)`, distance: Math.round(d), azimuthMil: azMil };
+        if (d > wpnTable.maxRange) {
+            return { 
+                valid: false, 
+                reason: `Target out of range (${Math.round(d)}m > max ${wpnTable.maxRange}m)`, 
+                distance: Math.round(d), 
+                azimuthMil: azMil,
+                officialMil
+            };
         }
 
-        // Quadratic Ballistic Root Equation:
-        // tan(theta) = [ v0^2 +- sqrt(v0^4 - g*(g*d^2 + 2*dh*v0^2)) ] / (g*d)
+        // Calibrated physics simulation for 3D trajectory visualization
+        const v0 = (this.currentWeaponId === 'mortar') ? 145 : 295;
+        const g = 9.80665;
         const v2 = v0 * v0;
         const v4 = v2 * v2;
         const determinant = v4 - g * (g * d * d + 2 * dh * v2);
@@ -100,17 +146,18 @@ export class BallisticsEngine {
         if (determinant < 0) {
             return {
                 valid: false,
-                reason: `Unreachable target due to mountain height (+${Math.round(dh)}m elevation)`,
+                reason: `Target height unreachable (+${Math.round(dh)}m elevation)`,
                 distance: Math.round(d),
-                azimuthMil: azMil
+                azimuthMil: azMil,
+                officialMil
             };
         }
 
         const sqrtDet = Math.sqrt(determinant);
 
-        // High arc (+) vs Low arc (-)
+        // High arc vs Low arc
         let tanTheta;
-        if (this.arcMode === 'high' || wpn.category === 'mortar') {
+        if (this.arcMode === 'high' || this.currentWeaponId === 'mortar') {
             tanTheta = (v2 + sqrtDet) / (g * d);
         } else {
             tanTheta = (v2 - sqrtDet) / (g * d);
@@ -118,7 +165,7 @@ export class BallisticsEngine {
 
         const thetaRad = Math.atan(tanTheta);
         const thetaDeg = (thetaRad * 180) / Math.PI;
-        const thetaMil = Math.round((thetaRad * 6400) / (2 * Math.PI));
+        const physicsMil = Math.round((thetaRad * 6400) / (2 * Math.PI));
 
         // Time of Flight
         const vx = v0 * Math.cos(thetaRad);
@@ -168,13 +215,14 @@ export class BallisticsEngine {
 
         return {
             valid: true,
-            weapon: wpn,
+            weapon: wpnTable,
             distance: Math.round(d),
             elevationDelta: Math.round(dh),
             azimuthDeg: Math.round(azDeg),
             azimuthMil: azMil,
             elevationAngleDeg: thetaDeg.toFixed(1),
-            elevationAngleMil: thetaMil,
+            elevationAngleMil: physicsMil,
+            officialMil: officialMil || physicsMil,
             timeOfFlight: tFlight.toFixed(1),
             apexHeight: Math.round(apexHeight),
             isObstructed,
@@ -238,7 +286,7 @@ export class BallisticsEngine {
     }
 
     setWeapon(weaponId) {
-        if (WEAPON_CONFIGS[weaponId]) {
+        if (OFFICIAL_WEAPON_TABLES[weaponId]) {
             this.currentWeaponId = weaponId;
             return this.update();
         }

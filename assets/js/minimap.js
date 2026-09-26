@@ -25,7 +25,20 @@ export class TacticalMinimap {
             size: 800 // 800m or 1000m active zone
         };
 
+        // Satellite background image cache
+        this.satImages = {};
+        this.preloadSatImages();
+
         this.initInteractions();
+    }
+
+    preloadSatImages() {
+        const maps = ['bakurani', 'ozeti', 'zestafona'];
+        maps.forEach(m => {
+            const img = new Image();
+            img.src = `assets/textures/${m}_sat.jpg`;
+            this.satImages[m] = img;
+        });
     }
 
     initInteractions() {
@@ -51,6 +64,15 @@ export class TacticalMinimap {
         const h = this.canvas.height = this.canvas.clientHeight * window.devicePixelRatio;
 
         ctx.clearRect(0, 0, w, h);
+
+        // 0. Draw Satellite Orthophoto Background
+        const curMap = this.terrain.currentMapId || 'bakurani';
+        const satImg = this.satImages[curMap];
+        if (satImg && satImg.complete && satImg.naturalWidth > 0) {
+            ctx.globalAlpha = 0.55;
+            ctx.drawImage(satImg, 0, 0, w, h);
+            ctx.globalAlpha = 1.0;
+        }
 
         const mapSize = this.terrain.config.gridSize; // 2000m
         const toPxX = (gx) => (gx / mapSize) * w;

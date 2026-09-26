@@ -73,7 +73,11 @@
             <button id="btn-view-topdown" class="map-btn" title="2D Top-Down Tactical View">2D MAP</button>
             <button id="btn-view-scope" class="map-btn" title="First-Person Observer Eye View">FPV SCOPE</button>
             <div class="w-px h-5 bg-gray-700 mx-1"></div>
-            <button id="btn-toggle-contours" class="map-btn active" title="Toggle 10m/50m Topographic Contours">CONTOURS</button>
+            <!-- Map Texture Render Style -->
+            <button id="btn-style-hybrid" class="map-btn active" title="Satellite Orthophoto with Topo Contours">HYBRID</button>
+            <button id="btn-style-sat" class="map-btn" title="Pure Satellite Aerial Photo">SATELLITE</button>
+            <button id="btn-style-topo" class="map-btn" title="Tactical Topographic Contours">TOPO</button>
+            <div class="w-px h-5 bg-gray-700 mx-1"></div>
             <button id="btn-toggle-grid" class="map-btn active" title="Toggle 100m Military Grid">GRID</button>
         </div>
     </header>
@@ -175,11 +179,10 @@
             </div>
 
             <div class="mt-2 mb-3">
-                <label class="font-mono text-[10px] text-gray-400 block mb-1">WEAPON SYSTEM:</label>
+                <label class="font-mono text-[10px] text-gray-400 block mb-1">OFFICIAL GAME WEAPON TABLE:</label>
                 <select id="select-weapon" class="w-full bg-black/60 border border-[color:var(--line)] text-xs text-white font-mono rounded px-2 py-1.5 outline-none">
-                    <option value="l81">L81 81mm Mortar (350m - 1800m)</option>
-                    <option value="sph2">SPH-2 155mm Howitzer (750m - 3800m)</option>
-                    <option value="sniper">AWM-338 Sniper Rifle (Flat Line)</option>
+                    <option value="mortar">L81 Mortar (132m - 684m) [Official Table]</option>
+                    <option value="sph2">SPH-2 155mm Howitzer (780m - 2629m) [Official Table]</option>
                 </select>
             </div>
 
@@ -200,7 +203,7 @@
                     <span id="sol-azimuth" class="text-[color:var(--cyan)] font-bold">--° (-- MIL)</span>
                 </div>
                 <div class="flex justify-between">
-                    <span class="text-gray-400">ELEVATION (MIL):</span>
+                    <span class="text-gray-400">GAME ELEVATION:</span>
                     <span id="sol-elevation" class="text-[color:var(--amber)] font-bold">-- MIL</span>
                 </div>
                 <div class="flex justify-between">
@@ -216,16 +219,29 @@
 
         <div class="w-full h-px bg-gray-800"></div>
 
-        <!-- 03 ПВО / AIR DEFENSE -->
+        <!-- 03 ПВО / AIR DEFENSE & PLAYER RADII -->
         <div>
             <div class="section-title">
                 <span>📡</span>
-                <span>AIR DEFENSE // ПВО DOME</span>
+                <span>AIR DEFENSE // ПВО &amp; РАДИУСЫ ИГРОКОВ</span>
             </div>
+            
+            <div class="mt-2 mb-2">
+                <label class="font-mono text-[10px] text-gray-400 block mb-1">SYSTEM / THREAT PROFILE:</label>
+                <select id="select-pvo-system" class="w-full bg-black/60 border border-[color:var(--line)] text-xs text-white font-mono rounded px-2 py-1.5 outline-none">
+                    <option value="verba">9K333 Verba MANPADS (1200m IR Lock Dome)</option>
+                    <option value="zu23">FOB ZU-23-2 Twin Autocannon (1500m Base Flak)</option>
+                    <option value="infantry">Player Threat Rings (50m CQB / 300m Rifle / 1.2km Sniper)</option>
+                </select>
+            </div>
+
             <div class="flex items-center justify-between text-xs font-mono text-gray-300 mt-2">
-                <span>3D Radar Search Dome (2.5km)</span>
-                <input type="checkbox" id="chk-pvo" class="accent-blue-500">
+                <span class="text-gray-400">Show 3D Threat Dome</span>
+                <input type="checkbox" id="chk-pvo" class="accent-emerald-500 w-4 h-4 cursor-pointer">
             </div>
+            <p id="pvo-description" class="text-[11px] text-gray-400 mt-2 font-mono leading-relaxed bg-black/40 p-2 rounded border border-gray-800">
+                9K333 Verba: Infantry shoulder-fired IR homing missile. Locks onto AH-6M/AH-6R scout helicopters within 1200m. Requires direct Line of Sight.
+            </p>
         </div>
 
         <div class="w-full h-px bg-gray-800"></div>

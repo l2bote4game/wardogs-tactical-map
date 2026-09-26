@@ -34,7 +34,12 @@ export class TerrainEngine {
         this.heightMatrix = new Float32Array(this.GRID_RES * this.GRID_RES);
         this.scaleRatio = 0.1; // 1 unit in Three.js = 10 meters in game
 
-        // Visual Toggles
+        // Visual Toggles & Satellite Textures
+        this.textureLoader = new THREE.TextureLoader();
+        this.loadedTextures = {};
+        this.dummyTexture = new THREE.DataTexture(new Uint8Array([20, 30, 25, 255]), 1, 1, THREE.RGBAFormat);
+        this.dummyTexture.needsUpdate = true;
+        this.renderStyle = 'hybrid'; // 'satellite', 'contour', 'hybrid'
         this.showContours = true;
         this.showGrid = true;
         this.viewMode = 'orbit'; // 'orbit', 'topdown', 'scope'
@@ -120,12 +125,46 @@ export class TerrainEngine {
         this.generateHeightfield();
         this.rebuildTerrainMesh();
         this.rebuildMilitaryGrid();
+        this.loadSatelliteTexture(this.config.texturePath);
 
         // Reset camera focus
         if (this.controls) {
             this.controls.target.set(0, 15, 0);
             this.camera.position.set(0, 160, 200);
             this.controls.update();
+        }
+    }
+
+    loadSatelliteTexture(path) {
+        if (!path) return;
+        if (this.loadedTextures[path]) {
+            this.applySatTexture(this.loadedTextures[path]);
+            return;
+        }
+
+        this.textureLoader.load(
+            path,
+            (tex) => {
+                tex.wrapS = THREE.ClampToEdgeWrapping;
+                tex.wrapT = THREE.ClampToEdgeWrapping;
+                tex.minFilter = THREE.LinearMipmapLinearFilter;
+                tex.magFilter = THREE.LinearFilter;
+                tex.generateMipmaps = true;
+                this.loadedTextures[path] = tex;
+                this.applySatTexture(tex);
+            },
+            undefined,
+            (err) => {
+                console.warn('Failed to load satellite texture:', path, err);
+            }
+        );
+    }
+
+    applySatTexture(tex) {
+        if (this.material && this.material.uniforms.uSatTexture) {
+            this.material.uniforms.uSatTexture.value = tex;
+            this.material.uniforms.uHasSatTexture.value = 1.0;
+            this.material.needsUpdate = true;
         }
     }
 
@@ -264,17 +303,23 @@ export class TerrainEngine {
         geometry.setAttribute('elevation', new THREE.BufferAttribute(elevations, 1));
         geometry.computeVertexNormals();
 
-        // Custom Topographic Shader Material
+        // Custom Topographic & Satellite Shader Material
+        const cachedTex = this.loadedTextures[this.config.texturePath] || null;
+        const styleVal = this.renderStyle === 'satellite' ? 0.0 : (this.renderStyle === 'contour' ? 1.0 : 2.0);
+
         const uniforms = {
             uMinElev: { value: this.config.minElevation },
             uMaxElev: { value: this.config.maxElevation },
             uScaleRatio: { value: this.scaleRatio },
             uShowContours: { value: this.showContours ? 1.0 : 0.0 },
-            uContourMinor: { value: 10.0 }, // 10m minor contour
-            uContourMajor: { value: 50.0 }, // 50m major contour
-            uViewshedTexture: { value: null },
+            uRenderStyle: { value: styleVal }, // 0.0 = Satellite, 1.0 = Contours, 2.0 = Hybrid
+            uContourMinor: { value: 20.0 }, // 20m minor contour
+            uContourMajor: { value: 100.0 }, // 100m major contour
+            uSatTexture: { value: cachedTex || this.dummyTexture },
+            uHasSatTexture: { value: cachedTex ? 1.0 : 0.0 },
+            uViewshedTexture: { value: this.dummyTexture },
             uHasViewshed: { value: 0.0 },
-            uSunDir: { value: new THREE.Vector3(0.5, 0.8, 0.4).normalize() }
+            uSunDir: { value: new THREE.Vector3(0.4, 0.85, 0.35).normalize() }
         };
 
         const terrainMaterial = new THREE.ShaderMaterial({
@@ -299,8 +344,11 @@ export class TerrainEngine {
                 uniform float uMinElev;
                 uniform float uMaxElev;
                 uniform float uShowContours;
+                uniform float uRenderStyle;
                 uniform float uContourMinor;
                 uniform float uContourMajor;
+                uniform sampler2D uSatTexture;
+                uniform float uHasSatTexture;
                 uniform sampler2D uViewshedTexture;
                 uniform float uHasViewshed;
                 uniform vec3 uSunDir;
@@ -310,13 +358,13 @@ export class TerrainEngine {
                 varying vec2 vUv;
                 varying vec3 vWorldPos;
 
-                // Tactical Military Color Ramp
+                // Tactical Military Color Ramp (Topographic mode)
                 vec3 getElevationColor(float t) {
-                    vec3 cDeep = vec3(0.08, 0.12, 0.11);   // Dark ravine
-                    vec3 cLow = vec3(0.14, 0.22, 0.18);    // Low valley
-                    vec3 cMid = vec3(0.24, 0.30, 0.25);    // Midland slope
-                    vec3 cHigh = vec3(0.38, 0.42, 0.39);   // High rock
-                    vec3 cPeak = vec3(0.68, 0.72, 0.70);   // Rocky crest
+                    vec3 cDeep = vec3(0.06, 0.10, 0.09);   // Dark ravine
+                    vec3 cLow = vec3(0.12, 0.18, 0.14);    // Low valley
+                    vec3 cMid = vec3(0.20, 0.26, 0.22);    // Midland slope
+                    vec3 cHigh = vec3(0.35, 0.40, 0.36);   // High rock
+                    vec3 cPeak = vec3(0.65, 0.70, 0.68);   // Rocky crest
 
                     if (t < 0.25) return mix(cDeep, cLow, t / 0.25);
                     if (t < 0.50) return mix(cLow, cMid, (t - 0.25) / 0.25);
@@ -326,40 +374,59 @@ export class TerrainEngine {
 
                 void main() {
                     float t = clamp((vElevation - uMinElev) / (uMaxElev - uMinElev), 0.0, 1.0);
-                    vec3 baseCol = getElevationColor(t);
+                    vec3 topoCol = getElevationColor(t);
+
+                    // Satellite orthophoto sampling
+                    vec3 satCol = topoCol;
+                    if (uHasSatTexture > 0.5) {
+                        // UV mapping flip correction if needed (Three.js PlaneGeometry uv.y is 0 at bottom)
+                        vec4 texSample = texture2D(uSatTexture, vec2(vUv.x, 1.0 - vUv.y));
+                        satCol = texSample.rgb;
+                    }
 
                     // Hillshade lighting
-                    float diffuse = max(0.18, dot(vNormal, uSunDir));
-                    vec3 litCol = baseCol * diffuse;
+                    float diffuse = max(0.25, dot(vNormal, uSunDir));
+                    
+                    vec3 baseCol = topoCol;
+                    if (uRenderStyle < 0.5) {
+                        // Pure Satellite
+                        baseCol = satCol * (diffuse * 0.75 + 0.35);
+                    } else if (uRenderStyle > 1.5) {
+                        // Hybrid: Satellite enhanced with terrain relief
+                        baseCol = mix(satCol, satCol * diffuse, 0.45);
+                    } else {
+                        // Pure Topo
+                        baseCol = topoCol * diffuse;
+                    }
 
                     // Topographic Contour Isolines
-                    if (uShowContours > 0.5) {
+                    if (uShowContours > 0.5 && uRenderStyle > 0.5) {
                         float elev = vElevation;
                         float fMinor = abs(fract(elev / uContourMinor - 0.5) - 0.5) / fwidth(elev / uContourMinor);
-                        float lineMinor = clamp(1.0 - fMinor * 0.8, 0.0, 1.0);
+                        float lineMinor = clamp(1.0 - fMinor * 0.75, 0.0, 1.0);
 
                         float fMajor = abs(fract(elev / uContourMajor - 0.5) - 0.5) / fwidth(elev / uContourMajor);
-                        float lineMajor = clamp(1.0 - fMajor * 0.5, 0.0, 1.0);
+                        float lineMajor = clamp(1.0 - fMajor * 0.45, 0.0, 1.0);
 
                         // Overlay crisp dark & illuminated contours
-                        litCol = mix(litCol, vec3(0.04, 0.06, 0.08), lineMinor * 0.35);
-                        litCol = mix(litCol, vec3(0.0, 0.95, 0.65), lineMajor * 0.65);
+                        baseCol = mix(baseCol, vec3(0.04, 0.06, 0.08), lineMinor * 0.4);
+                        baseCol = mix(baseCol, vec3(0.0, 0.98, 0.72), lineMajor * 0.75);
                     }
 
                     // Dynamic Viewshed Overlay (Green = Visible, Red = Shadow)
                     if (uHasViewshed > 0.5) {
                         vec4 vCol = texture2D(uViewshedTexture, vUv);
                         if (vCol.a > 0.02) {
-                            litCol = mix(litCol, vCol.rgb, vCol.a * 0.68);
+                            baseCol = mix(baseCol, vCol.rgb, vCol.a * 0.72);
                         }
                     }
 
                     // Tactical 100m subtle cell border lines
                     vec2 cellUv = fract(vUv * 20.0);
-                    float border = step(0.97, cellUv.x) + step(0.97, cellUv.y);
-                    litCol += vec3(0.0, 0.5, 0.4) * border * 0.12;
+                    float border = step(0.98, cellUv.x) + step(0.98, cellUv.y);
+                    baseCol += vec3(0.0, 0.5, 0.4) * border * 0.08;
 
-                    gl_FragColor = vec4(litCol, 1.0);
+                    gl_FragColor = vec4(baseCol, 1.0);
                 }
             `,
             wireframe: false
@@ -392,9 +459,18 @@ export class TerrainEngine {
 
     setViewshedTexture(texture) {
         if (!this.material) return;
-        this.material.uniforms.uViewshedTexture.value = texture;
+        this.material.uniforms.uViewshedTexture.value = texture || this.dummyTexture;
         this.material.uniforms.uHasViewshed.value = texture ? 1.0 : 0.0;
         this.material.needsUpdate = true;
+    }
+
+    setRenderStyle(style) {
+        this.renderStyle = style; // 'satellite', 'contour', 'hybrid'
+        if (this.material && this.material.uniforms.uRenderStyle) {
+            const styleVal = style === 'satellite' ? 0.0 : (style === 'contour' ? 1.0 : 2.0);
+            this.material.uniforms.uRenderStyle.value = styleVal;
+            this.material.needsUpdate = true;
+        }
     }
 
     toggleContours(flag) {
