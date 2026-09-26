@@ -11,6 +11,7 @@ import { BallisticsEngine } from './ballistics-engine.js';
 import { AirDefenseEngine } from './air-defense-engine.js';
 import { ElevationProfileGraph } from './elevation-profile.js';
 import { TacticalMinimap } from './minimap.js';
+import { Tactical2DMap } from './tactical-2d-map.js';
 import { tacticalAudio } from './audio.js';
 
 class TacticalApp {
@@ -22,6 +23,7 @@ class TacticalApp {
         this.airdefense = null;
         this.elevationProfile = null;
         this.minimap = null;
+        this.tactical2D = null;
 
         this.init();
     }
@@ -36,7 +38,10 @@ class TacticalApp {
         this.ballistics = new BallisticsEngine(this.terrain);
         this.airdefense = new AirDefenseEngine(this.terrain);
 
-        // 3. Initialize Elevation Profile & Minimap
+        // 3. Initialize Interactive 2D Map (Full screen pan & zoom)
+        this.tactical2D = new Tactical2DMap(viewport, this.terrain, this.viewshed, this.ballistics, this.airdefense);
+
+        // 4. Initialize Elevation Profile & Minimap
         const elevCanvas = document.getElementById('elevation-canvas');
         this.elevationProfile = new ElevationProfileGraph(elevCanvas);
 
@@ -79,6 +84,7 @@ class TacticalApp {
 
                 tacticalAudio.playClick();
                 this.terrain.loadMap(mapId);
+                this.tactical2D.setMap(mapId);
 
                 // Set defaults for map
                 const cfg = MAP_CONFIGS[mapId];
@@ -238,18 +244,20 @@ class TacticalApp {
         btnOrbit.addEventListener('click', () => {
             setCamBtn(btnOrbit);
             scopeOverlay.classList.remove('active');
+            this.tactical2D.setVisible(false);
             this.terrain.setCameraView('orbit');
         });
 
         btnTopdown.addEventListener('click', () => {
             setCamBtn(btnTopdown);
             scopeOverlay.classList.remove('active');
-            this.terrain.setCameraView('topdown');
+            this.tactical2D.setVisible(true);
         });
 
         btnScope.addEventListener('click', () => {
             setCamBtn(btnScope);
             scopeOverlay.classList.add('active');
+            this.tactical2D.setVisible(false);
             this.terrain.setCameraView('scope', this.viewshed.observer, this.viewshed.target);
             tacticalAudio.playLaserPing();
         });
@@ -408,7 +416,10 @@ class TacticalApp {
         // 3. Elevation Profile Graph
         this.elevationProfile.render(los, ballistic);
 
-        // 4. Update HUD Text Displays
+        // 4. Update 2D Tactical Map
+        if (this.tactical2D) this.tactical2D.render();
+
+        // 5. Update HUD Text Displays
         this.updateHUD(los, ballistic);
     }
 
@@ -476,6 +487,11 @@ class TacticalApp {
 
         if (map && MAP_CONFIGS[map]) {
             this.terrain.loadMap(map);
+            this.tactical2D.setMap(map);
+            const container = document.getElementById('map-selector');
+            if (container) {
+                container.querySelectorAll('.map-btn').forEach(b => b.classList.toggle('active', b.dataset.map === map));
+            }
         }
         if (obs) {
             const [ox, oy] = obs.split(',').map(Number);
@@ -487,6 +503,11 @@ class TacticalApp {
                 this.viewshed.setTarget(tx, ty);
                 this.ballistics.setTarget(tx, ty);
             }
+        }
+        const view = p.get('view');
+        if (view === '2d') {
+            const btnTopdown = document.getElementById('btn-view-topdown');
+            if (btnTopdown) btnTopdown.click();
         }
     }
 

@@ -39,8 +39,8 @@ export class TerrainEngine {
         this.loadedTextures = {};
         this.dummyTexture = new THREE.DataTexture(new Uint8Array([20, 30, 25, 255]), 1, 1, THREE.RGBAFormat);
         this.dummyTexture.needsUpdate = true;
-        this.renderStyle = 'hybrid'; // 'satellite', 'contour', 'hybrid'
-        this.showContours = true;
+        this.renderStyle = 'satellite'; // Default to pure crystal-clear satellite orthophoto!
+        this.showContours = false;      // Contours off by default so satellite map is 100% visible
         this.showGrid = true;
         this.viewMode = 'orbit'; // 'orbit', 'topdown', 'scope'
 
@@ -408,16 +408,16 @@ export class TerrainEngine {
                         float fMajor = abs(fract(elev / uContourMajor - 0.5) - 0.5) / fwidth(elev / uContourMajor);
                         float lineMajor = clamp(1.0 - fMajor * 0.45, 0.0, 1.0);
 
-                        // Overlay crisp dark & illuminated contours
-                        baseCol = mix(baseCol, vec3(0.04, 0.06, 0.08), lineMinor * 0.4);
-                        baseCol = mix(baseCol, vec3(0.0, 0.98, 0.72), lineMajor * 0.75);
+                        // Subtle topographic contours that do not blind the aerial photography
+                        baseCol = mix(baseCol, vec3(0.04, 0.06, 0.08), lineMinor * 0.25);
+                        baseCol = mix(baseCol, vec3(0.0, 0.6, 0.45), lineMajor * 0.45);
                     }
 
-                    // Dynamic Viewshed Overlay (Green = Visible, Red = Shadow)
+                    // Dynamic Viewshed Overlay (Subtle 28% green tint for visible, red for blind zones)
                     if (uHasViewshed > 0.5) {
                         vec4 vCol = texture2D(uViewshedTexture, vUv);
                         if (vCol.a > 0.02) {
-                            baseCol = mix(baseCol, vCol.rgb, vCol.a * 0.72);
+                            baseCol = mix(baseCol, vCol.rgb, vCol.a * 0.28);
                         }
                     }
 

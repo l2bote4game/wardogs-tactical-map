@@ -20,7 +20,8 @@ print(f"Temporary server running on http://127.0.0.1:{PORT}")
 edge_path = "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe"
 tests = [
     ("archive/qa/screenshot_wardogs_orbit.png", f"http://127.0.0.1:{PORT}/"),
-    ("archive/qa/screenshot_wardogs_ozeti.png", f"http://127.0.0.1:{PORT}/#map=ozeti"),
+    ("archive/qa/screenshot_wardogs_zestafona.png", f"http://127.0.0.1:{PORT}/#map=zestafona"),
+    ("archive/qa/screenshot_wardogs_2d.png", f"http://127.0.0.1:{PORT}/#map=bakurani&view=2d"),
 ]
 
 for output_rel, url in tests:
