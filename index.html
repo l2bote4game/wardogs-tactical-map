@@ -49,70 +49,77 @@
 
             <!-- Map Selector Segmented Buttons -->
             <div class="map-selector" id="map-selector">
-                <button class="map-btn active" data-map="bakurani">BAKURANI</button>
-                <button class="map-btn" data-map="ozeti">OZETI</button>
-                <button class="map-btn" data-map="zestafona">ZESTAFONA</button>
+                <button class="map-btn active" data-map="bakurani">БАКУРАНИ</button>
+                <button class="map-btn" data-map="ozeti">ОЗЕТИ</button>
+                <button class="map-btn" data-map="zestafona">ЗЕСТАФОНА</button>
             </div>
         </div>
 
         <!-- Center In-Game Coordinates Telemetry -->
         <div class="hidden md:flex items-center gap-4 font-mono text-xs">
             <div class="metric-pill">
-                <span class="text-gray-400">CURSOR:</span>
-                <span id="telemetry-cursor" class="coords-tag">X: 1000  Y: 1000  Z: 180m</span>
+                <span class="text-gray-400">КУРСОР:</span>
+                <span id="telemetry-cursor" class="coords-tag">X: 1000  Y: 1000  Z: 180м</span>
             </div>
             <div class="metric-pill">
-                <span class="text-gray-400">GRID:</span>
+                <span class="text-gray-400">КВАДРАТ:</span>
                 <span id="telemetry-grid" class="coords-tag">J-10</span>
             </div>
         </div>
 
         <!-- Camera View & Display Toggles -->
         <div class="flex items-center gap-2">
-            <button id="btn-view-orbit" class="map-btn active" title="3D Free Orbit Camera">3D ORBIT</button>
-            <button id="btn-view-topdown" class="map-btn" title="2D Top-Down Tactical View">2D MAP</button>
-            <button id="btn-view-scope" class="map-btn" title="First-Person Observer Eye View">FPV SCOPE</button>
+            <button id="btn-view-orbit" class="map-btn active" title="Свободная 3D камера обзора">3D КАМЕРА</button>
+            <button id="btn-view-topdown" class="map-btn" title="2D полноэкранная тактическая карта с зумом">2D КАРТА</button>
+            <button id="btn-view-scope" class="map-btn" title="Оптический прицел от лица наблюдателя">ПРИЦЕЛ (СНАЙПЕР)</button>
             <div class="w-px h-5 bg-gray-700 mx-1"></div>
             <!-- Map Texture Render Style -->
-            <button id="btn-style-hybrid" class="map-btn active" title="Satellite Orthophoto with Topo Contours">HYBRID</button>
-            <button id="btn-style-sat" class="map-btn" title="Pure Satellite Aerial Photo">SATELLITE</button>
-            <button id="btn-style-topo" class="map-btn" title="Tactical Topographic Contours">TOPO</button>
+            <button id="btn-style-hybrid" class="map-btn active" title="Спутниковый снимок с изолиниями рельефа">ГИБРИД</button>
+            <button id="btn-style-sat" class="map-btn" title="Чистый спутниковый ортофотоснимок">СПУТНИК</button>
+            <button id="btn-style-topo" class="map-btn" title="Военно-топографическая карта высот">ТОПО</button>
             <div class="w-px h-5 bg-gray-700 mx-1"></div>
             <!-- Authentic 3D Game World Toggles -->
-            <button id="btn-toggle-buildings" class="map-btn active" title="Toggle 3D Houses, Hangars, Bridges & Bunkers">🏠 3D ДОМА</button>
-            <button id="btn-toggle-trees" class="map-btn active" title="Toggle 3D Trees & Forests">🌲 ДЕРЕВЬЯ</button>
+            <button id="btn-toggle-buildings" class="map-btn active" title="Включить/выключить 3D здания, заводы и ангары">🏠 3D ДОМА</button>
+            <button id="btn-toggle-trees" class="map-btn active" title="Включить/выключить 3D деревья и лес">🌲 ДЕРЕВЬЯ</button>
+            <button id="btn-toggle-bases" class="map-btn active" title="Показать базы синих, красных и точку захвата">🏁 БАЗЫ И ЗОНЫ</button>
             <div class="w-px h-5 bg-gray-700 mx-1"></div>
-            <button id="btn-toggle-grid" class="map-btn active" title="Toggle 100m Military Grid">GRID</button>
+            <button id="btn-toggle-grid" class="map-btn active" title="Тактическая сетка 100 метров">СЕТКА</button>
         </div>
     </header>
+
+    <!-- Quick Help & Tips Banner -->
+    <div id="quick-help-banner" class="hud-panel" style="position: absolute; bottom: 200px; left: 74px; z-index: 90; padding: 7px 16px; border-radius: 8px; border: 1px solid rgba(0, 242, 254, 0.4); background: rgba(12, 18, 28, 0.95); font-family: var(--font-mono); font-size: 11px; display: flex; align-items: center; gap: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.5);">
+        <span style="color: var(--amber); font-weight: bold; display: flex; align-items: center; gap: 4px;">💡 ИНСТРУКЦИЯ:</span>
+        <span class="text-gray-200">1. Выбери инструмент слева (<span class="text-[color:var(--cyan)] font-bold">👁️ Наблюдатель</span> или <span class="text-[color:var(--green)] font-bold">💣 Миномёт</span>). 2. Кликни по карте в любую точку. 3. Читай прицел в MIL и проверяй перекрытие холмами/домами внизу!</span>
+    </div>
 
     <!-- World Loading Banner -->
     <div id="world-loading-banner" class="hud-panel" style="position: absolute; top: 72px; left: 50%; transform: translateX(-50%); z-index: 999; padding: 8px 20px; border-radius: 8px; border: 1px solid var(--cyan); background: rgba(10, 12, 16, 0.95); display: none; align-items: center; gap: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.6);">
         <span class="spinner" style="width: 14px; height: 14px; border: 2px solid var(--cyan); border-top-color: transparent; border-radius: 50%; display: inline-block; animation: spin 0.8s linear infinite;"></span>
-        <span id="world-loading-text" class="font-mono text-xs text-[color:var(--cyan)] font-bold">LOADING 3D GAME WORLD...</span>
+        <span id="world-loading-text" class="font-mono text-xs text-[color:var(--cyan)] font-bold">ЗАГРУЗКА 3D МИРА WARDOGS...</span>
     </div>
 
     <!-- Left Tool Rail -->
-    <nav class="tool-rail hud-panel" aria-label="Tactical Tool Palette">
-        <button id="tool-obs" class="tool-btn active" title="Place Observer (O) — Calculates Line of Sight">
+    <nav class="tool-rail hud-panel" aria-label="Тактическая панель инструментов">
+        <button id="tool-obs" class="tool-btn active" title="Поставить наблюдателя (клик по карте) — проверяет прямую видимость и препятствия">
             <span>👁️</span>
-            <span class="tool-badge text-[color:var(--cyan)]">OBS</span>
+            <span class="tool-badge text-[color:var(--cyan)]">ОБЗОР</span>
         </button>
-        <button id="tool-tgt" class="tool-btn" title="Place Target (T) — Calculates Distance &amp; Pitch">
+        <button id="tool-tgt" class="tool-btn" title="Поставить цель (клик по карте) — замер дистанции и азимута">
             <span>🎯</span>
-            <span class="tool-badge text-[color:var(--amber)]">TGT</span>
+            <span class="tool-badge text-[color:var(--amber)]">ЦЕЛЬ</span>
         </button>
-        <button id="tool-arty" class="tool-btn" title="Place Mortar / Artillery Battery (A)">
+        <button id="tool-arty" class="tool-btn" title="Поставить миномёт или САУ (клик по карте) — расчёт прицела в MIL">
             <span>💣</span>
-            <span class="tool-badge text-[color:var(--green)]">ARTY</span>
+            <span class="tool-badge text-[color:var(--green)]">АРТА</span>
         </button>
-        <button id="tool-pvo" class="tool-btn" title="Place ПВО / Air Defense Site (P)">
+        <button id="tool-pvo" class="tool-btn" title="Поставить позицию ПВО (клик по карте) — зона поражения вертолётов">
             <span>📡</span>
             <span class="tool-badge text-[color:var(--blue)]">ПВО</span>
         </button>
-        <button id="tool-cz" class="tool-btn" title="Toggle 2x2km Control Zone (KOTH)">
-            <span>⛶</span>
-            <span class="tool-badge text-yellow-400">CZ</span>
+        <button id="tool-cz" class="tool-btn" title="Включить / скрыть контрольную зону захвата">
+            <span>🏁</span>
+            <span class="tool-badge text-yellow-400">ЗОНА</span>
         </button>
     </nav>
 
@@ -122,28 +129,28 @@
         <div>
             <div class="section-title">
                 <span>👁️</span>
-                <span>VIEWSHED // ОБЗОР МЕСТНОСТИ</span>
+                <span>ОБЗОР МЕСТНОСТИ // VIEWSHED</span>
             </div>
-            <p class="text-xs text-gray-400 mt-1 mb-3">Green = 100% Line of Sight. Red = Blind zone behind ridges.</p>
+            <p class="text-xs text-gray-400 mt-1 mb-3">Зелёный = прямая видимость (прострел). Красный = слепая зона за холмом или домом.</p>
 
             <!-- Stance Presets -->
             <div class="mb-3">
-                <label class="font-mono text-[10px] text-gray-400 block mb-1">OBSERVER STANCE / HEIGHT:</label>
+                <label class="font-mono text-[10px] text-gray-400 block mb-1">ПОЛОЖЕНИЕ НАБЛЮДАТЕЛЯ / ВЫСОТА ГЛАЗ:</label>
                 <div class="stance-grid" id="stance-buttons">
-                    <button class="stance-btn" data-stance="prone">Prone<br><span class="text-gray-500">0.35m</span></button>
-                    <button class="stance-btn" data-stance="crouch">Crouch<br><span class="text-gray-500">1.05m</span></button>
-                    <button class="stance-btn active" data-stance="standing">Stand<br><span class="text-gray-500">1.75m</span></button>
-                    <button class="stance-btn" data-stance="vehicle">Vehicle<br><span class="text-gray-500">3.2m</span></button>
-                    <button class="stance-btn" data-stance="tower">Tower<br><span class="text-gray-500">14m</span></button>
-                    <button class="stance-btn" data-stance="drone">Drone<br><span class="text-gray-500">45m</span></button>
+                    <button class="stance-btn" data-stance="prone">Лёжа<br><span class="text-gray-500">0.35м</span></button>
+                    <button class="stance-btn" data-stance="crouch">Сидя<br><span class="text-gray-500">1.05м</span></button>
+                    <button class="stance-btn active" data-stance="standing">Стоя<br><span class="text-gray-500">1.75м</span></button>
+                    <button class="stance-btn" data-stance="vehicle">Техника<br><span class="text-gray-500">3.2м</span></button>
+                    <button class="stance-btn" data-stance="tower">Вышка<br><span class="text-gray-500">14м</span></button>
+                    <button class="stance-btn" data-stance="drone">Дрон<br><span class="text-gray-500">45м</span></button>
                 </div>
             </div>
 
             <!-- Radius Slider -->
             <div class="slider-group mb-3">
                 <div class="slider-header">
-                    <span>VIEW RADIUS:</span>
-                    <span id="val-radius" class="slider-val">1200 m</span>
+                    <span>ДАЛЬНОСТЬ ОБЗОРА:</span>
+                    <span id="val-radius" class="slider-val">1200 м</span>
                 </div>
                 <input type="range" id="input-radius" min="200" max="2500" step="50" value="1200">
             </div>
@@ -151,8 +158,8 @@
             <!-- FOV Slider -->
             <div class="slider-group mb-3">
                 <div class="slider-header">
-                    <span>FOV SECTOR:</span>
-                    <span id="val-fov" class="slider-val">360° (Full)</span>
+                    <span>СЕКТОР ОБЗОРА:</span>
+                    <span id="val-fov" class="slider-val">360° (Круговой)</span>
                 </div>
                 <input type="range" id="input-fov" min="30" max="360" step="15" value="360">
             </div>
@@ -160,7 +167,7 @@
             <!-- Heading Slider -->
             <div class="slider-group mb-3">
                 <div class="slider-header">
-                    <span>LOOK AZIMUTH:</span>
+                    <span>НАПРАВЛЕНИЕ ВЗГЛЯДА:</span>
                     <span id="val-azimuth" class="slider-val">135°</span>
                 </div>
                 <input type="range" id="input-azimuth" min="0" max="355" step="5" value="135">
@@ -170,11 +177,11 @@
             <div class="flex items-center justify-between text-xs font-mono text-gray-300 mt-2">
                 <label class="flex items-center gap-2 cursor-pointer">
                     <input type="checkbox" id="chk-viewshed" checked class="accent-[color:var(--cyan)]">
-                    <span>Show Viewshed</span>
+                    <span>Зона видимости</span>
                 </label>
                 <label class="flex items-center gap-2 cursor-pointer">
                     <input type="checkbox" id="chk-blind" checked class="accent-red-500">
-                    <span>Show Blind Zones</span>
+                    <span>Слепые зоны</span>
                 </label>
             </div>
         </div>
@@ -185,44 +192,44 @@
         <div>
             <div class="section-title">
                 <span>💣</span>
-                <span>BALLISTICS // АРТИЛЛЕРИЯ &amp; МИНОМЁТ</span>
+                <span>АРТИЛЛЕРИЯ И МИНОМЁТ // БАЛЛИСТИКА</span>
             </div>
 
             <div class="mt-2 mb-3">
-                <label class="font-mono text-[10px] text-gray-400 block mb-1">OFFICIAL GAME WEAPON TABLE:</label>
+                <label class="font-mono text-[10px] text-gray-400 block mb-1">ТАБЛИЦА ОРУЖИЯ WARDOGS:</label>
                 <select id="select-weapon" class="w-full bg-black/60 border border-[color:var(--line)] text-xs text-white font-mono rounded px-2 py-1.5 outline-none">
-                    <option value="mortar">L81 Mortar (132m - 684m) [Official Table]</option>
-                    <option value="sph2">SPH-2 155mm Howitzer (780m - 2629m) [Official Table]</option>
+                    <option value="mortar">L81 Миномёт 81-мм (132м - 684м) [Официальная таблица]</option>
+                    <option value="sph2">SPH-2 155-мм Гаубица (780м - 2629м) [Официальная таблица]</option>
                 </select>
             </div>
 
             <!-- Arc Mode (High Arc vs Low Arc) -->
             <div class="flex gap-2 mb-3">
-                <button id="btn-arc-high" class="map-btn active flex-1 text-center" title="Plunging Fire (Over Hills)">HIGH ARC (MORTAR)</button>
-                <button id="btn-arc-low" class="map-btn flex-1 text-center" title="Direct Trajectory">LOW ARC</button>
+                <button id="btn-arc-high" class="map-btn active flex-1 text-center" title="Навесная траектория через холмы">НАВЕСНАЯ (МИНОМЁТ)</button>
+                <button id="btn-arc-low" class="map-btn flex-1 text-center" title="Настильная траектория">НАСТИЛЬНАЯ</button>
             </div>
 
             <!-- Firing Solution Card -->
             <div class="bg-black/50 border border-[color:var(--line)] rounded p-2.5 font-mono text-xs space-y-1.5" id="firing-solution-card">
                 <div class="flex justify-between">
-                    <span class="text-gray-400">RANGE:</span>
-                    <span id="sol-range" class="text-white font-bold">-- m</span>
+                    <span class="text-gray-400">ДИСТАНЦИЯ:</span>
+                    <span id="sol-range" class="text-white font-bold">-- м</span>
                 </div>
                 <div class="flex justify-between">
-                    <span class="text-gray-400">AZIMUTH:</span>
+                    <span class="text-gray-400">АЗИМУТ:</span>
                     <span id="sol-azimuth" class="text-[color:var(--cyan)] font-bold">--° (-- MIL)</span>
                 </div>
                 <div class="flex justify-between">
-                    <span class="text-gray-400">GAME ELEVATION:</span>
+                    <span class="text-gray-400">ПРИЦЕЛ (ДЛЯ ИГРЫ):</span>
                     <span id="sol-elevation" class="text-[color:var(--amber)] font-bold">-- MIL</span>
                 </div>
                 <div class="flex justify-between">
-                    <span class="text-gray-400">TIME OF FLIGHT:</span>
-                    <span id="sol-tof" class="text-white">-- s</span>
+                    <span class="text-gray-400">ВРЕМЯ ПОЛЁТА:</span>
+                    <span id="sol-tof" class="text-white">-- с</span>
                 </div>
                 <div class="flex justify-between">
-                    <span class="text-gray-400">CREST STATUS:</span>
-                    <span id="sol-crest" class="text-[color:var(--green)] font-bold">CLEAR</span>
+                    <span class="text-gray-400">СОСТОЯНИЕ:</span>
+                    <span id="sol-crest" class="text-[color:var(--green)] font-bold">ЧИСТО</span>
                 </div>
             </div>
         </div>
@@ -233,24 +240,24 @@
         <div>
             <div class="section-title">
                 <span>📡</span>
-                <span>AIR DEFENSE // ПВО &amp; РАДИУСЫ ИГРОКОВ</span>
+                <span>ПВО И ЗОНЫ ОПАСНОСТИ</span>
             </div>
             
             <div class="mt-2 mb-2">
-                <label class="font-mono text-[10px] text-gray-400 block mb-1">SYSTEM / THREAT PROFILE:</label>
+                <label class="font-mono text-[10px] text-gray-400 block mb-1">КОМПЛЕКС / ПРОФИЛЬ УГРОЗЫ:</label>
                 <select id="select-pvo-system" class="w-full bg-black/60 border border-[color:var(--line)] text-xs text-white font-mono rounded px-2 py-1.5 outline-none">
-                    <option value="verba">9K333 Verba MANPADS (1200m IR Lock Dome)</option>
-                    <option value="zu23">FOB ZU-23-2 Twin Autocannon (1500m Base Flak)</option>
-                    <option value="infantry">Player Threat Rings (50m CQB / 300m Rifle / 1.2km Sniper)</option>
+                    <option value="verba">ПЗРК 9К333 Верба (купол захвата 1200м по вертолётам)</option>
+                    <option value="zu23">ЗУ-23-2 Спаренная зенитка (1500м база)</option>
+                    <option value="infantry">Зоны угрозы пехоты (50м ближний / 300м автомат / 1.2км снайпер)</option>
                 </select>
             </div>
 
             <div class="flex items-center justify-between text-xs font-mono text-gray-300 mt-2">
-                <span class="text-gray-400">Show 3D Threat Dome</span>
+                <span class="text-gray-400">Показать 3D купол ПВО</span>
                 <input type="checkbox" id="chk-pvo" class="accent-emerald-500 w-4 h-4 cursor-pointer">
             </div>
             <p id="pvo-description" class="text-[11px] text-gray-400 mt-2 font-mono leading-relaxed bg-black/40 p-2 rounded border border-gray-800">
-                9K333 Verba: Infantry shoulder-fired IR homing missile. Locks onto AH-6M/AH-6R scout helicopters within 1200m. Requires direct Line of Sight.
+                9К333 Верба: пехотный переносной зенитно-ракетный комплекс. Захватывает вертолёты AH-6M/AH-6R в радиусе 1200м при наличии прямой видимости.
             </p>
         </div>
 
@@ -260,7 +267,7 @@
         <div>
             <div class="section-title">
                 <span>📍</span>
-                <span>TACTICAL KEY POINTS // ВЫСОТЫ</span>
+                <span>ТАКТИЧЕСКИЕ ВЫСОТЫ И ОБЪЕКТЫ</span>
             </div>
             <div class="space-y-1 mt-2" id="poi-list">
                 <!-- Dynamically populated per map -->
@@ -269,33 +276,33 @@
     </aside>
 
     <!-- Bottom Drawer: Real-time Elevation Cross-Section Profile -->
-    <section class="bottom-drawer hud-panel" aria-label="Elevation Cross-Section Profile">
+    <section class="bottom-drawer hud-panel" aria-label="Срез рельефа и линия видимости">
         <div class="drawer-header">
             <div class="flex items-center gap-3">
-                <span class="font-mono text-xs font-bold tracking-wider text-[color:var(--cyan)]">ELEVATION PROFILE &amp; LINE OF SIGHT</span>
-                <span class="font-mono text-[10px] text-gray-400">// CROSS-SECTION SLICE</span>
+                <span class="font-mono text-xs font-bold tracking-wider text-[color:var(--cyan)]">ПРОФИЛЬ ВЫСОТ И ПРЕПЯТСТВИЙ // СРЕЗ РЕЛЬЕФА</span>
+                <span class="font-mono text-[10px] text-gray-400">// ТОЧНЫЙ DEM РАСЧЁТ</span>
             </div>
 
             <!-- Status Indicator Strip -->
             <div class="metrics-strip">
                 <div class="metric-pill">
                     <span class="status-indicator clear" id="los-status-dot"></span>
-                    <span id="los-status-text" class="font-bold text-[color:var(--green)]">LOS: CLEAR (100%)</span>
+                    <span id="los-status-text" class="font-bold text-[color:var(--green)]">ПРЯМАЯ ВИДИМОСТЬ (100%)</span>
                 </div>
                 <div class="metric-pill">
-                    <span class="text-gray-400">DIST:</span>
-                    <span id="los-dist-text" class="text-white font-bold">-- m</span>
+                    <span class="text-gray-400">ДИСТ:</span>
+                    <span id="los-dist-text" class="text-white font-bold">-- м</span>
                 </div>
                 <div class="metric-pill">
                     <span class="text-gray-400">Δh:</span>
-                    <span id="los-dh-text" class="text-white font-bold">-- m</span>
+                    <span id="los-dh-text" class="text-white font-bold">-- м</span>
                 </div>
                 <div class="metric-pill">
-                    <span class="text-gray-400">SLOPE:</span>
+                    <span class="text-gray-400">УКЛОН:</span>
                     <span id="los-slope-text" class="text-white font-bold">--°</span>
                 </div>
                 <div class="metric-pill">
-                    <span class="text-gray-400">AZIMUTH:</span>
+                    <span class="text-gray-400">АЗИМУТ:</span>
                     <span id="los-azimuth-text" class="text-white font-bold">--°</span>
                 </div>
             </div>
@@ -308,8 +315,8 @@
     <!-- Synchronized 2D Minimap Window -->
     <aside class="minimap-panel hud-panel">
         <div class="flex items-center justify-between mb-1 font-mono text-[10px] text-[color:var(--cyan)]">
-            <span>2D TACTICAL RADAR</span>
-            <span id="minimap-scale">2000m</span>
+            <span>2D ТАКТИЧЕСКИЙ РАДАР</span>
+            <span id="minimap-scale">2000м</span>
         </div>
         <canvas id="minimap-canvas"></canvas>
     </aside>

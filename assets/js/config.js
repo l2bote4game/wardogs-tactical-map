@@ -27,7 +27,10 @@ export const MAP_CONFIGS = {
             { id: 'poi-alpha', name: 'Outpost Ridge Alpha', x: 1650, y: 1620, type: 'recon', elevation: 395, desc: 'Eastern flank vantage point overlooking valley' },
             { id: 'poi-bridge', name: 'Canyon Viaduct', x: 1050, y: 680, type: 'bridge', elevation: 165, desc: 'High-speed armored vehicle crossing' }
         ],
-        terrainProfile: { roughness: 1.35, ridgeStrength: 1.6, valleyFloor: 0.18, ridgeAngle: 0.78 }
+        terrainProfile: { roughness: 1.35, ridgeStrength: 1.6, valleyFloor: 0.18, ridgeAngle: 0.78 },
+        blueBase: { name: 'База Синих // Спавн LONESTAR', faction: 'lonestar', x: 380, y: 1450, radiusM: 180, color: '#2f80c8' },
+        redBase: { name: 'База Красных // Спавн VALKYRA', faction: 'valkyra', x: 1620, y: 550, radiusM: 180, color: '#d8443c' },
+        controlZone: { name: 'Точка Захвата // CONTROL ZONE', x: 1000, y: 1000, radiusM: 220, color: '#eab308' }
     },
     ozeti: {
         id: 'ozeti',
@@ -49,7 +52,10 @@ export const MAP_CONFIGS = {
             { id: 'poi-radar', name: 'Radar Plateau', x: 450, y: 1620, type: 'recon', elevation: 295, desc: 'Northwestern radar station with wide 270° viewshed' },
             { id: 'poi-village', name: 'Lower Ozeti Hamlet', x: 1240, y: 410, type: 'settlement', elevation: 62, desc: 'Dense cluster of stone residential compounds' }
         ],
-        terrainProfile: { roughness: 0.95, ridgeStrength: 1.0, valleyFloor: 0.25, ridgeAngle: 1.57 }
+        terrainProfile: { roughness: 0.95, ridgeStrength: 1.0, valleyFloor: 0.25, ridgeAngle: 1.57 },
+        blueBase: { name: 'База Синих // Спавн LONESTAR (Malaga)', faction: 'lonestar', x: 450, y: 320, radiusM: 180, color: '#2f80c8' },
+        redBase: { name: 'База Красных // Спавн VALKYRA (Barcelona)', faction: 'valkyra', x: 1550, y: 1650, radiusM: 180, color: '#d8443c' },
+        controlZone: { name: 'Точка Захвата // CONTROL ZONE (Мост)', x: 1000, y: 1000, radiusM: 220, color: '#eab308' }
     },
     zestafona: {
         id: 'zestafona',
@@ -71,18 +77,21 @@ export const MAP_CONFIGS = {
             { id: 'poi-substation', name: 'High-Voltage Yard', x: 1390, y: 460, type: 'industrial', elevation: 115, desc: 'Transformer grid and defensive perimeter berm' },
             { id: 'poi-westcliffs', name: 'West Ridge Bunkers', x: 380, y: 1150, type: 'fortification', elevation: 330, desc: 'Old military emplacements cut into limestone' }
         ],
-        terrainProfile: { roughness: 1.15, ridgeStrength: 1.4, valleyFloor: 0.35, ridgeAngle: 0.0 }
+        terrainProfile: { roughness: 1.15, ridgeStrength: 1.4, valleyFloor: 0.35, ridgeAngle: 0.0 },
+        blueBase: { name: 'База Синих // Спавн LONESTAR (Водоочистка)', faction: 'lonestar', x: 320, y: 320, radiusM: 180, color: '#2f80c8' },
+        redBase: { name: 'База Красных // Спавн VALKYRA (Терминал)', faction: 'valkyra', x: 1650, y: 1550, radiusM: 180, color: '#d8443c' },
+        controlZone: { name: 'Точка Захвата // CONTROL ZONE (Цех)', x: 1000, y: 1000, radiusM: 200, color: '#eab308' }
     }
 };
 
 /* Observer Stance & Optical Eye Heights */
 export const STANCE_PRESETS = {
-    prone: { id: 'prone', label: 'Prone (0.35m)', height: 0.35, icon: '🪖' },
-    crouch: { id: 'crouch', label: 'Crouched (1.05m)', height: 1.05, icon: '🛡️' },
-    standing: { id: 'standing', label: 'Standing (1.75m)', height: 1.75, icon: '🧍' },
-    vehicle: { id: 'vehicle', label: 'Vehicle Roof / Turret (3.2m)', height: 3.20, icon: '🚙' },
-    tower: { id: 'tower', label: 'Watchtower / Crane (14.0m)', height: 14.0, icon: '🗼' },
-    drone: { id: 'drone', label: 'Tactical Recon Drone (45.0m)', height: 45.0, icon: '🛸' }
+    prone: { id: 'prone', label: 'Лёжа (0.35м)', height: 0.35, icon: '🪖' },
+    crouch: { id: 'crouch', label: 'Сидя (1.05м)', height: 1.05, icon: '🛡️' },
+    standing: { id: 'standing', label: 'Стоя (1.75м)', height: 1.75, icon: '🧍' },
+    vehicle: { id: 'vehicle', label: 'Техника / Люк (3.2м)', height: 3.20, icon: '🚙' },
+    tower: { id: 'tower', label: 'Вышка / Кран (14м)', height: 14.0, icon: '🗼' },
+    drone: { id: 'drone', label: 'Развед-дрон (45м)', height: 45.0, icon: '🛸' }
 };
 
 /* Player Combat & Threat Radii */

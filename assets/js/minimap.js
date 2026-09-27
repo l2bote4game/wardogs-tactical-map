@@ -89,24 +89,70 @@ export class TacticalMinimap {
             ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
         }
 
-        // 2. 2x2km / 800m Control Zone (KOTH Objective)
-        if (this.controlZone.active) {
-            const czX = toPxX(this.controlZone.x - this.controlZone.size / 2);
-            const czY = toPxY(this.controlZone.y - this.controlZone.size / 2);
-            const czW = (this.controlZone.size / mapSize) * w;
-            const czH = (this.controlZone.size / mapSize) * h;
+        // 2. Faction Bases and Control Zone
+        const mapCfg = this.terrain.config;
+        if (mapCfg) {
+            // Blue Base
+            if (mapCfg.blueBase) {
+                const bx = toPxX(mapCfg.blueBase.x);
+                const by = toPxY(mapCfg.blueBase.y);
+                const brPx = (mapCfg.blueBase.radiusM / mapSize) * w;
+                ctx.fillStyle = 'rgba(47, 128, 200, 0.2)';
+                ctx.beginPath();
+                ctx.arc(bx, by, brPx, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = '#2f80c8';
+                ctx.lineWidth = 1.5 * window.devicePixelRatio;
+                ctx.stroke();
 
-            ctx.fillStyle = 'rgba(245, 158, 11, 0.12)';
-            ctx.fillRect(czX, czY, czW, czH);
+                ctx.fillStyle = '#60a5fa';
+                ctx.beginPath();
+                ctx.arc(bx, by, 3 * window.devicePixelRatio, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.font = `bold ${8 * window.devicePixelRatio}px monospace`;
+                ctx.fillText('СИНИЕ', bx + 6 * window.devicePixelRatio, by + 3 * window.devicePixelRatio);
+            }
 
-            ctx.strokeStyle = '#f59e0b';
-            ctx.lineWidth = 2 * window.devicePixelRatio;
-            ctx.strokeRect(czX, czY, czW, czH);
+            // Red Base
+            if (mapCfg.redBase) {
+                const rx = toPxX(mapCfg.redBase.x);
+                const ry = toPxY(mapCfg.redBase.y);
+                const rrPx = (mapCfg.redBase.radiusM / mapSize) * w;
+                ctx.fillStyle = 'rgba(216, 68, 60, 0.2)';
+                ctx.beginPath();
+                ctx.arc(rx, ry, rrPx, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = '#d8443c';
+                ctx.lineWidth = 1.5 * window.devicePixelRatio;
+                ctx.stroke();
 
-            // Label
-            ctx.fillStyle = '#f59e0b';
-            ctx.font = `bold ${9 * window.devicePixelRatio}px monospace`;
-            ctx.fillText('CONTROL ZONE', czX + 6 * window.devicePixelRatio, czY + 14 * window.devicePixelRatio);
+                ctx.fillStyle = '#f87171';
+                ctx.beginPath();
+                ctx.arc(rx, ry, 3 * window.devicePixelRatio, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.font = `bold ${8 * window.devicePixelRatio}px monospace`;
+                ctx.fillText('КРАСНЫЕ', rx + 6 * window.devicePixelRatio, ry + 3 * window.devicePixelRatio);
+            }
+
+            // Control Zone
+            if (mapCfg.controlZone) {
+                const czX = toPxX(mapCfg.controlZone.x);
+                const czY = toPxY(mapCfg.controlZone.y);
+                const czRPx = (mapCfg.controlZone.radiusM / mapSize) * w;
+
+                ctx.fillStyle = 'rgba(234, 179, 8, 0.2)';
+                ctx.beginPath();
+                ctx.arc(czX, czY, czRPx, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.strokeStyle = '#eab308';
+                ctx.lineWidth = 2 * window.devicePixelRatio;
+                ctx.stroke();
+
+                ctx.fillStyle = '#fde047';
+                ctx.font = `bold ${8 * window.devicePixelRatio}px monospace`;
+                ctx.fillText('ТОЧКА ЗАХВАТА', czX - 25 * window.devicePixelRatio, czY - czRPx - 4 * window.devicePixelRatio);
+            }
         }
 
         // 3. Viewshed Range Circle on Minimap

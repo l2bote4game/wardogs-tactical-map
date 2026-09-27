@@ -22,9 +22,14 @@ export class WorldEngine {
         this.vegetationGroup.name = 'WardogsVegetation';
         this.scene.add(this.vegetationGroup);
 
+        this.basesGroup = new THREE.Group();
+        this.basesGroup.name = 'WardogsBases';
+        this.scene.add(this.basesGroup);
+
         // Visibility toggles
         this.showBuildings = true;
         this.showVegetation = true;
+        this.showBases = true;
 
         // Cache of loaded pack data
         this.cachedPacks = {};
@@ -51,10 +56,14 @@ export class WorldEngine {
             await this.loadStructures(mapId);
 
             // 3. Load Authentic 3D Trees & Vegetation
-            if (this.onProgress) this.onProgress('Loading 3D Trees & Vegetation...', 0.85);
+            if (this.onProgress) this.onProgress('Загрузка 3D леса и деревьев...', 0.75);
             await this.loadVegetation(mapId);
 
-            if (this.onProgress) this.onProgress('3D Game World Ready', 1.0);
+            // 4. Load Tactical Faction Bases & Control Zone
+            if (this.onProgress) this.onProgress('Разметка баз и контрольной зоны...', 0.90);
+            this.loadBases(mapId);
+
+            if (this.onProgress) this.onProgress('Тактическая карта готова', 1.0);
             console.log(`[WorldEngine] World for ${mapId} loaded successfully.`);
         } catch (err) {
             console.error(`[WorldEngine] Error loading world for ${mapId}:`, err);
@@ -82,6 +91,15 @@ export class WorldEngine {
 
         while (this.vegetationGroup.children.length > 0) {
             const child = this.vegetationGroup.children.pop();
+            if (child.geometry) child.geometry.dispose();
+            if (child.material) {
+                if (Array.isArray(child.material)) child.material.forEach(m => m.dispose());
+                else child.material.dispose();
+            }
+        }
+
+        while (this.basesGroup.children.length > 0) {
+            const child = this.basesGroup.children.pop();
             if (child.geometry) child.geometry.dispose();
             if (child.material) {
                 if (Array.isArray(child.material)) child.material.forEach(m => m.dispose());
@@ -190,8 +208,8 @@ export class WorldEngine {
 
         // Standard PBR material with vertex color support
         const material = new THREE.MeshStandardMaterial({
-            roughness: 0.85,
-            metalness: 0.15,
+            roughness: 0.65,
+            metalness: 0.10,
             flatShading: true
         });
 
@@ -245,7 +263,8 @@ export class WorldEngine {
         treeGeo.translate(0, 1.0, 0); // Base at zero
 
         const material = new THREE.MeshStandardMaterial({
-            roughness: 0.95,
+            color: 0x3d7436,
+            roughness: 0.85,
             metalness: 0.0,
             flatShading: true
         });
@@ -277,6 +296,117 @@ export class WorldEngine {
 
         this.vegetationGroup.visible = this.showVegetation;
         console.log(`[WorldEngine] Loaded ${totalTrees} 3D tree instances across ${pack.manifest.meshes.length} batches.`);
+    }
+
+    /**
+     * Load authentic faction bases (Blue, Red) and Control Zone
+     */
+    loadBases(mapId) {
+        const cfg = this.terrain.config;
+        if (!cfg) return;
+
+        const makeTextSprite = (text, colorHex, borderHex) => {
+            const canvas = document.createElement('canvas');
+            canvas.width = 512;
+            canvas.height = 128;
+            const ctx = canvas.getContext('2d');
+
+            ctx.fillStyle = 'rgba(12, 18, 28, 0.90)';
+            ctx.beginPath();
+            ctx.roundRect(12, 12, 488, 104, 20);
+            ctx.fill();
+            ctx.lineWidth = 6;
+            ctx.strokeStyle = borderHex;
+            ctx.stroke();
+
+            ctx.fillStyle = colorHex;
+            ctx.font = 'bold 36px "JetBrains Mono", sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(text, 256, 64);
+
+            const texture = new THREE.CanvasTexture(canvas);
+            const spriteMat = new THREE.SpriteMaterial({ map: texture, transparent: true, depthTest: false });
+            const sprite = new THREE.Sprite(spriteMat);
+            sprite.scale.set(65, 16, 1);
+            return sprite;
+        };
+
+        const createBaseMarker = (info, defaultColor) => {
+            if (!info) return;
+            const pos = this.terrain.gameToWorld(info.x, info.y, 0);
+            const groundY = this.terrain.getElevation(info.x, info.y);
+            const color = new THREE.Color(info.color || defaultColor);
+
+            const baseGroup = new THREE.Group();
+            baseGroup.position.set(pos.x, groundY, pos.z);
+
+            // 1. Transparent Holo Cylinder
+            const radius = info.radiusM || 180;
+            const height = 120;
+            const cylGeo = new THREE.CylinderGeometry(radius, radius, height, 32, 1, true);
+            cylGeo.translate(0, height / 2, 0);
+            const cylMat = new THREE.MeshBasicMaterial({
+                color: color,
+                transparent: true,
+                opacity: 0.16,
+                side: THREE.DoubleSide,
+                depthWrite: false
+            });
+            const cylinder = new THREE.Mesh(cylGeo, cylMat);
+            baseGroup.add(cylinder);
+
+            // 2. Glowing Ground Ring
+            const ringGeo = new THREE.RingGeometry(radius - 4, radius + 4, 48);
+            ringGeo.rotateX(-Math.PI / 2);
+            ringGeo.translate(0, 1.5, 0);
+            const ringMat = new THREE.MeshBasicMaterial({
+                color: color,
+                transparent: true,
+                opacity: 0.85,
+                side: THREE.DoubleSide
+            });
+            const ring = new THREE.Mesh(ringGeo, ringMat);
+            baseGroup.add(ring);
+
+            // 3. Central Vertical Beam
+            const beamGeo = new THREE.CylinderGeometry(1.5, 1.5, height * 1.5, 8);
+            beamGeo.translate(0, (height * 1.5) / 2, 0);
+            const beamMat = new THREE.MeshBasicMaterial({
+                color: color,
+                transparent: true,
+                opacity: 0.75
+            });
+            const beam = new THREE.Mesh(beamGeo, beamMat);
+            baseGroup.add(beam);
+
+            // 4. Floating 3D Tactical Billboard
+            const sprite = makeTextSprite(info.name, '#ffffff', color.getStyle());
+            sprite.position.set(0, height + 25, 0);
+            baseGroup.add(sprite);
+
+            this.basesGroup.add(baseGroup);
+        };
+
+        // Blue Base
+        createBaseMarker(cfg.blueBase, '#2f80c8');
+
+        // Red Base
+        createBaseMarker(cfg.redBase, '#d8443c');
+
+        // Control Zone
+        createBaseMarker(cfg.controlZone, '#eab308');
+
+        this.basesGroup.visible = this.showBases;
+    }
+
+    /**
+     * Toggle Faction Bases and Control Zone
+     */
+    toggleBases(visible = null) {
+        this.showBases = visible !== null ? visible : !this.showBases;
+        this.basesGroup.visible = this.showBases;
+        return this.showBases;
     }
 
     /**

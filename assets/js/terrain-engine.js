@@ -52,21 +52,21 @@ export class TerrainEngine {
         const width = this.container.clientWidth || window.innerWidth;
         const height = this.container.clientHeight || window.innerHeight;
 
-        // Scene
+        // Scene: Crisp Daylight Military Atmosphere
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0x0a0c10);
-        this.scene.fog = new THREE.FogExp2(0x0a0c10, 0.0018);
+        this.scene.background = new THREE.Color(0x182230);
+        this.scene.fog = new THREE.FogExp2(0x182230, 0.0006);
 
         // Camera
-        this.camera = new THREE.PerspectiveCamera(45, width / height, 0.5, 3000);
-        this.camera.position.set(0, 180, 220);
+        this.camera = new THREE.PerspectiveCamera(45, width / height, 0.5, 4000);
+        this.camera.position.set(0, 240, 320);
 
         // Renderer
         this.renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
         this.renderer.setSize(width, height);
         this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        this.renderer.toneMappingExposure = 1.15;
+        this.renderer.toneMappingExposure = 1.35;
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         this.container.appendChild(this.renderer.domElement);
@@ -75,10 +75,10 @@ export class TerrainEngine {
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
         this.controls.enableDamping = true;
         this.controls.dampingFactor = 0.06;
-        this.controls.maxPolarAngle = Math.PI / 2.05; // prevent going below terrain
-        this.controls.minDistance = 10;
-        this.controls.maxDistance = 600;
-        this.controls.target.set(0, 20, 0);
+        this.controls.maxPolarAngle = Math.PI / 2.05;
+        this.controls.minDistance = 5;
+        this.controls.maxDistance = 1200;
+        this.controls.target.set(0, 15, 0);
 
         // Lighting Rig
         this.setupLighting();
@@ -94,27 +94,29 @@ export class TerrainEngine {
     }
 
     setupLighting() {
-        const ambient = new THREE.AmbientLight(0xdde5f0, 0.7);
-        this.scene.add(ambient);
+        // Bright daylight hemisphere light (sky white, ground slate blue)
+        const hemi = new THREE.HemisphereLight(0xffffff, 0x475569, 1.8);
+        this.scene.add(hemi);
 
-        const sun = new THREE.DirectionalLight(0xfff8ee, 2.2);
-        sun.position.set(120, 240, 100);
+        // Warm Sunlight
+        const sun = new THREE.DirectionalLight(0xfffbf0, 2.6);
+        sun.position.set(200, 350, 150);
         sun.castShadow = true;
         sun.shadow.mapSize.width = 2048;
         sun.shadow.mapSize.height = 2048;
         sun.shadow.camera.near = 10;
-        sun.shadow.camera.far = 600;
-        const d = 160;
+        sun.shadow.camera.far = 1000;
+        const d = 350;
         sun.shadow.camera.left = -d;
         sun.shadow.camera.right = d;
         sun.shadow.camera.top = d;
         sun.shadow.camera.bottom = -d;
-        sun.shadow.bias = -0.0004;
+        sun.shadow.bias = -0.0003;
         this.scene.add(sun);
 
-        // Subtle fill light for steep valley relief
-        const fill = new THREE.DirectionalLight(0x2d4860, 0.9);
-        fill.position.set(-120, 80, -100);
+        // Secondary sky bounce fill light
+        const fill = new THREE.DirectionalLight(0x93c5fd, 1.0);
+        fill.position.set(-180, 120, -150);
         this.scene.add(fill);
     }
 

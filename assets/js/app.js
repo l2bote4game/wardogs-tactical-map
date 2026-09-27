@@ -320,6 +320,15 @@ class TacticalApp {
             });
         }
 
+        const btnBases = document.getElementById('btn-toggle-bases');
+        if (btnBases && this.terrain.worldEngine) {
+            btnBases.addEventListener('click', () => {
+                const active = this.terrain.worldEngine.toggleBases();
+                btnBases.classList.toggle('active', active);
+                tacticalAudio.playClick();
+            });
+        }
+
         // Connect World Loading Progress Banner
         const loadingBanner = document.getElementById('world-loading-banner');
         const loadingText = document.getElementById('world-loading-text');
@@ -466,40 +475,41 @@ class TacticalApp {
         if (los.visible) {
             dot.className = 'status-indicator clear';
             statusText.className = 'font-bold text-[color:var(--green)]';
-            statusText.textContent = `LOS: CLEAR (100% VISIBLE)`;
+            statusText.textContent = `ПРЯМАЯ ВИДИМОСТЬ (100% ПРОСТРЕЛ)`;
         } else {
             dot.className = 'status-indicator blocked';
             statusText.className = 'font-bold text-[color:var(--red)]';
-            statusText.textContent = `LOS: BLOCKED @ ${los.obstacleDist || '--'}m`;
+            const blockType = los.blockedBy === 'BUILDING' ? 'ЗДАНИЕ' : 'ХОЛМ';
+            statusText.textContent = `ПРЕГРАДА: ${blockType} ЧЕРЕЗ ${los.obstacleDist || '--'}м`;
         }
 
-        document.getElementById('los-dist-text').textContent = `${los.distance} m`;
-        document.getElementById('los-dh-text').textContent = `${los.elevationDelta > 0 ? '+' : ''}${los.elevationDelta} m`;
+        document.getElementById('los-dist-text').textContent = `${los.distance} м`;
+        document.getElementById('los-dh-text').textContent = `${los.elevationDelta > 0 ? '+' : ''}${los.elevationDelta} м`;
         document.getElementById('los-slope-text').textContent = `${los.pitchDeg}° (${los.pitchMil} MIL)`;
         document.getElementById('los-azimuth-text').textContent = `${los.azimuthDeg}° (${los.azimuthMil} MIL)`;
 
         // Ballistics Solution Card
         if (ballistic && ballistic.valid) {
-            document.getElementById('sol-range').textContent = `${ballistic.distance} m (Δh: ${ballistic.elevationDelta > 0 ? '+' : ''}${ballistic.elevationDelta}m)`;
+            document.getElementById('sol-range').textContent = `${ballistic.distance} м (Δh: ${ballistic.elevationDelta > 0 ? '+' : ''}${ballistic.elevationDelta}м)`;
             document.getElementById('sol-azimuth').textContent = `${ballistic.azimuthDeg}° (${ballistic.azimuthMil} MIL)`;
-            document.getElementById('sol-elevation').textContent = `${ballistic.officialMil || ballistic.elevationAngleMil} MIL (Calc: ${ballistic.elevationAngleDeg}°)`;
-            document.getElementById('sol-tof').textContent = `${ballistic.timeOfFlight} s (Apex: ${ballistic.apexHeight}m)`;
+            document.getElementById('sol-elevation').textContent = `${ballistic.officialMil || ballistic.elevationAngleMil} MIL (Прицел: ${ballistic.elevationAngleDeg}°)`;
+            document.getElementById('sol-tof').textContent = `${ballistic.timeOfFlight} с (Высота траектории: ${ballistic.apexHeight}м)`;
 
             const crestEl = document.getElementById('sol-crest');
             if (ballistic.isObstructed) {
-                crestEl.textContent = `COLLISION AT ${ballistic.crestCollision?.dist || 0}m`;
+                crestEl.textContent = `УДАР О ПРЕПЯТСТВИЕ НА ${ballistic.crestCollision?.dist || 0}м`;
                 crestEl.className = 'text-[color:var(--red)] font-bold';
             } else {
-                crestEl.textContent = 'CLEAR (SAFE TO FIRE)';
+                crestEl.textContent = 'ЧИСТО (ТРАЕКТОРИЯ СВОБОДНА)';
                 crestEl.className = 'text-[color:var(--green)] font-bold';
             }
         } else if (ballistic && !ballistic.valid) {
-            document.getElementById('sol-range').textContent = `${ballistic.distance || '--'} m`;
+            document.getElementById('sol-range').textContent = `${ballistic.distance || '--'} м`;
             document.getElementById('sol-azimuth').textContent = `${ballistic.azimuthMil || '--'} MIL`;
-            document.getElementById('sol-elevation').textContent = ballistic.officialMil ? `${ballistic.officialMil} MIL` : 'OUT OF ENVELOPE';
+            document.getElementById('sol-elevation').textContent = ballistic.officialMil ? `${ballistic.officialMil} MIL` : 'ВНЕ ЗОНЫ';
             document.getElementById('sol-tof').textContent = '--';
             const crestEl = document.getElementById('sol-crest');
-            crestEl.textContent = ballistic.reason || 'UNREACHABLE';
+            crestEl.textContent = ballistic.reason === 'Target out of range' ? 'ЦЕЛЬ ВНЕ ЗОНЫ ДОСЯГАЕМОСТИ' : (ballistic.reason || 'НЕДОСЯГАЕМО');
             crestEl.className = 'text-[color:var(--red)] font-bold';
         }
     }

@@ -299,17 +299,69 @@ export class Tactical2DMap {
             }
         }
 
-        // 3. Control Zone (2x2km Objective Box)
-        const czX = origin.x + 600 * this.zoom;
-        const czY = origin.y + 600 * this.zoom;
-        const czSize = 800 * this.zoom;
-        ctx.fillStyle = 'rgba(245, 158, 11, 0.08)';
-        ctx.fillRect(czX, czY, czSize, czSize);
-        ctx.strokeStyle = '#f59e0b';
-        ctx.lineWidth = 2 * dpr;
-        ctx.strokeRect(czX, czY, czSize, czSize);
-        ctx.fillStyle = '#f59e0b';
-        ctx.fillText('CONTROL ZONE [OBJECTIVE]', czX + 10 * dpr, czY + 18 * dpr);
+        // 3. Faction Bases and Control Zone
+        const mapCfg = MAP_CONFIGS[this.activeMapId];
+        if (mapCfg) {
+            // Blue Base
+            if (mapCfg.blueBase) {
+                const bPt = this.gameToScreen(mapCfg.blueBase.x, mapCfg.blueBase.y);
+                const bRadPx = (mapCfg.blueBase.radiusM || 180) * this.zoom;
+                ctx.fillStyle = 'rgba(47, 128, 200, 0.15)';
+                ctx.beginPath();
+                ctx.arc(bPt.x, bPt.y, bRadPx, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = '#2f80c8';
+                ctx.lineWidth = 2 * dpr;
+                ctx.stroke();
+
+                ctx.fillStyle = '#60a5fa';
+                ctx.beginPath();
+                ctx.arc(bPt.x, bPt.y, 6 * dpr, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.font = `bold ${12 * dpr}px "JetBrains Mono", sans-serif`;
+                ctx.fillText(mapCfg.blueBase.name, bPt.x + 10 * dpr, bPt.y + 4 * dpr);
+            }
+
+            // Red Base
+            if (mapCfg.redBase) {
+                const rPt = this.gameToScreen(mapCfg.redBase.x, mapCfg.redBase.y);
+                const rRadPx = (mapCfg.redBase.radiusM || 180) * this.zoom;
+                ctx.fillStyle = 'rgba(216, 68, 60, 0.15)';
+                ctx.beginPath();
+                ctx.arc(rPt.x, rPt.y, rRadPx, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = '#d8443c';
+                ctx.lineWidth = 2 * dpr;
+                ctx.stroke();
+
+                ctx.fillStyle = '#f87171';
+                ctx.beginPath();
+                ctx.arc(rPt.x, rPt.y, 6 * dpr, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.font = `bold ${12 * dpr}px "JetBrains Mono", sans-serif`;
+                ctx.fillText(mapCfg.redBase.name, rPt.x + 10 * dpr, rPt.y + 4 * dpr);
+            }
+
+            // Control Zone
+            if (mapCfg.controlZone) {
+                const czPt = this.gameToScreen(mapCfg.controlZone.x, mapCfg.controlZone.y);
+                const czRadPx = (mapCfg.controlZone.radiusM || 220) * this.zoom;
+                ctx.fillStyle = 'rgba(234, 179, 8, 0.15)';
+                ctx.beginPath();
+                ctx.arc(czPt.x, czPt.y, czRadPx, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = '#eab308';
+                ctx.lineWidth = 2.5 * dpr;
+                ctx.stroke();
+
+                ctx.fillStyle = '#fde047';
+                ctx.beginPath();
+                ctx.arc(czPt.x, czPt.y, 7 * dpr, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.font = `bold ${12 * dpr}px "JetBrains Mono", sans-serif`;
+                ctx.fillText(mapCfg.controlZone.name, czPt.x + 12 * dpr, czPt.y + 4 * dpr);
+            }
+        }
 
         // 4. Air Defense (ПВО) Envelope
         if (this.airdefense && this.airdefense.visible) {
