@@ -146,13 +146,14 @@
                 </div>
             </div>
 
-            <!-- Radius Slider -->
-            <div class="slider-group mb-3">
-                <div class="slider-header">
-                    <span>ДАЛЬНОСТЬ ОБЗОРА:</span>
-                    <span id="val-radius" class="slider-val">1200 м</span>
+            <!-- Optical Range Presets -->
+            <div class="mb-3">
+                <label class="font-mono text-[10px] text-gray-400 block mb-1">ДИСТАНЦИЯ ОБЗОРА / ОПТИКА:</label>
+                <div class="grid grid-cols-3 gap-1 font-mono text-[10px]" id="range-presets">
+                    <button class="stance-btn" data-range="600">Пехота<br><span class="text-gray-500">600м</span></button>
+                    <button class="stance-btn active" data-range="1200">Оптика 4x<br><span class="text-gray-500">1200м</span></button>
+                    <button class="stance-btn" data-range="2400">Снайпер<br><span class="text-gray-500">Вся карта</span></button>
                 </div>
-                <input type="range" id="input-radius" min="200" max="2500" step="50" value="1200">
             </div>
 
             <!-- FOV Slider -->
@@ -320,6 +321,33 @@
         </div>
         <canvas id="minimap-canvas"></canvas>
     </aside>
+
+    <!-- Authentic First-Person Sniper / Observer Scope Overlay -->
+    <div id="sniper-scope-overlay" class="hidden">
+        <!-- Circular Scope Reticle & Vignette -->
+        <div style="position: absolute; width: 620px; height: 620px; border-radius: 50%; border: 3px solid rgba(0, 242, 254, 0.7); box-shadow: 0 0 0 9999px rgba(8, 11, 16, 0.90), inset 0 0 50px rgba(0,0,0,0.9); pointer-events: none;">
+            <!-- Horizontal & Vertical Crosshairs -->
+            <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: rgba(0, 242, 254, 0.75);"></div>
+            <div style="position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: rgba(0, 242, 254, 0.75);"></div>
+            <!-- Center Red Dot -->
+            <div style="position: absolute; top: calc(50% - 3px); left: calc(50% - 3px); width: 6px; height: 6px; border-radius: 50%; background: #ef4444; box-shadow: 0 0 8px #ef4444;"></div>
+            <!-- MIL Circles -->
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 200px; height: 200px; border: 1px dashed rgba(0, 242, 254, 0.35); border-radius: 50%;"></div>
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 400px; height: 400px; border: 1px dashed rgba(0, 242, 254, 0.2); border-radius: 50%;"></div>
+            <span style="position: absolute; top: 12px; left: 50%; transform: translateX(-50%); font-family: var(--font-mono); font-size: 11px; color: var(--cyan); font-weight: bold; background: rgba(0,0,0,0.6); padding: 2px 6px; border-radius: 4px;">N // 000°</span>
+        </div>
+
+        <!-- Scope Controls & Exit Header -->
+        <div style="position: absolute; top: 76px; left: 50%; transform: translateX(-50%); pointer-events: auto; display: flex; align-items: center; gap: 12px; background: rgba(12, 18, 28, 0.95); padding: 8px 16px; border-radius: 8px; border: 1px solid var(--cyan); box-shadow: 0 4px 20px rgba(0,0,0,0.7);">
+            <span class="font-mono text-xs text-white font-bold">🔭 ВЗГЛЯД ИЗ ГЛАЗ НАБЛЮДАТЕЛЯ (1.75м)</span>
+            <div class="flex items-center gap-1 font-mono text-xs">
+                <button id="scope-zoom-1x" class="px-2 py-1 rounded bg-cyan-500/20 text-cyan-300 font-bold hover:bg-cyan-500/40">1x</button>
+                <button id="scope-zoom-4x" class="px-2 py-1 rounded bg-black/60 text-gray-300 font-bold hover:bg-cyan-500/40">4x ОПТИКА</button>
+                <button id="scope-zoom-10x" class="px-2 py-1 rounded bg-black/60 text-gray-300 font-bold hover:bg-cyan-500/40">10x СНАЙПЕР</button>
+            </div>
+            <button id="btn-exit-scope" class="px-3 py-1 rounded bg-red-600 hover:bg-red-500 text-white font-mono text-xs font-bold transition-all">❌ ВЫЙТИ В 3D</button>
+        </div>
+    </div>
 
     <!-- Application Script Bundle -->
     <script type="module" src="assets/js/app.js"></script>

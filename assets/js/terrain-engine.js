@@ -30,10 +30,10 @@ export class TerrainEngine {
         this.raycaster = new THREE.Raycaster();
         this.mouseNDC = new THREE.Vector2();
 
-        // Terrain Heightfield Data (256x256 elevation matrix)
+        // Terrain Heightfield Data (1 unit = 1 meter)
         this.GRID_RES = 256;
         this.heightMatrix = new Float32Array(this.GRID_RES * this.GRID_RES);
-        this.scaleRatio = 0.1; // 1 unit in Three.js = 10 meters in game
+        this.scaleRatio = 1.0; // 1 unit in Three.js = 1 meter in game (1:1 precision)
 
         // Visual Toggles & Satellite Textures
         this.textureLoader = new THREE.TextureLoader();
@@ -44,6 +44,7 @@ export class TerrainEngine {
         this.showContours = false;      // Contours off by default so satellite map is 100% visible
         this.showGrid = true;
         this.viewMode = 'orbit'; // 'orbit', 'topdown', 'scope'
+        this.surroundMesh = null;
 
         this.init();
     }
@@ -52,21 +53,21 @@ export class TerrainEngine {
         const width = this.container.clientWidth || window.innerWidth;
         const height = this.container.clientHeight || window.innerHeight;
 
-        // Scene: Crisp Daylight Military Atmosphere
+        // Scene: Crisp Daylight Military Atmosphere with Horizon Haze
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0x182230);
-        this.scene.fog = new THREE.FogExp2(0x182230, 0.0006);
+        this.scene.background = new THREE.Color(0x182433);
+        this.scene.fog = new THREE.FogExp2(0x182433, 0.00030);
 
-        // Camera
-        this.camera = new THREE.PerspectiveCamera(45, width / height, 0.5, 4000);
-        this.camera.position.set(0, 240, 320);
+        // Camera: 1 Unit = 1 Meter scale
+        this.camera = new THREE.PerspectiveCamera(45, width / height, 0.5, 6000);
+        this.camera.position.set(0, 320, 500);
 
         // Renderer
         this.renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
         this.renderer.setSize(width, height);
         this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        this.renderer.toneMappingExposure = 1.35;
+        this.renderer.toneMappingExposure = 1.25;
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         this.container.appendChild(this.renderer.domElement);
@@ -75,9 +76,9 @@ export class TerrainEngine {
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
         this.controls.enableDamping = true;
         this.controls.dampingFactor = 0.06;
-        this.controls.maxPolarAngle = Math.PI / 2.05;
-        this.controls.minDistance = 5;
-        this.controls.maxDistance = 1200;
+        this.controls.maxPolarAngle = Math.PI / 2.02; // Prevent going underground
+        this.controls.minDistance = 2;               // Can zoom right to soldier's eye!
+        this.controls.maxDistance = 3500;            // Full map overview
         this.controls.target.set(0, 15, 0);
 
         // Lighting Rig
@@ -133,6 +134,9 @@ export class TerrainEngine {
         this.rebuildMilitaryGrid();
         this.loadSatelliteTexture(this.config.texturePath);
 
+        // Create seamless surrounding mountain collar and horizon
+        this.createSurroundSkirt(mapId);
+
         // Load authentic 3D World (DEM terrain, buildings, trees)
         if (this.worldEngine) {
             this.worldEngine.loadWorld(mapId);
@@ -141,7 +145,7 @@ export class TerrainEngine {
         // Reset camera focus
         if (this.controls) {
             this.controls.target.set(0, 15, 0);
-            this.camera.position.set(0, 160, 200);
+            this.camera.position.set(0, 320, 500);
             this.controls.update();
         }
     }
@@ -288,22 +292,108 @@ export class TerrainEngine {
         return h0 * (1 - dy) + h1 * dy;
     }
 
-    /* Coordinate Transforms: Game meters [0, 2000] <-> Three.js World coordinates */
+    /* Coordinate Transforms: Game meters <-> Three.js World coordinates (1:1 Meters) */
     gameToWorld(gameX, gameY) {
-        const half = this.config.gridSize / 2;
-        const wx = (gameX - half) * this.scaleRatio;
-        const wz = (gameY - half) * this.scaleRatio;
-        const elev = this.getElevation(gameX, gameY);
-        const wy = elev * this.scaleRatio;
+        const half = (this.config.sizeM || this.config.gridSize) / 2;
+        const wx = gameX - half;
+        const wz = gameY - half;
+        const wy = this.getElevation(gameX, gameY);
         return new THREE.Vector3(wx, wy, wz);
     }
 
     worldToGame(worldX, worldZ) {
-        const half = this.config.gridSize / 2;
-        const gx = (worldX / this.scaleRatio) + half;
-        const gy = (worldZ / this.scaleRatio) + half;
+        const half = (this.config.sizeM || this.config.gridSize) / 2;
+        const gx = worldX + half;
+        const gy = worldZ + half;
         const elev = this.getElevation(gx, gy);
         return { x: gx, y: gy, elevation: elev };
+    }
+
+    /**
+     * Create seamless surrounding mountain horizon collar and pedestal base
+     */
+    createSurroundSkirt(mapId) {
+        if (this.surroundMesh) {
+            this.scene.remove(this.surroundMesh);
+            if (this.surroundMesh.geometry) this.surroundMesh.geometry.dispose();
+            if (this.surroundMesh.material) this.surroundMesh.material.dispose();
+            this.surroundMesh = null;
+        }
+
+        const cfg = MAP_CONFIGS[mapId] || this.config;
+        const half = (cfg.sizeM || cfg.gridSize || 1200) / 2;
+        const outerRadius = 4500; // 4.5km surrounding mountain horizon
+        const innerRadius = half * 0.99; // Slight inner overlap to prevent any sub-millimeter seam
+        const segmentsRing = 96;
+        const rings = 14;
+
+        const geo = new THREE.BufferGeometry();
+        const positions = [];
+        const uvs = [];
+        const indices = [];
+
+        // Build concentric rings from inner boundary (half) to outerRadius (4500m)
+        for (let r = 0; r <= rings; r++) {
+            const t = r / rings; // 0 = inner border, 1 = distant mountains
+            const rad = innerRadius + (outerRadius - innerRadius) * Math.pow(t, 1.25);
+
+            for (let s = 0; s < segmentsRing; s++) {
+                const angle = (s / segmentsRing) * Math.PI * 2;
+                const cosA = Math.cos(angle);
+                const sinA = Math.sin(angle);
+                const px = cosA * rad;
+                const pz = sinA * rad;
+
+                let py = 0;
+                if (r === 0) {
+                    // Match inner terrain elevation at the boundary
+                    py = this.getElevation(px + half, pz + half);
+                } else {
+                    // Mountain ridge procedural synthesis
+                    const mountainNoise = Math.sin(cosA * 3.2 + sinA * 2.1) * 110 +
+                                          Math.cos(cosA * 5.4 - sinA * 4.7) * 75 +
+                                          Math.sin(cosA * 8.1 + sinA * 7.5) * 45;
+                    const peakFactor = Math.pow(t, 1.5);
+                    const baseElev = this.getElevation(cosA * half + half, sinA * half + half);
+                    py = baseElev * (1 - t) + (70 + Math.abs(mountainNoise) * 2.2) * peakFactor;
+                }
+
+                positions.push(px, py, pz);
+                uvs.push((px / outerRadius) * 0.5 + 0.5, (pz / outerRadius) * 0.5 + 0.5);
+            }
+        }
+
+        // Indices
+        for (let r = 0; r < rings; r++) {
+            for (let s = 0; s < segmentsRing; s++) {
+                const nextS = (s + 1) % segmentsRing;
+                const i00 = r * segmentsRing + s;
+                const i10 = r * segmentsRing + nextS;
+                const i01 = (r + 1) * segmentsRing + s;
+                const i11 = (r + 1) * segmentsRing + nextS;
+
+                indices.push(i00, i01, i10);
+                indices.push(i10, i01, i11);
+            }
+        }
+
+        geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+        geo.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+        geo.setIndex(indices);
+        geo.computeVertexNormals();
+
+        // Mountain material: Dark alpine slate and rock
+        const mat = new THREE.MeshStandardMaterial({
+            color: 0x2e3846,
+            roughness: 0.95,
+            metalness: 0.05,
+            flatShading: false
+        });
+
+        this.surroundMesh = new THREE.Mesh(geo, mat);
+        this.surroundMesh.name = 'SurroundMountainCollar';
+        this.surroundMesh.receiveShadow = true;
+        this.scene.add(this.surroundMesh);
     }
 
     /* ------------------------------------------------------------
@@ -494,10 +584,15 @@ export class TerrainEngine {
     }
 
     setViewshedTexture(texture) {
-        if (!this.material) return;
-        this.material.uniforms.uViewshedTexture.value = texture || this.dummyTexture;
-        this.material.uniforms.uHasViewshed.value = texture ? 1.0 : 0.0;
-        this.material.needsUpdate = true;
+        if (this.worldEngine && this.worldEngine.terrainUniforms) {
+            this.worldEngine.terrainUniforms.uViewshedTexture.value = texture || this.dummyTexture;
+            this.worldEngine.terrainUniforms.uHasViewshed.value = texture ? 1.0 : 0.0;
+        }
+        if (this.material && this.material.uniforms && this.material.uniforms.uViewshedTexture) {
+            this.material.uniforms.uViewshedTexture.value = texture || this.dummyTexture;
+            this.material.uniforms.uHasViewshed.value = texture ? 1.0 : 0.0;
+            this.material.needsUpdate = true;
+        }
     }
 
     setRenderStyle(style) {
@@ -535,19 +630,42 @@ export class TerrainEngine {
             this.controls.update();
         } else if (mode === 'orbit') {
             this.controls.enableRotate = true;
-            this.camera.position.set(0, 160, 200);
+            this.camera.position.set(0, 320, 500);
             this.controls.target.set(0, 20, 0);
+            this.controls.minDistance = 2;
+            this.controls.maxDistance = 3500;
             this.controls.update();
+
+            const scopeOverlay = document.getElementById('sniper-scope-overlay');
+            if (scopeOverlay) scopeOverlay.classList.add('hidden');
+            this.camera.fov = 45;
+            this.camera.updateProjectionMatrix();
         } else if (mode === 'scope' && observerPos && targetPos) {
-            // First-person sniper scope view directly from observer's eye
+            // First-person sniper scope view directly from observer's eye (1:1 Meters)
             this.controls.enableRotate = true;
+            this.controls.minDistance = 0.1;
+            this.controls.maxDistance = 3500;
+
             const eyePos = this.gameToWorld(observerPos.x, observerPos.y);
-            eyePos.y += (observerPos.height || 1.75) * this.scaleRatio;
+            eyePos.y += (observerPos.height || 1.75);
 
             const aimPos = this.gameToWorld(targetPos.x, targetPos.y);
+            aimPos.y += 1.0;
+
             this.camera.position.copy(eyePos);
             this.controls.target.copy(aimPos);
+            this.camera.lookAt(aimPos);
             this.controls.update();
+
+            const scopeOverlay = document.getElementById('sniper-scope-overlay');
+            if (scopeOverlay) scopeOverlay.classList.remove('hidden');
+        }
+    }
+
+    setScopeZoom(fov) {
+        if (this.camera) {
+            this.camera.fov = fov;
+            this.camera.updateProjectionMatrix();
         }
     }
 

@@ -147,10 +147,69 @@ export class WorldEngine {
 
         const material = new THREE.MeshStandardMaterial({
             map: satTexture,
-            roughness: 0.82,
-            metalness: 0.05,
+            roughness: 0.90,
+            metalness: 0.02,
             flatShading: false
         });
+
+        // Store uniform reference for real-time viewshed updates & rock shading
+        const halfSize = (this.terrain.config.sizeM || 1200) / 2;
+        this.terrainUniforms = {
+            uViewshedTexture: { value: this.terrain.dummyTexture },
+            uHasViewshed: { value: 0.0 },
+            uHalfSize: { value: halfSize }
+        };
+
+        material.onBeforeCompile = (shader) => {
+            shader.uniforms.uViewshedTexture = this.terrainUniforms.uViewshedTexture;
+            shader.uniforms.uHasViewshed = this.terrainUniforms.uHasViewshed;
+            shader.uniforms.uHalfSize = this.terrainUniforms.uHalfSize;
+
+            shader.vertexShader = shader.vertexShader.replace(
+                '#include <common>',
+                `#include <common>
+                varying vec3 vWorldPos;`
+            );
+            shader.vertexShader = shader.vertexShader.replace(
+                '#include <worldpos_vertex>',
+                `#include <worldpos_vertex>
+                vWorldPos = (modelMatrix * vec4(transformed, 1.0)).xyz;`
+            );
+
+            shader.fragmentShader = shader.fragmentShader.replace(
+                '#include <common>',
+                `#include <common>
+                varying vec3 vWorldPos;
+                uniform sampler2D uViewshedTexture;
+                uniform float uHasViewshed;
+                uniform float uHalfSize;`
+            );
+            shader.fragmentShader = shader.fragmentShader.replace(
+                '#include <map_fragment>',
+                `#include <map_fragment>
+                // 1. Slope-aware natural rock cliff shading (no voxel stepping)
+                float slope = dot(vNormal, vec3(0.0, 1.0, 0.0));
+                if (slope < 0.72) {
+                    float rockFactor = smoothstep(0.72, 0.42, slope);
+                    vec3 rockColor = vec3(0.20, 0.23, 0.27);
+                    diffuseColor.rgb = mix(diffuseColor.rgb, rockColor, rockFactor * 0.85);
+                }
+
+                // 2. Projected Tactical Viewshed (Green = LOS / Red = Blind Zone)
+                if (uHasViewshed > 0.5) {
+                    vec2 vUv = vec2(
+                        (vWorldPos.x / (uHalfSize * 2.0)) + 0.5,
+                        (vWorldPos.z / (uHalfSize * 2.0)) + 0.5
+                    );
+                    if (vUv.x >= 0.0 && vUv.x <= 1.0 && vUv.y >= 0.0 && vUv.y <= 1.0) {
+                        vec4 vsCol = texture2D(uViewshedTexture, vUv);
+                        if (vsCol.a > 0.05) {
+                            diffuseColor.rgb = mix(diffuseColor.rgb, vsCol.rgb, vsCol.a * 0.65);
+                        }
+                    }
+                }`
+            );
+        };
 
         this.terrainMesh = new THREE.Mesh(geometry, material);
         this.terrainMesh.receiveShadow = true;
@@ -162,10 +221,8 @@ export class WorldEngine {
 
         this.scene.add(this.terrainMesh);
 
-        // Hide old generic terrain plane
-        if (this.terrain.terrainMesh) {
-            this.terrain.terrainMesh.visible = false;
-        }
+        // Update terrainEngine's active terrainMesh so raycasting and clicks hit the authentic DEM mesh!
+        this.terrain.terrainMesh = this.terrainMesh;
     }
 
     /**
@@ -206,17 +263,20 @@ export class WorldEngine {
         const boxGeo = new THREE.BoxGeometry(1, 1, 1);
         boxGeo.computeVertexNormals();
 
-        // Standard PBR material with vertex color support
+        // Standard PBR material for real architectural structures
         const material = new THREE.MeshStandardMaterial({
-            roughness: 0.65,
-            metalness: 0.10,
-            flatShading: true
+            color: 0x94a3b8,
+            roughness: 0.82,
+            metalness: 0.05,
+            flatShading: false
         });
 
         let totalLoaded = 0;
 
         for (const m of pack.manifest.meshes) {
             if (m.count <= 0) continue;
+            // FILTER: Only load real architectural buildings, ignore micro-props / debris cubes!
+            if (m.layer !== 'buildings') continue;
 
             const instMatArray = pack.view(m.instances);
             const colorArray = pack.view(m.colors);

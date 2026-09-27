@@ -120,19 +120,21 @@ export class BallisticsEngine {
         if (d < wpnTable.minRange) {
             return { 
                 valid: false, 
-                reason: `Target too close (${Math.round(d)}m < min ${wpnTable.minRange}m)`, 
+                outOfRange: true,
+                reason: `СЛИШКОМ БЛИЗКО: МИНИМУМ ${wpnTable.minRange}м (ТЕКУЩАЯ ${Math.round(d)}м)`, 
                 distance: Math.round(d), 
                 azimuthMil: azMil,
-                officialMil
+                officialMil: null
             };
         }
         if (d > wpnTable.maxRange) {
             return { 
                 valid: false, 
-                reason: `Target out of range (${Math.round(d)}m > max ${wpnTable.maxRange}m)`, 
+                outOfRange: true,
+                reason: `ВНЕ ЗОНЫ ДОСЯГАЕМОСТИ: ПЕРЕЛЁТ +${Math.round(d - wpnTable.maxRange)}м (МАКСИМУМ ${wpnTable.maxRange}м)`, 
                 distance: Math.round(d), 
                 azimuthMil: azMil,
-                officialMil
+                officialMil: null
             };
         }
 
@@ -207,9 +209,9 @@ export class BallisticsEngine {
                 }
             }
 
-            // Convert to Three.js coordinates
+            // Convert to Three.js coordinates (1:1 Meters)
             const worldPt = this.terrain.gameToWorld(curX, curY);
-            worldPt.y = curZ * this.terrain.scaleRatio;
+            worldPt.y = curZ;
             trajectoryPoints.push(worldPt);
         }
 
@@ -237,6 +239,35 @@ export class BallisticsEngine {
         // Update Battery Marker
         const batWorld = this.terrain.gameToWorld(this.battery.x, this.battery.y);
         this.batteryMarker.position.copy(batWorld);
+
+        // Update Artillery Range Rings on Ground
+        if (this.rangeRingsMesh) {
+            this.terrain.scene.remove(this.rangeRingsMesh);
+            this.rangeRingsMesh = null;
+        }
+
+        const wpnTable = OFFICIAL_WEAPON_TABLES[this.currentWeaponId] || OFFICIAL_WEAPON_TABLES.mortar;
+        const ringGroup = new THREE.Group();
+
+        // Min range ring
+        const minRingGeo = new THREE.RingGeometry(wpnTable.minRange - 1.5, wpnTable.minRange + 1.5, 64);
+        minRingGeo.rotateX(-Math.PI / 2);
+        const minRingMat = new THREE.MeshBasicMaterial({ color: 0xef4444, side: THREE.DoubleSide, transparent: true, opacity: 0.6 });
+        const minRing = new THREE.Mesh(minRingGeo, minRingMat);
+        minRing.position.y = 0.5;
+        ringGroup.add(minRing);
+
+        // Max range ring
+        const maxRingGeo = new THREE.RingGeometry(wpnTable.maxRange - 2.5, wpnTable.maxRange + 2.5, 96);
+        maxRingGeo.rotateX(-Math.PI / 2);
+        const maxRingMat = new THREE.MeshBasicMaterial({ color: 0x00f2fe, side: THREE.DoubleSide, transparent: true, opacity: 0.75 });
+        const maxRing = new THREE.Mesh(maxRingGeo, maxRingMat);
+        maxRing.position.y = 0.5;
+        ringGroup.add(maxRing);
+
+        ringGroup.position.copy(batWorld);
+        this.rangeRingsMesh = ringGroup;
+        this.terrain.scene.add(this.rangeRingsMesh);
 
         // Update 3D Trajectory Tube
         if (this.trajectoryMesh) {
@@ -274,14 +305,16 @@ export class BallisticsEngine {
     }
 
     setBattery(x, y) {
-        this.battery.x = Math.max(0, Math.min(this.terrain.config.gridSize, x));
-        this.battery.y = Math.max(0, Math.min(this.terrain.config.gridSize, y));
+        const sz = this.terrain.config.sizeM || this.terrain.config.gridSize || 1200;
+        this.battery.x = Math.max(0, Math.min(sz, x));
+        this.battery.y = Math.max(0, Math.min(sz, y));
         return this.update();
     }
 
     setTarget(x, y) {
-        this.target.x = Math.max(0, Math.min(this.terrain.config.gridSize, x));
-        this.target.y = Math.max(0, Math.min(this.terrain.config.gridSize, y));
+        const sz = this.terrain.config.sizeM || this.terrain.config.gridSize || 1200;
+        this.target.x = Math.max(0, Math.min(sz, x));
+        this.target.y = Math.max(0, Math.min(sz, y));
         return this.update();
     }
 

@@ -140,13 +140,35 @@ class TacticalApp {
             });
         });
 
-        // Sliders
-        const radiusSlider = document.getElementById('input-radius');
-        const radiusVal = document.getElementById('val-radius');
-        radiusSlider.addEventListener('input', (e) => {
-            const r = parseInt(e.target.value, 10);
-            radiusVal.textContent = `${r} m`;
-            this.viewshed.setViewshedRadius(r);
+        // Range Presets (Infantry 600m, Optics 1200m, Sniper 2400m)
+        const rangePresets = document.querySelectorAll('#range-presets .stance-btn');
+        rangePresets.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                rangePresets.forEach(b => b.classList.remove('active'));
+                const targetBtn = e.currentTarget;
+                targetBtn.classList.add('active');
+                const r = parseInt(targetBtn.dataset.range, 10);
+                this.viewshed.setViewshedRadius(r);
+                this.sound.playClick();
+            });
+        });
+
+        // Scope Zoom Buttons & Exit
+        document.getElementById('scope-zoom-1x')?.addEventListener('click', () => {
+            this.terrain.setScopeZoom(45);
+            this.sound.playClick();
+        });
+        document.getElementById('scope-zoom-4x')?.addEventListener('click', () => {
+            this.terrain.setScopeZoom(14);
+            this.sound.playClick();
+        });
+        document.getElementById('scope-zoom-10x')?.addEventListener('click', () => {
+            this.terrain.setScopeZoom(5);
+            this.sound.playClick();
+        });
+        document.getElementById('btn-exit-scope')?.addEventListener('click', () => {
+            this.terrain.setViewMode('orbit');
+            this.sound.playClick();
         });
 
         const fovSlider = document.getElementById('input-fov');
@@ -506,10 +528,10 @@ class TacticalApp {
         } else if (ballistic && !ballistic.valid) {
             document.getElementById('sol-range').textContent = `${ballistic.distance || '--'} м`;
             document.getElementById('sol-azimuth').textContent = `${ballistic.azimuthMil || '--'} MIL`;
-            document.getElementById('sol-elevation').textContent = ballistic.officialMil ? `${ballistic.officialMil} MIL` : 'ВНЕ ЗОНЫ';
+            document.getElementById('sol-elevation').textContent = 'ВНЕ ЗОНЫ';
             document.getElementById('sol-tof').textContent = '--';
             const crestEl = document.getElementById('sol-crest');
-            crestEl.textContent = ballistic.reason === 'Target out of range' ? 'ЦЕЛЬ ВНЕ ЗОНЫ ДОСЯГАЕМОСТИ' : (ballistic.reason || 'НЕДОСЯГАЕМО');
+            crestEl.textContent = ballistic.reason || '❌ ВНЕ ЗОНЫ ДОСЯГАЕМОСТИ';
             crestEl.className = 'text-[color:var(--red)] font-bold';
         }
     }
@@ -553,6 +575,9 @@ class TacticalApp {
         if (view === '2d') {
             const btnTopdown = document.getElementById('btn-view-topdown');
             if (btnTopdown) btnTopdown.click();
+        } else if (view === 'scope') {
+            const btnScope = document.getElementById('btn-view-scope');
+            if (btnScope) btnScope.click();
         }
     }
 

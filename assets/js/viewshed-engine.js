@@ -49,28 +49,89 @@ export class ViewshedEngine {
     initVisuals() {
         const scene = this.terrain.scene;
 
-        // 1. Observer 3D Marker (Tactical Cyan Diamond)
-        const obsGeo = new THREE.ConeGeometry(2.0, 5.0, 4);
-        obsGeo.rotateX(Math.PI); // Point downward to terrain
-        const obsMat = new THREE.MeshStandardMaterial({
+        // 1. Observer 3D Marker: Tactical Spotter Tripod + Optics Head + Heading Pointer
+        const obsGroup = new THREE.Group();
+
+        // Ground ring
+        const ringGeo = new THREE.RingGeometry(1.2, 1.8, 24);
+        ringGeo.rotateX(-Math.PI / 2);
+        const ringMat = new THREE.MeshBasicMaterial({ color: 0x00f2fe, side: THREE.DoubleSide });
+        obsGroup.add(new THREE.Mesh(ringGeo, ringMat));
+
+        // Tripod legs
+        const legMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.5 });
+        for (let i = 0; i < 3; i++) {
+            const angle = (i * Math.PI * 2) / 3;
+            const legGeo = new THREE.CylinderGeometry(0.08, 0.08, 1.6);
+            const leg = new THREE.Mesh(legGeo, legMat);
+            leg.position.set(Math.cos(angle) * 0.5, 0.75, Math.sin(angle) * 0.5);
+            leg.rotation.z = Math.cos(angle) * 0.28;
+            leg.rotation.x = Math.sin(angle) * 0.28;
+            obsGroup.add(leg);
+        }
+
+        // Optics body & lenses
+        const bodyGeo = new THREE.BoxGeometry(0.6, 0.4, 0.9);
+        const bodyMat = new THREE.MeshStandardMaterial({ color: 0x0284c7, roughness: 0.3, metalness: 0.8 });
+        const body = new THREE.Mesh(bodyGeo, bodyMat);
+        body.position.set(0, 1.6, 0);
+        obsGroup.add(body);
+
+        // Heading arrow pointer
+        const arrowGeo = new THREE.ConeGeometry(0.5, 1.5, 8);
+        arrowGeo.rotateX(Math.PI / 2);
+        const arrowMat = new THREE.MeshBasicMaterial({ color: 0x00f2fe });
+        const arrow = new THREE.Mesh(arrowGeo, arrowMat);
+        arrow.position.set(0, 1.6, 1.5);
+        obsGroup.add(arrow);
+
+        // Vertical beacon pin with top diamond
+        const pinGeo = new THREE.CylinderGeometry(0.05, 0.05, 8);
+        const pinMat = new THREE.MeshBasicMaterial({ color: 0x00f2fe, transparent: true, opacity: 0.7 });
+        const pin = new THREE.Mesh(pinGeo, pinMat);
+        pin.position.set(0, 5, 0);
+        obsGroup.add(pin);
+
+        const diamondGeo = new THREE.OctahedronGeometry(1.2);
+        const diamondMat = new THREE.MeshStandardMaterial({
             color: 0x00f2fe,
             emissive: 0x00f2fe,
             emissiveIntensity: 0.8,
-            roughness: 0.2
+            roughness: 0.1
         });
-        this.observerMarker = new THREE.Mesh(obsGeo, obsMat);
+        const diamond = new THREE.Mesh(diamondGeo, diamondMat);
+        diamond.position.set(0, 9.5, 0);
+        obsGroup.add(diamond);
+
+        this.observerMarker = obsGroup;
         scene.add(this.observerMarker);
 
-        // 2. Target 3D Marker (Tactical Amber / Red Reticle)
-        const tgtGeo = new THREE.TorusGeometry(2.5, 0.4, 8, 24);
-        const tgtMat = new THREE.MeshStandardMaterial({
+        // 2. Target 3D Marker: Tactical Amber Target Pin + Ring
+        const tgtGroup = new THREE.Group();
+
+        const tgtRingGeo = new THREE.RingGeometry(1.5, 2.2, 24);
+        tgtRingGeo.rotateX(-Math.PI / 2);
+        const tgtRingMat = new THREE.MeshBasicMaterial({ color: 0xf59e0b, side: THREE.DoubleSide });
+        tgtGroup.add(new THREE.Mesh(tgtRingGeo, tgtRingMat));
+
+        const tgtPinGeo = new THREE.CylinderGeometry(0.05, 0.05, 6);
+        const tgtPinMat = new THREE.MeshBasicMaterial({ color: 0xf59e0b, transparent: true, opacity: 0.7 });
+        const tgtPin = new THREE.Mesh(tgtPinGeo, tgtPinMat);
+        tgtPin.position.set(0, 4, 0);
+        tgtGroup.add(tgtPin);
+
+        const tgtDiamondGeo = new THREE.OctahedronGeometry(1.2);
+        const tgtDiamondMat = new THREE.MeshStandardMaterial({
             color: 0xf59e0b,
             emissive: 0xf59e0b,
-            emissiveIntensity: 0.7,
-            roughness: 0.2
+            emissiveIntensity: 0.8,
+            roughness: 0.1
         });
-        this.targetMarker = new THREE.Mesh(tgtGeo, tgtMat);
-        this.targetMarker.rotateX(Math.PI / 2);
+        const tgtDiamond = new THREE.Mesh(tgtDiamondGeo, tgtDiamondMat);
+        tgtDiamond.position.set(0, 7.5, 0);
+        tgtGroup.add(tgtDiamond);
+
+        this.targetMarker = tgtGroup;
         scene.add(this.targetMarker);
 
         // 3. Collision Marker (Red ring where sightline hits obstacle)
@@ -247,7 +308,7 @@ export class ViewshedEngine {
         const ctx = this.ctx;
         ctx.clearRect(0, 0, sz, sz);
 
-        const mapSize = this.terrain.config.gridSize; // 2000m
+        const mapSize = this.terrain.config.sizeM || this.terrain.config.gridSize || 1200;
         const obsX = this.observer.x;
         const obsY = this.observer.y;
         const obsElev = this.terrain.getElevation(obsX, obsY) + (this.observer.height || 1.75);
