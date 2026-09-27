@@ -94,12 +94,12 @@ export class TerrainEngine {
     }
 
     setupLighting() {
-        // Bright daylight hemisphere light (sky white, ground slate blue)
-        const hemi = new THREE.HemisphereLight(0xffffff, 0x475569, 1.8);
+        // Natural daylight hemisphere light (sky white, ground slate blue)
+        const hemi = new THREE.HemisphereLight(0xffffff, 0x334155, 1.2);
         this.scene.add(hemi);
 
-        // Warm Sunlight
-        const sun = new THREE.DirectionalLight(0xfffbf0, 2.6);
+        // Balanced natural Sunlight
+        const sun = new THREE.DirectionalLight(0xfffaee, 1.6);
         sun.position.set(200, 350, 150);
         sun.castShadow = true;
         sun.shadow.mapSize.width = 2048;
@@ -115,7 +115,7 @@ export class TerrainEngine {
         this.scene.add(sun);
 
         // Secondary sky bounce fill light
-        const fill = new THREE.DirectionalLight(0x93c5fd, 1.0);
+        const fill = new THREE.DirectionalLight(0x94a3b8, 0.5);
         fill.position.set(-180, 120, -150);
         this.scene.add(fill);
     }

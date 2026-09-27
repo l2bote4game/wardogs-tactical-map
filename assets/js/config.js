@@ -12,25 +12,21 @@ export const MAP_CONFIGS = {
         region: 'Caucasus Highlands',
         subtitle: 'Industrial Mountain Pass & Fortified Saddle',
         description: 'Jagged mountain peaks, deep canyon riverbed, fortified bunker hub, and high-altitude rail bridges.',
-        gridSize: 2000, // 2km x 2km
-        cellSize: 100,  // 100m tactical cells
-        minElevation: 60,
-        maxElevation: 485,
+        gridSize: 1200,
+        sizeM: 1200,
+        cellSize: 100,
+        minElevation: -22,
+        maxElevation: 77,
         texturePath: 'assets/textures/bakurani_sat.jpg',
-        defaultObserver: { x: 420, y: 1540, stance: 'standing' }, // Radio Tower Ridge
-        defaultTarget: { x: 980, y: 1100 },                      // Quarry Chokepoint
+        defaultObserver: { x: 350, y: 800, stance: 'standing' },
+        defaultTarget: { x: 573, y: 510 },
         pois: [
-            { id: 'poi-radio', name: 'Radio Tower Peak', x: 420, y: 1540, type: 'recon', elevation: 465, desc: 'Highest observation post in western sector' },
-            { id: 'poi-quarry', name: 'Quarry Chokepoint', x: 980, y: 1100, type: 'objective', elevation: 140, desc: 'Central tactical bottleneck and mineral depot' },
-            { id: 'poi-bunker', name: 'Command Bunker Complex', x: 1350, y: 920, type: 'fortification', elevation: 280, desc: 'Reinforced underground shelter & artillery bastion' },
-            { id: 'poi-station', name: 'Train Depot Basin', x: 620, y: 430, type: 'industrial', elevation: 95, desc: 'Logistical rail terminal and warehouse basin' },
-            { id: 'poi-alpha', name: 'Outpost Ridge Alpha', x: 1650, y: 1620, type: 'recon', elevation: 395, desc: 'Eastern flank vantage point overlooking valley' },
-            { id: 'poi-bridge', name: 'Canyon Viaduct', x: 1050, y: 680, type: 'bridge', elevation: 165, desc: 'High-speed armored vehicle crossing' }
+            { id: 'poi-chuta', name: 'Станция Chuta', x: 200, y: 550, type: 'settlement', elevation: 25, desc: 'Западный железнодорожный тупик' },
+            { id: 'poi-baghi', name: 'Узел Baghi', x: 600, y: 950, type: 'industrial', elevation: 42, desc: 'Центральный сортировочный узел' },
+            { id: 'poi-khevuli', name: 'Карьер Khevuli', x: 1000, y: 620, type: 'recon', elevation: 65, desc: 'Восточные командные высоты' }
         ],
         terrainProfile: { roughness: 1.35, ridgeStrength: 1.6, valleyFloor: 0.18, ridgeAngle: 0.78 },
-        blueBase: { name: 'База Синих // Спавн LONESTAR', faction: 'lonestar', x: 380, y: 1450, radiusM: 180, color: '#2f80c8' },
-        redBase: { name: 'База Красных // Спавн VALKYRA', faction: 'valkyra', x: 1620, y: 550, radiusM: 180, color: '#d8443c' },
-        controlZone: { name: 'Точка Захвата // CONTROL ZONE', x: 1000, y: 1000, radiusM: 220, color: '#eab308' }
+        controlZone: { name: 'ЗОНА КОНТРОЛЯ // BAKURANI', id: 'bakurani-default', x: 573, y: 510, siteX: -26.8, siteZ: -90.4, radiusM: 500, color: '#f2f4ee' }
     },
     ozeti: {
         id: 'ozeti',
@@ -38,24 +34,22 @@ export const MAP_CONFIGS = {
         region: 'Transcaucasian Foothills',
         subtitle: 'Rolling Valley, Stepped Terraces & River Crossing',
         description: 'Expansive rolling plateaus, agricultural hamlets, broad riverbed chokepoints, and isolated monasteries.',
-        gridSize: 2000,
+        gridSize: 1400,
+        sizeM: 1400,
         cellSize: 100,
-        minElevation: 40,
-        maxElevation: 330,
+        minElevation: -48,
+        maxElevation: 37,
         texturePath: 'assets/textures/ozeti_sat.jpg',
-        defaultObserver: { x: 1550, y: 1480, stance: 'standing' }, // Monastery Hill
-        defaultTarget: { x: 1000, y: 980 },                       // River Bridge
+        defaultObserver: { x: 1050, y: 980, stance: 'standing' },
+        defaultTarget: { x: 666, y: 684 },
         pois: [
-            { id: 'poi-monastery', name: 'Monastery Hill', x: 1550, y: 1480, type: 'recon', elevation: 320, desc: 'Domineering southeastern hill overlooking the river' },
-            { id: 'poi-bridge', name: 'River Bridge Crossing', x: 1000, y: 980, type: 'bridge', elevation: 48, desc: 'Primary bridge between northern and southern zones' },
-            { id: 'poi-silos', name: 'Grain Silos Complex', x: 520, y: 780, type: 'industrial', elevation: 76, desc: 'Western industrial cover with tall climbable roofs' },
-            { id: 'poi-radar', name: 'Radar Plateau', x: 450, y: 1620, type: 'recon', elevation: 295, desc: 'Northwestern radar station with wide 270° viewshed' },
-            { id: 'poi-village', name: 'Lower Ozeti Hamlet', x: 1240, y: 410, type: 'settlement', elevation: 62, desc: 'Dense cluster of stone residential compounds' }
+            { id: 'poi-malaga', name: 'Посёлок Malaga', x: 380, y: 450, type: 'settlement', elevation: 18, desc: 'Северная жилая терраса' },
+            { id: 'poi-bridge', name: 'Мост через реку', x: 666, y: 684, type: 'bridge', elevation: -15, desc: 'Центральный мостовой переход' },
+            { id: 'poi-barcelona', name: 'Высота Barcelona', x: 1150, y: 650, type: 'recon', elevation: 28, desc: 'Восточный скальный гребень' },
+            { id: 'poi-hanover', name: 'Промзона Hanover', x: 620, y: 950, type: 'industrial', elevation: 12, desc: 'Южный складской комплекс' }
         ],
         terrainProfile: { roughness: 0.95, ridgeStrength: 1.0, valleyFloor: 0.25, ridgeAngle: 1.57 },
-        blueBase: { name: 'База Синих // Спавн LONESTAR (Malaga)', faction: 'lonestar', x: 450, y: 320, radiusM: 180, color: '#2f80c8' },
-        redBase: { name: 'База Красных // Спавн VALKYRA (Barcelona)', faction: 'valkyra', x: 1550, y: 1650, radiusM: 180, color: '#d8443c' },
-        controlZone: { name: 'Точка Захвата // CONTROL ZONE (Мост)', x: 1000, y: 1000, radiusM: 220, color: '#eab308' }
+        controlZone: { name: 'ЗОНА КОНТРОЛЯ // OZETI', id: 'ozeti-default', x: 666, y: 684, siteX: -33.8, siteZ: -16.3, radiusM: 550, color: '#f2f4ee' }
     },
     zestafona: {
         id: 'zestafona',
@@ -63,24 +57,21 @@ export const MAP_CONFIGS = {
         region: 'Industrial Basin',
         subtitle: 'Heavy Metallurgical Basin & Escarpment Walls',
         description: 'Dense smokestacks, sprawling factory shop floors, railway classification yards, enclosed by sheer cliffs.',
-        gridSize: 2000,
+        gridSize: 1000,
+        sizeM: 1000,
         cellSize: 100,
-        minElevation: 50,
-        maxElevation: 395,
+        minElevation: -18,
+        maxElevation: 15,
         texturePath: 'assets/textures/zestafona_sat.jpg',
-        defaultObserver: { x: 1480, y: 1750, stance: 'standing' }, // North Cliffs
-        defaultTarget: { x: 850, y: 720 },                        // Rail Yard
+        defaultObserver: { x: 780, y: 820, stance: 'standing' },
+        defaultTarget: { x: 509, y: 509 },
         pois: [
-            { id: 'poi-cliffs', name: 'Northern Escarpment', x: 1480, y: 1750, type: 'recon', elevation: 385, desc: 'Sheer vertical rock wall offering full-map vantage' },
-            { id: 'poi-smelter', name: 'Smelter Stack 01', x: 1120, y: 1240, type: 'industrial', elevation: 210, desc: 'Central cooling towers and elevated pipe trestles' },
-            { id: 'poi-railyard', name: 'Marshalling Yard', x: 850, y: 720, type: 'industrial', elevation: 58, desc: 'Sunken train depot with hundreds of freight cars' },
-            { id: 'poi-substation', name: 'High-Voltage Yard', x: 1390, y: 460, type: 'industrial', elevation: 115, desc: 'Transformer grid and defensive perimeter berm' },
-            { id: 'poi-westcliffs', name: 'West Ridge Bunkers', x: 380, y: 1150, type: 'fortification', elevation: 330, desc: 'Old military emplacements cut into limestone' }
+            { id: 'poi-smelter', name: 'Металлургический цех', x: 509, y: 509, type: 'industrial', elevation: 5, desc: 'Центральный плавильный цех' },
+            { id: 'poi-water', name: 'Водоочистная станция', x: 440, y: 780, type: 'industrial', elevation: -8, desc: 'Северный гидротехнический узел' },
+            { id: 'poi-houses', name: 'Рабочий посёлок', x: 340, y: 420, type: 'settlement', elevation: -2, desc: 'Западный жилой сектор' }
         ],
         terrainProfile: { roughness: 1.15, ridgeStrength: 1.4, valleyFloor: 0.35, ridgeAngle: 0.0 },
-        blueBase: { name: 'База Синих // Спавн LONESTAR (Водоочистка)', faction: 'lonestar', x: 320, y: 320, radiusM: 180, color: '#2f80c8' },
-        redBase: { name: 'База Красных // Спавн VALKYRA (Терминал)', faction: 'valkyra', x: 1650, y: 1550, radiusM: 180, color: '#d8443c' },
-        controlZone: { name: 'Точка Захвата // CONTROL ZONE (Цех)', x: 1000, y: 1000, radiusM: 200, color: '#eab308' }
+        controlZone: { name: 'ЗОНА КОНТРОЛЯ // ZESTAFONA', id: 'zestafona-default', x: 509, y: 509, siteX: 9.2, siteZ: 9.3, radiusM: 500, color: '#f2f4ee' }
     }
 };
 

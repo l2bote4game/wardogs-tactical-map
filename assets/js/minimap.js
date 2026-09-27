@@ -74,14 +74,14 @@ export class TacticalMinimap {
             ctx.globalAlpha = 1.0;
         }
 
-        const mapSize = this.terrain.config.gridSize; // 2000m
+        const mapSize = this.terrain.config.sizeM || this.terrain.config.gridSize || 1200;
         const toPxX = (gx) => (gx / mapSize) * w;
         const toPxY = (gy) => (gy / mapSize) * h;
 
-        // 1. Tactical Grid Cells (20x20 cells of 100m)
+        // 1. Tactical Grid Cells (100m grid lines)
         ctx.strokeStyle = 'rgba(0, 242, 254, 0.12)';
         ctx.lineWidth = 1;
-        const cells = 20;
+        const cells = Math.round(mapSize / 100);
         for (let i = 0; i <= cells; i++) {
             const x = (i / cells) * w;
             const y = (i / cells) * h;
@@ -89,70 +89,30 @@ export class TacticalMinimap {
             ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
         }
 
-        // 2. Faction Bases and Control Zone
+        // 2. Control Zone (Zone of Control / Точка захвата)
         const mapCfg = this.terrain.config;
-        if (mapCfg) {
-            // Blue Base
-            if (mapCfg.blueBase) {
-                const bx = toPxX(mapCfg.blueBase.x);
-                const by = toPxY(mapCfg.blueBase.y);
-                const brPx = (mapCfg.blueBase.radiusM / mapSize) * w;
-                ctx.fillStyle = 'rgba(47, 128, 200, 0.2)';
-                ctx.beginPath();
-                ctx.arc(bx, by, brPx, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.strokeStyle = '#2f80c8';
-                ctx.lineWidth = 1.5 * window.devicePixelRatio;
-                ctx.stroke();
+        if (mapCfg && mapCfg.controlZone) {
+            const czX = toPxX(mapCfg.controlZone.x);
+            const czY = toPxY(mapCfg.controlZone.y);
+            const czRPx = (mapCfg.controlZone.radiusM / mapSize) * w;
 
-                ctx.fillStyle = '#60a5fa';
-                ctx.beginPath();
-                ctx.arc(bx, by, 3 * window.devicePixelRatio, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.font = `bold ${8 * window.devicePixelRatio}px monospace`;
-                ctx.fillText('СИНИЕ', bx + 6 * window.devicePixelRatio, by + 3 * window.devicePixelRatio);
-            }
+            ctx.fillStyle = 'rgba(242, 244, 238, 0.08)';
+            ctx.beginPath();
+            ctx.arc(czX, czY, czRPx, 0, Math.PI * 2);
+            ctx.fill();
 
-            // Red Base
-            if (mapCfg.redBase) {
-                const rx = toPxX(mapCfg.redBase.x);
-                const ry = toPxY(mapCfg.redBase.y);
-                const rrPx = (mapCfg.redBase.radiusM / mapSize) * w;
-                ctx.fillStyle = 'rgba(216, 68, 60, 0.2)';
-                ctx.beginPath();
-                ctx.arc(rx, ry, rrPx, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.strokeStyle = '#d8443c';
-                ctx.lineWidth = 1.5 * window.devicePixelRatio;
-                ctx.stroke();
+            ctx.strokeStyle = '#f2f4ee';
+            ctx.setLineDash([3 * window.devicePixelRatio, 3 * window.devicePixelRatio]);
+            ctx.lineWidth = 1.5 * window.devicePixelRatio;
+            ctx.beginPath();
+            ctx.arc(czX, czY, czRPx, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.setLineDash([]);
 
-                ctx.fillStyle = '#f87171';
-                ctx.beginPath();
-                ctx.arc(rx, ry, 3 * window.devicePixelRatio, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.font = `bold ${8 * window.devicePixelRatio}px monospace`;
-                ctx.fillText('КРАСНЫЕ', rx + 6 * window.devicePixelRatio, ry + 3 * window.devicePixelRatio);
-            }
-
-            // Control Zone
-            if (mapCfg.controlZone) {
-                const czX = toPxX(mapCfg.controlZone.x);
-                const czY = toPxY(mapCfg.controlZone.y);
-                const czRPx = (mapCfg.controlZone.radiusM / mapSize) * w;
-
-                ctx.fillStyle = 'rgba(234, 179, 8, 0.2)';
-                ctx.beginPath();
-                ctx.arc(czX, czY, czRPx, 0, Math.PI * 2);
-                ctx.fill();
-
-                ctx.strokeStyle = '#eab308';
-                ctx.lineWidth = 2 * window.devicePixelRatio;
-                ctx.stroke();
-
-                ctx.fillStyle = '#fde047';
-                ctx.font = `bold ${8 * window.devicePixelRatio}px monospace`;
-                ctx.fillText('ТОЧКА ЗАХВАТА', czX - 25 * window.devicePixelRatio, czY - czRPx - 4 * window.devicePixelRatio);
-            }
+            ctx.fillStyle = '#f2f4ee';
+            ctx.font = `bold ${8 * window.devicePixelRatio}px "JetBrains Mono", monospace`;
+            ctx.textAlign = 'center';
+            ctx.fillText('ЗОНА КОНТРОЛЯ', czX, Math.max(10 * window.devicePixelRatio, czY - czRPx - 4 * window.devicePixelRatio));
         }
 
         // 3. Viewshed Range Circle on Minimap

@@ -22,14 +22,14 @@ export class WorldEngine {
         this.vegetationGroup.name = 'WardogsVegetation';
         this.scene.add(this.vegetationGroup);
 
-        this.basesGroup = new THREE.Group();
-        this.basesGroup.name = 'WardogsBases';
-        this.scene.add(this.basesGroup);
+        this.controlZoneGroup = new THREE.Group();
+        this.controlZoneGroup.name = 'WardogsControlZone';
+        this.scene.add(this.controlZoneGroup);
 
-        // Visibility toggles
+        // Visibility toggles (Clean defaults)
         this.showBuildings = true;
         this.showVegetation = true;
-        this.showBases = true;
+        this.showControlZone = true;
 
         // Cache of loaded pack data
         this.cachedPacks = {};
@@ -59,9 +59,9 @@ export class WorldEngine {
             if (this.onProgress) this.onProgress('Загрузка 3D леса и деревьев...', 0.75);
             await this.loadVegetation(mapId);
 
-            // 4. Load Tactical Faction Bases & Control Zone
-            if (this.onProgress) this.onProgress('Разметка баз и контрольной зоны...', 0.90);
-            this.loadBases(mapId);
+            // 4. Load Authentic Terrain-Conforming Control Zone
+            if (this.onProgress) this.onProgress('Разметка зоны контроля...', 0.90);
+            this.loadControlZone(mapId);
 
             if (this.onProgress) this.onProgress('Тактическая карта готова', 1.0);
             console.log(`[WorldEngine] World for ${mapId} loaded successfully.`);
@@ -98,8 +98,8 @@ export class WorldEngine {
             }
         }
 
-        while (this.basesGroup.children.length > 0) {
-            const child = this.basesGroup.children.pop();
+        while (this.controlZoneGroup.children.length > 0) {
+            const child = this.controlZoneGroup.children.pop();
             if (child.geometry) child.geometry.dispose();
             if (child.material) {
                 if (Array.isArray(child.material)) child.material.forEach(m => m.dispose());
@@ -299,114 +299,68 @@ export class WorldEngine {
     }
 
     /**
-     * Load authentic faction bases (Blue, Red) and Control Zone
+     * Load authentic Control Zone (Terrain-conforming tactical contour ring)
      */
-    loadBases(mapId) {
+    loadControlZone(mapId) {
         const cfg = this.terrain.config;
-        if (!cfg) return;
+        if (!cfg || !cfg.controlZone) return;
 
-        const makeTextSprite = (text, colorHex, borderHex) => {
-            const canvas = document.createElement('canvas');
-            canvas.width = 512;
-            canvas.height = 128;
-            const ctx = canvas.getContext('2d');
+        const cz = cfg.controlZone;
+        const radius = cz.radiusM || 500;
+        const cx = cz.siteX !== undefined ? cz.siteX : (cz.x - (cfg.sizeM || 1200) / 2);
+        const czPos = cz.siteZ !== undefined ? cz.siteZ : (cz.y - (cfg.sizeM || 1200) / 2);
 
-            ctx.fillStyle = 'rgba(12, 18, 28, 0.90)';
-            ctx.beginPath();
-            ctx.roundRect(12, 12, 488, 104, 20);
-            ctx.fill();
-            ctx.lineWidth = 6;
-            ctx.strokeStyle = borderHex;
-            ctx.stroke();
+        // 1. Terrain-Conforming Contour Ring (Authentic WARDOGS GIS style)
+        const segments = Math.max(96, Math.ceil((2 * Math.PI * radius) / 12));
+        const points = [];
+        for (let i = 0; i <= segments; i++) {
+            const angle = (i / segments) * Math.PI * 2;
+            const px = cx + Math.cos(angle) * radius;
+            const pz = czPos + Math.sin(angle) * radius;
+            // Sample terrain height
+            const py = this.terrain.getElevationAt ? this.terrain.getElevationAt(px, pz) : 0;
+            points.push(new THREE.Vector3(px, py + 1.2, pz));
+        }
 
-            ctx.fillStyle = colorHex;
-            ctx.font = 'bold 36px "JetBrains Mono", sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(text, 256, 64);
+        const ringGeo = new THREE.BufferGeometry().setFromPoints(points);
+        const ringMat = new THREE.LineBasicMaterial({
+            color: 0xf2f4ee,
+            transparent: true,
+            opacity: 0.9,
+            linewidth: 2
+        });
+        const ring = new THREE.LineLoop(ringGeo, ringMat);
+        ring.name = 'control-zone-ring';
+        this.controlZoneGroup.add(ring);
 
-            const texture = new THREE.CanvasTexture(canvas);
-            const spriteMat = new THREE.SpriteMaterial({ map: texture, transparent: true, depthTest: false });
-            const sprite = new THREE.Sprite(spriteMat);
-            sprite.scale.set(65, 16, 1);
-            return sprite;
-        };
+        // 2. Subtle Ground Fill Disk
+        const discGeo = new THREE.CircleGeometry(radius, 64);
+        discGeo.rotateX(-Math.PI / 2);
+        const discMat = new THREE.MeshBasicMaterial({
+            color: 0xf2f4ee,
+            transparent: true,
+            opacity: 0.05,
+            side: THREE.DoubleSide,
+            depthWrite: false
+        });
+        const disc = new THREE.Mesh(discGeo, discMat);
+        disc.position.set(cx, 0.5, czPos);
+        this.controlZoneGroup.add(disc);
 
-        const createBaseMarker = (info, defaultColor) => {
-            if (!info) return;
-            const pos = this.terrain.gameToWorld(info.x, info.y, 0);
-            const groundY = this.terrain.getElevation(info.x, info.y);
-            const color = new THREE.Color(info.color || defaultColor);
-
-            const baseGroup = new THREE.Group();
-            baseGroup.position.set(pos.x, groundY, pos.z);
-
-            // 1. Transparent Holo Cylinder
-            const radius = info.radiusM || 180;
-            const height = 120;
-            const cylGeo = new THREE.CylinderGeometry(radius, radius, height, 32, 1, true);
-            cylGeo.translate(0, height / 2, 0);
-            const cylMat = new THREE.MeshBasicMaterial({
-                color: color,
-                transparent: true,
-                opacity: 0.16,
-                side: THREE.DoubleSide,
-                depthWrite: false
-            });
-            const cylinder = new THREE.Mesh(cylGeo, cylMat);
-            baseGroup.add(cylinder);
-
-            // 2. Glowing Ground Ring
-            const ringGeo = new THREE.RingGeometry(radius - 4, radius + 4, 48);
-            ringGeo.rotateX(-Math.PI / 2);
-            ringGeo.translate(0, 1.5, 0);
-            const ringMat = new THREE.MeshBasicMaterial({
-                color: color,
-                transparent: true,
-                opacity: 0.85,
-                side: THREE.DoubleSide
-            });
-            const ring = new THREE.Mesh(ringGeo, ringMat);
-            baseGroup.add(ring);
-
-            // 3. Central Vertical Beam
-            const beamGeo = new THREE.CylinderGeometry(1.5, 1.5, height * 1.5, 8);
-            beamGeo.translate(0, (height * 1.5) / 2, 0);
-            const beamMat = new THREE.MeshBasicMaterial({
-                color: color,
-                transparent: true,
-                opacity: 0.75
-            });
-            const beam = new THREE.Mesh(beamGeo, beamMat);
-            baseGroup.add(beam);
-
-            // 4. Floating 3D Tactical Billboard
-            const sprite = makeTextSprite(info.name, '#ffffff', color.getStyle());
-            sprite.position.set(0, height + 25, 0);
-            baseGroup.add(sprite);
-
-            this.basesGroup.add(baseGroup);
-        };
-
-        // Blue Base
-        createBaseMarker(cfg.blueBase, '#2f80c8');
-
-        // Red Base
-        createBaseMarker(cfg.redBase, '#d8443c');
-
-        // Control Zone
-        createBaseMarker(cfg.controlZone, '#eab308');
-
-        this.basesGroup.visible = this.showBases;
+        this.controlZoneGroup.visible = this.showControlZone;
     }
 
     /**
-     * Toggle Faction Bases and Control Zone
+     * Toggle Control Zone
      */
     toggleBases(visible = null) {
-        this.showBases = visible !== null ? visible : !this.showBases;
-        this.basesGroup.visible = this.showBases;
-        return this.showBases;
+        return this.toggleControlZone(visible);
+    }
+
+    toggleControlZone(visible = null) {
+        this.showControlZone = visible !== null ? visible : !this.showControlZone;
+        this.controlZoneGroup.visible = this.showControlZone;
+        return this.showControlZone;
     }
 
     /**

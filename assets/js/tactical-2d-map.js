@@ -88,10 +88,11 @@ export class Tactical2DMap {
     resetView() {
         const w = this.canvas.width;
         const h = this.canvas.height;
+        const mapSize = (MAP_CONFIGS[this.activeMapId] && MAP_CONFIGS[this.activeMapId].sizeM) || 1200;
         const minDim = Math.min(w, h);
-        this.zoom = (minDim * 0.88) / 2000; // fit 2000m map nicely
-        this.panX = (w - 2000 * this.zoom) / 2;
-        this.panY = (h - 2000 * this.zoom) / 2;
+        this.zoom = (minDim * 0.88) / mapSize;
+        this.panX = (w - mapSize * this.zoom) / 2;
+        this.panY = (h - mapSize * this.zoom) / 2;
     }
 
     /* Coordinate conversions */
@@ -238,10 +239,11 @@ export class Tactical2DMap {
         ctx.fillStyle = '#080a0f';
         ctx.fillRect(0, 0, w, h);
 
+        const mapSize = (MAP_CONFIGS[this.activeMapId] && MAP_CONFIGS[this.activeMapId].sizeM) || 1200;
         const img = this.satImages[this.activeMapId];
         const origin = this.gameToScreen(0, 0);
-        const mapW = 2000 * this.zoom;
-        const mapH = 2000 * this.zoom;
+        const mapW = mapSize * this.zoom;
+        const mapH = mapSize * this.zoom;
 
         // 1. Draw Satellite Orthophoto
         if (img && img.complete && img.naturalWidth > 0) {
@@ -256,16 +258,17 @@ export class Tactical2DMap {
         ctx.lineWidth = 2 * dpr;
         ctx.strokeRect(origin.x, origin.y, mapW, mapH);
 
-        // 2. Tactical MGRS Grid (20x20 cells of 100m)
+        // 2. Tactical MGRS Grid (100m cells)
         ctx.strokeStyle = 'rgba(0, 242, 254, 0.18)';
         ctx.lineWidth = 1 * dpr;
         ctx.fillStyle = 'rgba(0, 242, 254, 0.65)';
         ctx.font = `bold ${10 * dpr}px 'JetBrains Mono', monospace`;
 
-        for (let i = 0; i <= 20; i++) {
+        const numCells = Math.round(mapSize / 100);
+        for (let i = 0; i <= numCells; i++) {
             const gx = i * 100;
             const pt0 = this.gameToScreen(gx, 0);
-            const pt1 = this.gameToScreen(gx, 2000);
+            const pt1 = this.gameToScreen(gx, mapSize);
 
             // Vertical lines
             ctx.beginPath();
@@ -274,17 +277,17 @@ export class Tactical2DMap {
             ctx.stroke();
 
             // Letters on top
-            if (i < 20) {
+            if (i < numCells) {
                 const colCenter = this.gameToScreen(gx + 50, 20);
                 const letter = TACTICAL_GRID.letters[i] || '';
                 ctx.fillText(letter, colCenter.x - 4 * dpr, colCenter.y);
             }
         }
 
-        for (let j = 0; j <= 20; j++) {
+        for (let j = 0; j <= numCells; j++) {
             const gy = j * 100;
             const pt0 = this.gameToScreen(0, gy);
-            const pt1 = this.gameToScreen(2000, gy);
+            const pt1 = this.gameToScreen(mapSize, gy);
 
             // Horizontal lines
             ctx.beginPath();
@@ -293,74 +296,32 @@ export class Tactical2DMap {
             ctx.stroke();
 
             // Numbers on left
-            if (j < 20) {
+            if (j < numCells) {
                 const rowCenter = this.gameToScreen(10, gy + 50);
                 ctx.fillText(String(j + 1), rowCenter.x, rowCenter.y + 4 * dpr);
             }
         }
 
-        // 3. Faction Bases and Control Zone
+        // 3. Control Zone (Zone of Control / Точка захвата)
         const mapCfg = MAP_CONFIGS[this.activeMapId];
-        if (mapCfg) {
-            // Blue Base
-            if (mapCfg.blueBase) {
-                const bPt = this.gameToScreen(mapCfg.blueBase.x, mapCfg.blueBase.y);
-                const bRadPx = (mapCfg.blueBase.radiusM || 180) * this.zoom;
-                ctx.fillStyle = 'rgba(47, 128, 200, 0.15)';
-                ctx.beginPath();
-                ctx.arc(bPt.x, bPt.y, bRadPx, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.strokeStyle = '#2f80c8';
-                ctx.lineWidth = 2 * dpr;
-                ctx.stroke();
+        if (mapCfg && mapCfg.controlZone) {
+            const czPt = this.gameToScreen(mapCfg.controlZone.x, mapCfg.controlZone.y);
+            const czRadPx = (mapCfg.controlZone.radiusM || 500) * this.zoom;
+            ctx.fillStyle = 'rgba(242, 244, 238, 0.08)';
+            ctx.beginPath();
+            ctx.arc(czPt.x, czPt.y, czRadPx, 0, Math.PI * 2);
+            ctx.fill();
 
-                ctx.fillStyle = '#60a5fa';
-                ctx.beginPath();
-                ctx.arc(bPt.x, bPt.y, 6 * dpr, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.font = `bold ${12 * dpr}px "JetBrains Mono", sans-serif`;
-                ctx.fillText(mapCfg.blueBase.name, bPt.x + 10 * dpr, bPt.y + 4 * dpr);
-            }
+            ctx.strokeStyle = '#f2f4ee';
+            ctx.setLineDash([6 * dpr, 6 * dpr]);
+            ctx.lineWidth = 2 * dpr;
+            ctx.stroke();
+            ctx.setLineDash([]);
 
-            // Red Base
-            if (mapCfg.redBase) {
-                const rPt = this.gameToScreen(mapCfg.redBase.x, mapCfg.redBase.y);
-                const rRadPx = (mapCfg.redBase.radiusM || 180) * this.zoom;
-                ctx.fillStyle = 'rgba(216, 68, 60, 0.15)';
-                ctx.beginPath();
-                ctx.arc(rPt.x, rPt.y, rRadPx, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.strokeStyle = '#d8443c';
-                ctx.lineWidth = 2 * dpr;
-                ctx.stroke();
-
-                ctx.fillStyle = '#f87171';
-                ctx.beginPath();
-                ctx.arc(rPt.x, rPt.y, 6 * dpr, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.font = `bold ${12 * dpr}px "JetBrains Mono", sans-serif`;
-                ctx.fillText(mapCfg.redBase.name, rPt.x + 10 * dpr, rPt.y + 4 * dpr);
-            }
-
-            // Control Zone
-            if (mapCfg.controlZone) {
-                const czPt = this.gameToScreen(mapCfg.controlZone.x, mapCfg.controlZone.y);
-                const czRadPx = (mapCfg.controlZone.radiusM || 220) * this.zoom;
-                ctx.fillStyle = 'rgba(234, 179, 8, 0.15)';
-                ctx.beginPath();
-                ctx.arc(czPt.x, czPt.y, czRadPx, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.strokeStyle = '#eab308';
-                ctx.lineWidth = 2.5 * dpr;
-                ctx.stroke();
-
-                ctx.fillStyle = '#fde047';
-                ctx.beginPath();
-                ctx.arc(czPt.x, czPt.y, 7 * dpr, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.font = `bold ${12 * dpr}px "JetBrains Mono", sans-serif`;
-                ctx.fillText(mapCfg.controlZone.name, czPt.x + 12 * dpr, czPt.y + 4 * dpr);
-            }
+            ctx.fillStyle = '#f2f4ee';
+            ctx.font = `bold ${12 * dpr}px "JetBrains Mono", monospace`;
+            ctx.textAlign = 'center';
+            ctx.fillText(mapCfg.controlZone.name, czPt.x, czPt.y - czRadPx - 8 * dpr);
         }
 
         // 4. Air Defense (ПВО) Envelope

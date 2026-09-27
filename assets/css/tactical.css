@@ -182,13 +182,22 @@ body {
     top: 80px;
     right: 14px;
     width: 320px;
-    max-height: calc(100vh - 280px);
+    max-height: calc(100vh - 250px);
     overflow-y: auto;
     z-index: 30;
     padding: 16px;
+    padding-bottom: 28px;
     display: flex;
     flex-direction: column;
     gap: 16px;
+}
+
+.controls-panel::-webkit-scrollbar {
+    width: 4px;
+}
+.controls-panel::-webkit-scrollbar-thumb {
+    background: rgba(0, 242, 254, 0.25);
+    border-radius: 2px;
 }
 
 .section-title {
